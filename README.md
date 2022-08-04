@@ -18,17 +18,20 @@ here will be *implementations* and not just library calls.
 
 # Contributing an implementation
 
-Do not copy any existing code. Write the program from scratch and keep
-it simple. Use existing implementations as guidelines. Avoid
-programming patterns and object-oriented design and functional
-programming for the sake of patterns and OOP and FP.
+A few rules:
 
-Avoid unnecessarily complex syntax, even if the complex syntax is more
-idiomatic in the language. Just keep it simple.
+1. Do not copy any existing code. Write the program from scratch and
+   keep it simple.
+2. Use existing implementations in this project as guidelines. Use the
+   same or similar algorithms and data structures.
+3. Avoid programming patterns and object-oriented design and
+   functional programming for the sake of patterns and OOP and FP.
+4. Avoid unnecessarily complex syntax, even if the complex syntax is
+   more idiomatic in the language. Just keep it simple.
+
+Ultimately, Phil is the BDFL and reserves the right to be picky. :)
 
 ## Call for languages
-
-Would be great to have ports for:
 
 * Ada
 * FreePascal
@@ -43,4 +46,3 @@ Would be great to have ports for:
 * Lua
 * C++
 * D
-* Zig
