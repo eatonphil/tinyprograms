@@ -1,0 +1,15 @@
+name: Run tests
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  static_checks:
+    name: Static Checks
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    - run: ./scripts/test.py

@@ -1,3 +1,3 @@
-run:
+prepare:
   - zig build-exe main.zig
-  - ./main ../_tests/helloworld.bf
+run: ./main {PROGRAM}
