@@ -21,8 +21,10 @@ here will be *implementations* and not just library calls.
 Do not copy any existing code. Write the program from scratch and keep
 it simple. Use existing implementations as guidelines. Avoid
 programming patterns and object-oriented design and functional
-programming for the sake of patterns and OOP and FP. Just keep it
-simple.
+programming for the sake of patterns and OOP and FP.
+
+Avoid unnecessarily complex syntax, even if the complex syntax is more
+idiomatic in the language. Just keep it simple.
 
 ## Call for languages
 
