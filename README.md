@@ -7,6 +7,10 @@ This project is a collection of tiny programs that may help you learn
 a language. It is similar to Rosetta Code except that all programs
 here will be *implementations* and not just library calls.
 
+# Progress
+
+This is WIP. Not everything is implemented yet.
+
 # Programs
 
 * JSON: A JSON parser for all of JSON except decimal numbers
