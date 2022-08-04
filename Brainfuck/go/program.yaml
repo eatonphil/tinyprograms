@@ -1,4 +1,5 @@
-run:
+prepare:
+  - rm -f go.mod go.sum
   - go mod init brainfuck
   - go build
-  - ./brainfuck ../_tests/helloworld.bf
+run: ./brainfuck {PROGRAM}

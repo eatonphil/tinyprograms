@@ -1,0 +1,20 @@
+name: Run tests
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  tests:
+    name: Run all tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    # Set up Zig
+    - uses: goto-bus-stop/setup-zig@v1
+      with:
+        version: master
+
+    - run: ./scripts/test.py
