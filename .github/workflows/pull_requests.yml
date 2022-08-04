@@ -5,8 +5,8 @@ on:
     branches: [main]
 
 jobs:
-  static_checks:
-    name: Static Checks
+  tests:
+    name: Run all tests
     runs-on: ubuntu-latest
 
     steps:

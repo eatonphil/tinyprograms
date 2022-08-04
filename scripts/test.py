@@ -39,9 +39,14 @@ for project in subdirs(REPO_ROOT):
                 for step in program['prepare']:
                     subprocess.run(step, shell=True, cwd=language, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-                out = subprocess.check_output(program['run'].format(PROGRAM="../_tests/" + test), shell=True, cwd=language)
                 with open(project + "/_tests/" + test + ".stdout") as e:
                     expected = e.read().encode()
+
+                try:
+                    out = subprocess.check_output(program['run'].format(PROGRAM="../_tests/" + test), shell=True, cwd=language)
+                except Exception as e:
+                    print(e)
+                    out = ""
                 if out != expected:
                     print("[{}, {}]: Expected '{}', got '{}'.".format(project.split('/')[1], language.split('/')[-1], expected, out))
                     failed = True
@@ -49,6 +54,6 @@ for project in subdirs(REPO_ROOT):
 
 if failed:
     print("Tests failed.")
-    os.exit(1)
+    exit(1)
 else:
     print("All tests succeeded.")
