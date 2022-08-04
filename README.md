@@ -15,3 +15,30 @@ here will be *implementations* and not just library calls.
 * UUID: A UUIDv4 generator
 * HTTP: An HTTP server from UNIX sockets
 * RBTree: A red-black tree
+
+# Contributing an implementation
+
+Do not copy any existing code. Write the program from scratch and keep
+it simple. Use existing implementations as guidelines. Avoid
+programming patterns and object-oriented design and functional
+programming for the sake of patterns and OOP and FP. Just keep it
+simple.
+
+## Call for languages
+
+Would be great to have ports for:
+
+* Ada
+* FreePascal
+* FreeBASIC
+* R
+* Octave
+* Common Lisp
+* Swift
+* Kotlin
+* Scala
+* Clojure
+* Lua
+* C++
+* D
+* Zig

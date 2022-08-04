@@ -1,4 +1,4 @@
 run:
   - go mod init brainfuck
   - go build
-  - ./brainfuck ../test.bf
+  - - ./brainfuck ../_tests/helloworld.bf

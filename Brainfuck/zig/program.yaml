@@ -1,0 +1,3 @@
+run:
+  - zig build-exe main.zig
+  - ./main ../_tests/helloworld.bf
