@@ -1,0 +1,3 @@
+run:
+  - rustc main.rs
+  - ./main ../_tests/helloworld.bf
