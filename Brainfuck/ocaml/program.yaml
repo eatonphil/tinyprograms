@@ -1,0 +1,3 @@
+prepare:
+  - ocamlc bf.ml
+run: ./bf {PROGRAM}
