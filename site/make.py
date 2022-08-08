@@ -1,19 +1,24 @@
 #!/usr/bin/env python3
 
 import os
+import shutil
 import subprocess
 
 import yaml
 from jinja2 import Template
 
-REPO_ROOT = "./"
-NON_PROJECT_DIRS = [REPO_ROOT + r for r in [
+REPO_ROOT = "."
+NON_PROJECT_DIRS = [os.path.join(REPO_ROOT, r) for r in [
     "site",
     "scripts",
+    ".git",
+    ".github",
+    "build",
 ]]
 
-OUT_ROOT = REPO_ROOT + "build"
-shutil.rmtree(OUT_ROOT)
+OUT_ROOT = os.path.join(REPO_ROOT, "build")
+if os.path.exists(OUT_ROOT):
+    shutil.rmtree(OUT_ROOT)
 os.makedirs(OUT_ROOT)
 
 def subdirs(path):
@@ -21,7 +26,7 @@ def subdirs(path):
         if f.is_dir():
             yield f.path
 
-with open(REPO_ROOT + 'site/template.html') as file_:
+with open(os.path.join(REPO_ROOT, 'site/template.html')) as file_:
     template = Template(file_.read())
 
 PROJECTS = {}
@@ -35,30 +40,43 @@ for project in subdirs(REPO_ROOT):
         "implementations": [],
     }
 
-    for language in subdirs(REPO_ROOT + project):
+    for language in subdirs(os.path.join(REPO_ROOT, project)):
         if "_tests" in language:
             continue
 
-        if not os.path.exists(language + "/program.yaml"):
+        if not os.path.exists(os.path.join(language, "program.yaml")):
             continue
 
         l_name = language.split('/')[-1]
         PROJECTS[p_name]["implementations"].append(l_name)
 
-for project_name, project in PROJECTS.items:
-    if not os.exists(OUT_ROOT + "/" + p_name):
-        os.makedirs(OUT_ROOT + "/" + p_name)
+    if len(PROJECTS[p_name]["implementations"]) == 0:
+        del PROJECTS[p_name]
+
+for project_name, project in PROJECTS.items():
+    out = os.path.join(OUT_ROOT, project_name)
+    if not os.path.exists(out):
+        os.makedirs(out)
 
     for language in project["implementations"]:
-        program = open(language).read()
-
-        with open(language + "/program.yaml") as f:
+        with open(os.path.join(REPO_ROOT, project_name, language, "program.yaml")) as f:
             program_desc = yaml.load(f, Loader=yaml.Loader)
 
-        with open(OUT_ROOT + "/" + p_name + "/" + l_name, 'w') as f:
-            f.write(template.render(**program_desc, program=program, project_name=project_name, project=project, language=language))
+        program = open(os.path.join(REPO_ROOT, project_name, language, program_desc["source"])).read()
 
-with open(REPO_ROOT + "site/index.html") as f:
+        with open(os.path.join(OUT_ROOT, project_name, language + '.html'), 'w') as f:
+            f.write(template.render(
+                **program_desc,
+                program=program,
+                project_name=project_name,
+                project=project,
+                language=language))
+
+with open(os.path.join(REPO_ROOT, "site/index.html")) as f:
     template = Template(f.read())
-    with open(OUT_ROOT + "/index.html", 'w') as fw:
+    with open(os.path.join(OUT_ROOT, "index.html"), 'w') as fw:
         fw.write(template.render(projects=PROJECTS))
+
+STATIC_FILES = ["style.css"]
+for sf in STATIC_FILES:
+    shutil.copyfile(os.path.join(REPO_ROOT, "site", sf), os.path.join(OUT_ROOT, sf))
