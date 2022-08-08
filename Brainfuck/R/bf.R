@@ -1,6 +1,4 @@
-library(stringr)
-
-args = commandArgs(trailingOnly=TRUE)
+args <- commandArgs(trailingOnly=TRUE)
 
 program <- strsplit(readLines(args[1]), "")[[1]]
 
@@ -18,8 +16,8 @@ while (instructionPointer < (length(program) + 1)) {
     '-' = dataStack[dataPointer] <- dataStack[dataPointer] - 1,
     '.' = cat(rawToChar(as.raw(dataStack[dataPointer]))),
     ',' = {
-      lines <- readLines(con = file("stdin"))
-      dataStack[dataPointer] <- str_sub(lines,1,1)
+      c <- readChar(con = file("stdin"), nchars = 1)
+      dataStack[dataPointer] <- c
     },
     '[' = {
       stack <- 1
@@ -51,9 +49,3 @@ while (instructionPointer < (length(program) + 1)) {
   )
   instructionPointer <- instructionPointer + 1
 }
-
-
-
-
-
-
