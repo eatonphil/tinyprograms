@@ -1,0 +1,2 @@
+prepare:
+run: Rscript BF.R {PROGRAM}
