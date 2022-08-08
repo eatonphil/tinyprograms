@@ -13,10 +13,10 @@ NON_PROJECT_DIRS = [os.path.join(REPO_ROOT, r) for r in [
     "scripts",
     ".git",
     ".github",
-    "build",
+    "docs",
 ]]
 
-OUT_ROOT = os.path.join(REPO_ROOT, "build")
+OUT_ROOT = os.path.join(REPO_ROOT, "docs")
 if os.path.exists(OUT_ROOT):
     shutil.rmtree(OUT_ROOT)
 os.makedirs(OUT_ROOT)
