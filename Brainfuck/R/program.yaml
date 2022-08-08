@@ -3,4 +3,4 @@ prepare:
 
   - uses: r-lib/actions/setup-r@master
 
-run: Rscript BF.R {PROGRAM}
+run: Rscript bf.R {PROGRAM}
