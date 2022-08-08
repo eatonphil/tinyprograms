@@ -1,0 +1,21 @@
+<meta charset="UTF-8">
+<link href="/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/reset.min.css" />
+<link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+<link href="/materialicons.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tiny Programs</title>
+
+<h1>Tiny Programs</h1>
+
+<section>
+  {% for project_name, project in projects.items() %}
+  <h2>{{ project_name }}</h2>
+  <ul>
+    {% for language in project["implementations"] %}
+    <li><a href="/{{project_name}}/{{language}}.html">{{language}}</a></li>
+    {% endfor %}
+  </ul>
+  {% endfor %}
+</section>

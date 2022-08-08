@@ -21,18 +21,21 @@ here will be *implementations* and not library calls.
 
 A few rules:
 
-1. Keep it simple.
-2. Do not copy any existing code. Write the program from scratch. See
+1. Keep it simple and readable.
+1. This isn't code golfing.
+1. Do not copy any existing code. Write the program from scratch. See
    rule 1.
-3. Use existing implementations in this project as guidelines. Use the
+1. Use existing implementations in this project as guidelines. Use the
    same or similar algorithms and data structures. See rule 1.
-4. Avoid programming patterns and object-oriented design and
+1. Avoid programming patterns and object-oriented design and
    functional programming for the sake of patterns and OOP and FP. See
    rule 1.
-5. Avoid unnecessarily complex syntax, even if the complex syntax is
+1. Avoid unnecessarily complex syntax, even if the complex syntax is
    more idiomatic in the language. See rule 1.
-6. Copy program.yaml and implement the `prepare` and `run` settings so
+1. Copy program.yaml and implement the `prepare` and `run` settings so
    that your implementation is automatically tested in Github Actions.
+1. Definitely no 3rd-party libraries. And definitely not builtin
+   libraries if they implement the entirety of the program.
 
 Ultimately, Phil is the BDFL and reserves the right to be picky. :)
 
