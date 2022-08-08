@@ -91,6 +91,6 @@ with open(os.path.join(REPO_ROOT, "site/stars.html")) as f:
     with open(os.path.join(OUT_ROOT, "stars.html"), "w") as fw:
         fw.write(stars_html.replace("STARS", formatted_stars))
 
-STATIC_FILES = ["style.css"]
+STATIC_FILES = ["style.css", "CNAME"]
 for sf in STATIC_FILES:
     shutil.copyfile(os.path.join(REPO_ROOT, "site", sf), os.path.join(OUT_ROOT, sf))
