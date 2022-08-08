@@ -24,7 +24,6 @@ html, body {
 body {
     margin: 1rem auto;
     color: black;
-    font-size: 1.1rem;
     font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
     max-width: 100%;
     width: 600px;

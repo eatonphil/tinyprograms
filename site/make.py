@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 
+import json
 import os
 import shutil
 import subprocess
+import urllib.request
 
 import yaml
 from jinja2 import Template
+
+from millify import millify
 
 REPO_ROOT = "."
 NON_PROJECT_DIRS = [os.path.join(REPO_ROOT, r) for r in [
@@ -76,6 +80,16 @@ with open(os.path.join(REPO_ROOT, "site/index.html")) as f:
     template = Template(f.read())
     with open(os.path.join(OUT_ROOT, "index.html"), 'w') as fw:
         fw.write(template.render(projects=PROJECTS))
+
+with open(os.path.join(REPO_ROOT, "site/stars.html")) as f:
+    stars_html = f.read()
+
+    repo = json.load(urllib.request.urlopen("https://api.github.com/repos/eatonphil/tinyprograms"))
+    stars = repo["stargazers_count"]
+    formatted_stars = millify(str(stars), precision=1)
+
+    with open(os.path.join(OUT_ROOT, "stars.html"), "w") as fw:
+        fw.write(stars_html.replace("STARS", formatted_stars))
 
 STATIC_FILES = ["style.css"]
 for sf in STATIC_FILES:
