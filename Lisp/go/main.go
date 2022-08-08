@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"os"
+	"strconv"
 )
 
 type SexpKind uint
@@ -36,15 +36,24 @@ func (s Sexp) pretty() string {
 
 func sexpAppend(first *Sexp, second *Sexp) Sexp {
 	if first == nil {
-		return Sexp{Pair, nil, &struct{car Sexp; cdr *Sexp}{*second, nil}}
+		return Sexp{Pair, nil, &struct {
+			car Sexp
+			cdr *Sexp
+		}{*second, nil}}
 	}
 
 	if first.kind == Atom {
-		return Sexp{Pair, nil, &struct{car Sexp; cdr *Sexp}{*first, second}}
+		return Sexp{Pair, nil, &struct {
+			car Sexp
+			cdr *Sexp
+		}{*first, second}}
 	}
 
 	appended := sexpAppend(first.pair.cdr, second)
-	return Sexp{Pair, nil, &struct{car Sexp; cdr *Sexp}{first.pair.car, &appended}}
+	return Sexp{Pair, nil, &struct {
+		car Sexp
+		cdr *Sexp
+	}{first.pair.car, &appended}}
 }
 
 type TokenKind uint
@@ -99,7 +108,7 @@ outer:
 			continue
 		}
 
-		lexers := []func(string, int)(int, Token){lexInteger, lexIdentifier}
+		lexers := []func(string, int) (int, Token){lexInteger, lexIdentifier}
 		for _, lexer := range lexers {
 			newCursor, token := lexer(program, i)
 			if newCursor == i {
@@ -164,7 +173,7 @@ func evalLisp(ast Sexp, ctx map[string]interface{}) interface{} {
 		if fn == nil {
 			panic(fmt.Sprintf(("Unknown func: " + ast.pair.car.pretty())))
 		}
-		return fn.(func(Sexp, map[string]interface{})interface{})(*ast.pair.cdr, ctx)
+		return fn.(func(Sexp, map[string]interface{}) interface{})(*ast.pair.cdr, ctx)
 	}
 
 	if ast.atom.kind == Integer {
@@ -257,8 +266,11 @@ func evalLisp(ast Sexp, ctx map[string]interface{}) interface{} {
 }
 
 func main() {
-	program := os.Args[1]
-	tokens := lex(program)
+	program, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+	tokens := lex(string(program))
 	begin := Sexp{Atom, &Token{"begin", Identifier}, nil}
 	begin = sexpAppend(&begin, nil)
 	cursor, child := parse(tokens, 0)
