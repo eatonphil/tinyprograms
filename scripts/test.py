@@ -45,14 +45,15 @@ for project in subdirs(REPO_ROOT):
                 with open(project + "/_tests/" + test + ".stdout") as e:
                     expected = e.read().encode()
 
-                try:
-                    out = subprocess.check_output(program['run'].format(PROGRAM="../_tests/" + test), shell=True, cwd=language)
-                except Exception as e:
-                    print(e)
-                    out = ""
-                if out != expected:
-                    print("[{}, {}]: Expected '{}', got '{}'.".format(project.split('/')[1], language.split('/')[-1], expected, out))
-                    failed = True
+                for step in program['run']:
+                    try:
+                        out = subprocess.check_output(step.format(PROGRAM="../_tests/" + test), shell=True, cwd=language)
+                    except Exception as e:
+                        print(e)
+                        out = ""
+                    if out != expected:
+                        print("[{}, {}]: Expected '{}', got '{}'.".format(project.split('/')[1], language.split('/')[-1], expected, out))
+                        failed = True
 
 
 if failed:
