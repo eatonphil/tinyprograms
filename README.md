@@ -10,9 +10,9 @@ here will be *implementations* and not library calls.
 # Programs
 
 * [Brainfuck](./Brainfuck): A complete Brainfuck implementation
-* [Lisp](./Lisp): A tree-walking s-expression interpreter capable of running a fibonacci function
 * [UUIDv4](./UUIDv4): A UUIDv4 generator
 * Potential:
+  * Lisp: A tree-walking s-expression interpreter capable of running a fibonacci function
   * JQ: A tiny JQ clone
   * HTTP: An HTTP server from UNIX sockets
   * RBTree: A red-black tree
