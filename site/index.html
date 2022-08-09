@@ -23,7 +23,7 @@
 </section>
 
 <section>
-  {% for project_name, project in projects.items() %}
+  {% for project_name, project in projects %}
   <h2>{{ project_name }}</h2>
   <ul>
     {% for language in project["implementations"] %}

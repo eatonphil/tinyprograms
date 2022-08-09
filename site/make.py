@@ -79,7 +79,7 @@ for project_name, project in PROJECTS.items():
 with open(os.path.join(REPO_ROOT, "site/index.html")) as f:
     template = Template(f.read())
     with open(os.path.join(OUT_ROOT, "index.html"), 'w') as fw:
-        fw.write(template.render(projects=PROJECTS))
+        fw.write(template.render(projects=sorted(PROJECTS.items())))
 
 with open(os.path.join(REPO_ROOT, "site/stars.html")) as f:
     stars_html = f.read()
