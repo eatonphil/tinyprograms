@@ -69,8 +69,11 @@ for project in subdirs(REPO_ROOT):
                     if test.endswith('.stdout'):
                         continue
 
+                    print("Running {} for {}".format(test, l_name))
+
                     run_test_file(project, test)
             elif os.path.exists(project + "/test_runner.py"):
+                print("Running {}/test_runner.py for {}".format(project, l_name))
                 res = subprocess.run(os.path.abspath(project) + "/test_runner.py " + program["run"], shell=True, cwd=language, capture_output=True)
                 if res.returncode != 0:
                     print(res.stdout.decode())
