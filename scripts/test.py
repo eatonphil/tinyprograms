@@ -29,7 +29,7 @@ def run_test_file(project, test):
 
     for run_step in run_steps:
         try:
-            out = subprocess.check_output(program['run'].format(PROGRAM="../_tests/" + test), shell=True, cwd=language)
+            out = subprocess.check_output(run_step.format(PROGRAM="../_tests/" + test), shell=True, cwd=language)
         except Exception as e:
             print(e)
             out = ""
