@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>UUIDv4 in go | Tiny Programs</title>
 
+<a href="/">Home</a>
 <h1>UUIDv4 in go</h1>
 
 <section>
@@ -42,7 +43,12 @@ func main() {
 	buf[6] |= 1 << 6
 	buf[6] &= ^(byte(1) << 7)
 
-	fmt.Printf("%x-%x-%x-%x-%x", buf[:4], buf[4:6], buf[6:8], buf[8:10], buf[10:16])
+	fmt.Printf("%x-%x-%x-%x-%x",
+		buf[:4],
+		buf[4:6],
+		buf[6:8],
+		buf[8:10],
+		buf[10:16])
 }
 </code></pre>
 </section>

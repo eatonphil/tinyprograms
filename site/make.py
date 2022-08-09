@@ -53,6 +53,7 @@ for project in subdirs(REPO_ROOT):
 
         l_name = language.split('/')[-1]
         PROJECTS[p_name]["implementations"].append(l_name)
+        PROJECTS[p_name]["implementations"].sort()
 
     if len(PROJECTS[p_name]["implementations"]) == 0:
         del PROJECTS[p_name]
