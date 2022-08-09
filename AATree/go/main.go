@@ -6,18 +6,14 @@ import (
 	"strconv"
 )
 
-type Ordered interface {
-	~int
-}
-
-type AATree[K Ordered] struct{
-	key K
-	left *AATree[K]
-	right *AATree[K]
+type AATree struct{
+	key int
+	left *AATree
+	right *AATree
 	level int
 }
 
-func skew[K Ordered](tree *AATree[K]) *AATree[K] {
+func skew(tree *AATree) *AATree {
 	if tree == nil || tree.left == nil {
 		return tree
 	}
@@ -32,7 +28,7 @@ func skew[K Ordered](tree *AATree[K]) *AATree[K] {
 	return tree
 }
 
-func split[K Ordered](tree *AATree[K]) *AATree[K] {
+func split(tree *AATree) *AATree {
 	if tree == nil || tree.right == nil || tree.right.right == nil {
 		return tree
 	}
@@ -48,9 +44,9 @@ func split[K Ordered](tree *AATree[K]) *AATree[K] {
 	return tree
 }
 
-func insert[K Ordered](tree *AATree[K], key K) *AATree[K] {
+func insert(tree *AATree, key int) *AATree {
 	if tree == nil {
-		return &AATree[K]{
+		return &AATree{
 			key: key,
 			left: nil,
 			right: nil,
@@ -67,7 +63,7 @@ func insert[K Ordered](tree *AATree[K], key K) *AATree[K] {
 	return split(skew(tree))
 }
 
-func print[K Ordered](tree *AATree[K], space string) {
+func print(tree *AATree, space string) {
 	if tree.left != nil {
 		print(tree.left, space + "  ")
 	}
@@ -120,7 +116,7 @@ func splitNumbersFromFile(file string) []int {
 }
 
 func main() {
-	var t *AATree[int]
+	var t *AATree
 	for _, number := range splitNumbersFromFile(os.Args[1]) {
 		t = insert(t, number)
 	}

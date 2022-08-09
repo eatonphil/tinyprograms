@@ -1,3 +1,3 @@
-A random UUIDv4 generator.
+A UUIDv4 generator.
 
-See [https://www.rfc-editor.org/rfc/rfc4122](https://en.wikipedia.org/wiki/Brainfuck) for details.
+See [https://www.rfc-editor.org/rfc/rfc4122](https://www.rfc-editor.org/rfc/rfc4122) for details.
