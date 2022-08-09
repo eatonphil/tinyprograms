@@ -12,6 +12,12 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
+    # Set up Go
+    - uses: actions/setup-go@v3
+      with:
+        go-version: '>=1.18.0'
+        check-latest: true
+
     # Set up Zig
     - uses: goto-bus-stop/setup-zig@v1
       with:

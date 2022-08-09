@@ -22,10 +22,10 @@ def subdirs(path):
 
 def run_test_file(project, test):
     with open(project + "/_tests/" + test + ".stdout") as e:
-        expected = e.read().encode()
+        expected = e.read().strip()
 
     try:
-        out = subprocess.check_output(program['run'].format(PROGRAM="../_tests/" + test), shell=True, cwd=language)
+        out = subprocess.check_output(program['run'].format(PROGRAM="../_tests/" + test), shell=True, cwd=language).decode().strip()
     except Exception as e:
         print(e)
         out = ""
@@ -36,11 +36,18 @@ def run_test_file(project, test):
 
 
 language_filter = None
+project_filter = None
 for i, arg in enumerate(sys.argv):
     if arg in ["--language", "-l"]:
         language_filter = sys.argv[i+1]
+
+    if arg in ["--project", "-p"]:
+        project_filter = sys.argv[i+1]
     
 for project in subdirs(REPO_ROOT):
+    p_name = project.split('/')[-1]
+    if project_filter is not None and p_name != project_filter:
+        continue
     if project in NON_PROJECT_DIRS:
         continue
 

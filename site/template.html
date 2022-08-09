@@ -7,31 +7,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{{ project_name }} in {{ language }} | Tiny Programs</title>
 
-<a href="/">Home</a>
-<h1>{{ project_name }} in {{ language }}</h1>
+<article>
+  <a href="/">Tiny Programs</a>
+  <h1>{{ project_name }} in {{ language }}</h1>
 
-<section>
-  <h2>Implementation</h2>
-  <a href="{{url}}">Source Code</a>
-  <pre><code>{{program}}</code></pre>
-</section>
+  <section>
+    <h2>Implementation</h2>
+    <div class="description">
+      {% if project['description'] %}
+      {{project['description']}}
+      {% endif %}
+    </div>
+    <a href="{{url}}">Source Code</a>
+    <pre><code>{{program}}</code></pre>
+  </section>
 
-<section>
-  <h2>Build and run</h2>
-  <p>These steps are linux only.</p>
-  <pre><code>{% for step in prepare %}$ {{step}}
-{% endfor %}
-$ {{run_step}}</code></pre>
-</section>
+  <section>
+    <h2>Build and run</h2>
+    <p>These steps are linux only.</p>
+    <pre><code>{% for step in prepare %}$ {{step}}
+	{% endfor %}
+	$ {{run_step}}</code></pre>
+  </section>
 
-<section>
-  <h2>All implementations</h2>
-  <ul>
-    {% for language in project["implementations"] %}
-    <li><a href="/{{project_name}}/{{language}}.html">{{language}}</a></li>
-    {% endfor %}
-  </ul>
-</section>
+  <section>
+    <h2>All implementations</h2>
+    <ul>
+      {% for language in project["implementations"] %}
+      <li><a href="/{{project_name}}/{{language}}.html">{{language}}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <footer>
+    <p>Copyright 2022 Phil Eaton</p>
+    <p>
+      <a href="https://github.com/eatonphil/tinyprograms/blob/main/LICENSE.MD">MIT Licensed</a>
+    </p>
+  </footer>
+</article>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
