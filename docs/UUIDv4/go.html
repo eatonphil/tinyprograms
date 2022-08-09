@@ -1,0 +1,75 @@
+<meta charset="UTF-8">
+<link href="/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/reset.min.css" />
+<link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+<link href="/materialicons.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>UUIDv4 in go | Tiny Programs</title>
+
+<a href="/">Home</a>
+<h1>UUIDv4 in go</h1>
+
+<a href="https://github.com/eatonphil/tinyprograms/blob/main/UUIDv4/go/main.go">Source Code</a>
+
+<section>
+  <pre><code>package main
+
+import "fmt"
+import "os"
+
+func main() {
+	f, err := os.Open("/dev/random")
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	buf := make([]byte, 16)
+	n, err := f.Read(buf)
+	if err != nil {
+		panic(err)
+	}
+
+	if n != len(buf) {
+		panic("Expected 16 bytes")
+	}
+
+	// Set bit 6 to 0
+	buf[8] &= ^(byte(1) << 6)
+	// Set bit 7 to 1
+	buf[8] |= 1 << 7
+
+	// Set version
+	buf[6] &= ^(byte(1) << 4)
+	buf[6] &= ^(byte(1) << 5)
+	buf[6] |= 1 << 6
+	buf[6] &= ^(byte(1) << 7)
+
+	fmt.Printf("%x-%x-%x-%x-%x",
+		buf[:4],
+		buf[4:6],
+		buf[6:8],
+		buf[8:10],
+		buf[10:16])
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>All implementations</h2>
+  <ul>
+    
+    <li><a href="/UUIDv4/go.html">go</a></li>
+    
+    <li><a href="/UUIDv4/rust.html">rust</a></li>
+    
+    <li><a href="/UUIDv4/zig.html">zig</a></li>
+    
+  </ul>
+</section>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/go.min.js"></script>
+<script>hljs.highlightAll();</script>

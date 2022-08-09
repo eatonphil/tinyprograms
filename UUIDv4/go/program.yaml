@@ -1,7 +1,6 @@
 source: main.go
-
 prepare:
   - rm -f go.mod go.sum
-  - go mod init brainfuck
+  - go mod init uuid
   - go build
-run: ./brainfuck {PROGRAM}
+run: ./uuid

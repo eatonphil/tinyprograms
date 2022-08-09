@@ -1,0 +1,114 @@
+<meta charset="UTF-8">
+<link href="/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/reset.min.css" />
+<link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+<link href="/materialicons.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brainfuck in go | Tiny Programs</title>
+
+<a href="/">Home</a>
+<h1>Brainfuck in go</h1>
+
+<a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/go/main.go">Source Code</a>
+
+<section>
+  <pre><code>package main
+
+import (
+	"io"
+	"fmt"
+	"os"
+	"log"
+	"bufio"
+)
+
+func interpret(prog []byte) {
+	stdin := bufio.NewReader(os.Stdin)
+	var dataStack [30_000]byte
+	var dataPointer int
+	var instructionStack []int
+	var instructionPointer int
+	for instructionPointer < len(prog) {
+		switch prog[instructionPointer] {
+		case '>':
+			dataPointer++
+		case '<':
+			dataPointer--
+		case '+':
+			dataStack[dataPointer]++
+		case '-':
+			dataStack[dataPointer]--
+		case '.':
+			fmt.Printf("%s", string(dataStack[dataPointer]))
+		case ',':
+			c, err := stdin.ReadByte()
+			if err != nil && err != io.EOF {
+				log.Fatal(err)
+			}
+
+			dataStack[dataPointer] = c
+		case '[':
+			stack := 1
+			end := instructionPointer + 1
+		loop:
+			for {
+				switch prog[end] {
+				case '[':
+					stack++
+				case ']':
+					stack--
+
+					if stack == 0 {
+						break loop
+					}
+				}
+
+				end++
+			}
+
+			if dataStack[dataPointer] == 0 {
+				instructionPointer = end
+			} else {
+				instructionStack = append(instructionStack, instructionPointer)
+			}
+		case ']':
+			if dataStack[dataPointer] != 0 {
+				instructionPointer = instructionStack[len(instructionStack)-1] - 1
+			}
+
+			instructionStack = instructionStack[:len(instructionStack)-1]
+		}
+
+		instructionPointer++
+	}
+}
+
+func main() {
+	prog, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	interpret(prog)
+}
+</code></pre>
+</section>
+
+<section>
+  <h2>All implementations</h2>
+  <ul>
+    
+    <li><a href="/Brainfuck/go.html">go</a></li>
+    
+    <li><a href="/Brainfuck/rust.html">rust</a></li>
+    
+    <li><a href="/Brainfuck/zig.html">zig</a></li>
+    
+  </ul>
+</section>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/go.min.js"></script>
+<script>hljs.highlightAll();</script>
