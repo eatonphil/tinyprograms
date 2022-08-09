@@ -8,6 +8,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer f.Close()
 
 	buf := make([]byte, 16)
 	n, err := f.Read(buf)

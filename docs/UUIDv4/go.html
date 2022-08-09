@@ -21,6 +21,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer f.Close()
 
 	buf := make([]byte, 16)
 	n, err := f.Read(buf)
@@ -58,6 +59,8 @@ func main() {
   <ul>
     
     <li><a href="/UUIDv4/go.html">go</a></li>
+    
+    <li><a href="/UUIDv4/rust.html">rust</a></li>
     
     <li><a href="/UUIDv4/zig.html">zig</a></li>
     

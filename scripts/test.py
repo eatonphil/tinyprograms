@@ -39,14 +39,14 @@ language_filter = None
 for i, arg in enumerate(sys.argv):
     if arg in ["--language", "-l"]:
         language_filter = sys.argv[i+1]
-
     
 for project in subdirs(REPO_ROOT):
     if project in NON_PROJECT_DIRS:
         continue
 
     for language in subdirs(REPO_ROOT + project):
-        if language_filter is not None and language != language_filter:
+        l_name = language.split('/')[-1]
+        if language_filter is not None and l_name != language_filter:
             continue
 
         if "_tests" in language:
