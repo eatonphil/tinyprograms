@@ -66,6 +66,10 @@ a:visited {
     color: var(--link);
 }
 
+section {
+    margin-top: 3rem;
+}
+
 .description {
     font-size: .9rem;
     color: #555;

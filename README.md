@@ -1,4 +1,4 @@
-# Tiny Programs
+# Tiny Programs: Rosetta code for implementations
 
 Learning a new language can be hard. Developers go to "Hello World"
 but this is so trivial a program so as to be almost useless.
@@ -6,6 +6,10 @@ but this is so trivial a program so as to be almost useless.
 This project is a collection of tiny programs that may help you learn
 a language. It is similar to Rosetta Code except that all programs
 here will be *implementations* and not library calls.
+
+Implementations are opinionated and simple, but not necessarily
+idiomatic. Tests are in place for all implementations but they are not
+necessarily 100% bug-free.
 
 # Programs
 
