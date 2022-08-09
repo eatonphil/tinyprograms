@@ -1,6 +1,6 @@
 args <- commandArgs(trailingOnly=TRUE)
 
-program <- strsplit(readLines(args[1]), "")[[1]]
+program <- strsplit(readChar(args[1], file.info(args[1])$size), "")[[1]]
 
 dataStack <- c(rep(0, 30000))
 dataPointer <- 1
