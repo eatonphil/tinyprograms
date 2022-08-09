@@ -10,9 +10,9 @@
 <a href="/">Home</a>
 <h1>Brainfuck in zig</h1>
 
-<a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/zig/main.zig">Source Code</a>
-
 <section>
+  <h2>Implementation</h2>
+  <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/zig/main.zig">Source Code</a>
   <pre><code>const std = @import("std");
 
 var stdout_mutex = std.Thread.Mutex{};
@@ -111,6 +111,14 @@ pub fn main() !void {
     }
 }
 </code></pre>
+</section>
+
+<section>
+  <h2>Build and run</h2>
+  <p>These steps are linux only.</p>
+  <pre><code>$ zig build-exe main.zig
+
+$ ./main $myProgram</code></pre>
 </section>
 
 <section>

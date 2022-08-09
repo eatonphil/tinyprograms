@@ -71,6 +71,8 @@ for project_name, project in PROJECTS.items():
 
         program = open(os.path.join(REPO_ROOT, project_name, language, program_desc["source"])).read()
 
+        print("Writing {} page for {}".format(language, project_name))
+
         with open(os.path.join(OUT_ROOT, project_name, language + '.html'), 'w') as f:
             f.write(template.render(
                 **program_desc,
@@ -78,6 +80,7 @@ for project_name, project in PROJECTS.items():
                 project_name=project_name,
                 project=project,
                 url=os.path.join(REPO_BLOB_URL, project_name, language, program_desc["source"]),
+                run_step=(program_desc['run'][0] if isinstance(program_desc['run'], list) else program_desc['run']).format(PROGRAM="$myProgram"),
                 language=language))
 
 with open(os.path.join(REPO_ROOT, "site/index.html")) as f:

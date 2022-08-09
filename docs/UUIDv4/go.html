@@ -10,9 +10,9 @@
 <a href="/">Home</a>
 <h1>UUIDv4 in go</h1>
 
-<a href="https://github.com/eatonphil/tinyprograms/blob/main/UUIDv4/go/main.go">Source Code</a>
-
 <section>
+  <h2>Implementation</h2>
+  <a href="https://github.com/eatonphil/tinyprograms/blob/main/UUIDv4/go/main.go">Source Code</a>
   <pre><code>package main
 
 import "fmt"
@@ -54,6 +54,16 @@ func main() {
 		buf[10:16])
 }
 </code></pre>
+</section>
+
+<section>
+  <h2>Build and run</h2>
+  <p>These steps are linux only.</p>
+  <pre><code>$ rm -f go.mod go.sum
+$ go mod init uuid
+$ go build
+
+$ ./uuid</code></pre>
 </section>
 
 <section>
