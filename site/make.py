@@ -53,6 +53,7 @@ for project in subdirs(REPO_ROOT):
 
         l_name = language.split('/')[-1]
         PROJECTS[p_name]["implementations"].append(l_name)
+        PROJECTS[p_name]["implementations"].sort()
 
     if len(PROJECTS[p_name]["implementations"]) == 0:
         del PROJECTS[p_name]
@@ -79,7 +80,7 @@ for project_name, project in PROJECTS.items():
 with open(os.path.join(REPO_ROOT, "site/index.html")) as f:
     template = Template(f.read())
     with open(os.path.join(OUT_ROOT, "index.html"), 'w') as fw:
-        fw.write(template.render(projects=PROJECTS))
+        fw.write(template.render(projects=sorted(PROJECTS.items())))
 
 with open(os.path.join(REPO_ROOT, "site/stars.html")) as f:
     stars_html = f.read()
