@@ -30,5 +30,10 @@ func main() {
 	buf[6] |= 1 << 6
 	buf[6] &= ^(byte(1) << 7)
 
-	fmt.Printf("%x-%x-%x-%x-%x", buf[:4], buf[4:6], buf[6:8], buf[8:10], buf[10:16])
+	fmt.Printf("%x-%x-%x-%x-%x",
+		buf[:4],
+		buf[4:6],
+		buf[6:8],
+		buf[8:10],
+		buf[10:16])
 }
