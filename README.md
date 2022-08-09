@@ -11,11 +11,11 @@ here will be *implementations* and not library calls.
 
 * [Brainfuck](./Brainfuck): A complete Brainfuck implementation
 * [UUIDv4](./UUIDv4): A UUIDv4 generator
+* [AATree](./AATree): A balanced tree
 * Potential:
   * Lisp: A tree-walking s-expression interpreter capable of running a fibonacci function
   * JQ: A tiny JQ clone
   * HTTP: An HTTP server from UNIX sockets
-  * RBTree: A red-black tree
 
 # Contributing an implementation
 

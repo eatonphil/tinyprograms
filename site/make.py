@@ -6,6 +6,7 @@ import shutil
 import subprocess
 import urllib.request
 
+import mistune
 import yaml
 from jinja2 import Template
 
@@ -46,7 +47,11 @@ for project in subdirs(REPO_ROOT):
         "implementations": [],
     }
 
-    for language in subdirs(os.path.join(REPO_ROOT, project)):
+    if os.path.exists(os.path.join(project, "README.md")):
+        d = open(os.path.join(project, "README.md")).read()
+        PROJECTS[p_name]['description'] = mistune.html(d)
+
+    for language in subdirs(os.path.join(project)):
         if "_tests" in language:
             continue
 
