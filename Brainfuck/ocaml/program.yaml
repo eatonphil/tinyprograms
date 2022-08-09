@@ -1,3 +1,6 @@
 prepare:
-  - ocamlc bf.ml -o bf
-run: ./bf {PROGRAM}
+  - ocamlc bf.functional.ml -o bf.functional
+  - ocamlc bf.imperative.ml -o bf.imperative
+run:
+  - ./bf.functional {PROGRAM}
+  - ./bf.imperative {PROGRAM}
