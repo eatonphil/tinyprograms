@@ -1,0 +1,5 @@
+source: main.zig
+
+prepare:
+  - zig build-exe main.zig
+run: ./main

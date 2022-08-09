@@ -9,33 +9,26 @@ func main() {
 		panic(err)
 	}
 
-	nBytes := 16
-	var bytes []byte
-	buf := make([]byte, 1024)
-	for len(bytes) != nBytes {
-		n, err := f.Read(buf)
-		if err != nil {
-			panic(err)
-		}
+	buf := make([]byte, 16)
+	n, err := f.Read(buf)
+	if err != nil {
+		panic(err)
+	}
 
-		toTake := nBytes - len(bytes)
-		if toTake > n {
-			toTake = n
-		}
-
-		bytes = append(bytes, buf[:toTake]...)
+	if n != len(buf) {
+		panic("Expected 16 bytes")
 	}
 
 	// Set bit 6 to 0
-	bytes[8] &= ^(byte(1) << 6)
+	buf[8] &= ^(byte(1) << 6)
 	// Set bit 7 to 1
-	bytes[8] |= 1 << 7
+	buf[8] |= 1 << 7
 
 	// Set version
-	bytes[6] &= ^(byte(1) << 4)
-	bytes[6] &= ^(byte(1) << 5)
-	bytes[6] |= 1 << 6
-	bytes[6] &= ^(byte(1) << 7)
+	buf[6] &= ^(byte(1) << 4)
+	buf[6] &= ^(byte(1) << 5)
+	buf[6] |= 1 << 6
+	buf[6] &= ^(byte(1) << 7)
 
-	fmt.Printf("%x-%x-%x-%x-%x", bytes[:4], bytes[4:6], bytes[6:8], bytes[8:10], bytes[10:16])
+	fmt.Printf("%x-%x-%x-%x-%x", buf[:4], buf[4:6], buf[6:8], buf[8:10], buf[10:16])
 }
