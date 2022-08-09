@@ -11,6 +11,8 @@ from jinja2 import Template
 
 from millify import millify
 
+REPO_BLOB_URL = "https://github.com/eatonphil/tinyprograms/blob/main/"
+
 REPO_ROOT = "."
 NON_PROJECT_DIRS = [os.path.join(REPO_ROOT, r) for r in [
     "site",
@@ -75,6 +77,7 @@ for project_name, project in PROJECTS.items():
                 program=program,
                 project_name=project_name,
                 project=project,
+                url=os.path.join(REPO_BLOB_URL, project_name, language, program_desc["source"]),
                 language=language))
 
 with open(os.path.join(REPO_ROOT, "site/index.html")) as f:
