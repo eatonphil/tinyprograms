@@ -23,16 +23,20 @@ def subdirs(path):
 def run_test_file(project, test):
     with open(project + "/_tests/" + test + ".stdout") as e:
         expected = e.read().strip()
+        
+    run_steps = program['run']
+    run_steps = run_steps if isinstance(run_steps, list) else [run_steps]
 
-    try:
-        out = subprocess.check_output(program['run'].format(PROGRAM="../_tests/" + test), shell=True, cwd=language).decode().strip()
-    except Exception as e:
-        print(e)
-        out = ""
-    if out != expected:
-        print("[{}, {}]: Expected '{}', got '{}'.".format(project.split('/')[1], language.split('/')[-1], expected, out))
-        global failed
-        failed = True
+    for run_step in run_steps:
+        try:
+            out = subprocess.check_output(run_step.format(PROGRAM="../_tests/" + test), shell=True, cwd=language).decode().strip()
+        except Exception as e:
+            print(e)
+            out = ""
+        if out != expected:
+            print("[{}, {}]: Expected '{}', got '{}'.".format(project.split('/')[1], language.split('/')[-1], expected, out))
+            global failed
+            failed = True
 
 
 language_filter = None

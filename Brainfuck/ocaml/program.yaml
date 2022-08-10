@@ -1,0 +1,6 @@
+prepare:
+  - opam exec -- ocamlc bf.functional.ml -o bf.functional
+  - opam exec -- ocamlc bf.imperative.ml -o bf.imperative
+run:
+  - ./bf.functional {PROGRAM}
+  - ./bf.imperative {PROGRAM}
