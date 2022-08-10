@@ -22,14 +22,14 @@ def subdirs(path):
 
 def run_test_file(project, test):
     with open(project + "/_tests/" + test + ".stdout") as e:
-        expected = e.read().encode()
+        expected = e.read().strip()
         
     run_steps = program['run']
     run_steps = run_steps if isinstance(run_steps, list) else [run_steps]
 
     for run_step in run_steps:
         try:
-            out = subprocess.check_output(run_step.format(PROGRAM="../_tests/" + test), shell=True, cwd=language)
+            out = subprocess.check_output(run_step.format(PROGRAM="../_tests/" + test), shell=True, cwd=language).decode().strip()
         except Exception as e:
             print(e)
             out = ""
