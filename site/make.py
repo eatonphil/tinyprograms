@@ -6,6 +6,7 @@ import shutil
 import subprocess
 import urllib.request
 
+import mistune
 import yaml
 from jinja2 import Template
 
@@ -46,7 +47,11 @@ for project in subdirs(REPO_ROOT):
         "implementations": [],
     }
 
-    for language in subdirs(os.path.join(REPO_ROOT, project)):
+    if os.path.exists(os.path.join(project, "README.md")):
+        d = open(os.path.join(project, "README.md")).read()
+        PROJECTS[p_name]['description'] = mistune.html(d)
+
+    for language in subdirs(os.path.join(project)):
         if "_tests" in language:
             continue
 
@@ -71,6 +76,8 @@ for project_name, project in PROJECTS.items():
 
         program = open(os.path.join(REPO_ROOT, project_name, language, program_desc["source"])).read()
 
+        print("Writing {} page for {}".format(language, project_name))
+
         with open(os.path.join(OUT_ROOT, project_name, language + '.html'), 'w') as f:
             f.write(template.render(
                 **program_desc,
@@ -78,6 +85,7 @@ for project_name, project in PROJECTS.items():
                 project_name=project_name,
                 project=project,
                 url=os.path.join(REPO_BLOB_URL, project_name, language, program_desc["source"]),
+                run_step=(program_desc['run'][0] if isinstance(program_desc['run'], list) else program_desc['run']).format(PROGRAM="$myProgram"),
                 language=language))
 
 with open(os.path.join(REPO_ROOT, "site/index.html")) as f:

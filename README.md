@@ -1,4 +1,4 @@
-# Tiny Programs
+# Tiny Programs: Rosetta code for implementations
 
 Learning a new language can be hard. Developers go to "Hello World"
 but this is so trivial a program so as to be almost useless.
@@ -7,15 +7,19 @@ This project is a collection of tiny programs that may help you learn
 a language. It is similar to Rosetta Code except that all programs
 here will be *implementations* and not library calls.
 
+Implementations are opinionated and simple, but not necessarily
+idiomatic. Tests are in place for all implementations but they are not
+necessarily 100% bug-free.
+
 # Programs
 
 * [Brainfuck](./Brainfuck): A complete Brainfuck implementation
-* [Lisp](./Lisp): A tree-walking s-expression interpreter capable of running a fibonacci function
 * [UUIDv4](./UUIDv4): A UUIDv4 generator
+* [AATree](./AATree): A generic, balanced binary tree
 * Potential:
+  * Lisp: A tree-walking s-expression interpreter capable of running a fibonacci function
   * JQ: A tiny JQ clone
   * HTTP: An HTTP server from UNIX sockets
-  * RBTree: A red-black tree
 
 # Contributing an implementation
 

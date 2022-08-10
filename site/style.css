@@ -22,16 +22,15 @@ html, body {
 }
 
 body {
-    margin: 1rem auto;
+    margin: 15px;
     color: black;
     font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
-    max-width: 100%;
-    width: 600px;
 }
 
-h1, h2, h3, h4, h5, h6, table {
-    font-family: sans-serif;
-    font-weight: 100;
+article {
+    width: 600px;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
 h1 {
@@ -60,4 +59,30 @@ a {
 
 a:visited {
     color: var(--link);
+}
+
+section {
+    margin-top: 3rem;
+}
+
+.description {
+    font-size: .9rem;
+    color: #555;
+}
+
+.description a {
+    color: #555;
+    text-decoration: underline;
+}
+
+footer {
+    border-top: 1px solid #ccc;
+    font-size: .9rem;
+    margin-top: 30px;
+    padding-top: 30px;
+}
+
+footer p {
+    padding: 0;
+    margin: 0;
 }

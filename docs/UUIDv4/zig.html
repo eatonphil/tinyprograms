@@ -5,15 +5,23 @@
 <link href="/materialicons.css" rel="stylesheet">
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>UUIDv4 in zig | Tiny Programs</title>
+<title>UUIDv4 in zig | Tiny Programs Rosetta code for implementations</title>
 
-<a href="/">Home</a>
-<h1>UUIDv4 in zig</h1>
+<article>
+  <a href="/">Tiny Programs</a>
+  <h1>UUIDv4 in zig</h1>
 
-<a href="https://github.com/eatonphil/tinyprograms/blob/main/UUIDv4/zig/main.zig">Source Code</a>
+  <section>
+    <h2>Implementation</h2>
+    <div class="description">
+      
+      <p>A UUIDv4 generator.</p>
+<p>See <a href="https://www.rfc-editor.org/rfc/rfc4122">https://www.rfc-editor.org/rfc/rfc4122</a> for details.</p>
 
-<section>
-  <pre><code>const std = @import("std");
+      
+    </div>
+    <a href="https://github.com/eatonphil/tinyprograms/blob/main/UUIDv4/zig/main.zig">Source Code</a>
+    <pre><code>const std = @import("std");
 
 var stdout_mutex = std.Thread.Mutex{};
 
@@ -55,20 +63,38 @@ pub fn main() !void {
     });
 }
 </code></pre>
-</section>
+  </section>
 
-<section>
-  <h2>All implementations</h2>
-  <ul>
-    
-    <li><a href="/UUIDv4/go.html">go</a></li>
-    
-    <li><a href="/UUIDv4/rust.html">rust</a></li>
-    
-    <li><a href="/UUIDv4/zig.html">zig</a></li>
-    
-  </ul>
-</section>
+  <section>
+    <h2>Build and run</h2>
+    <p>These steps are linux only.</p>
+    <pre><code>$ zig build-exe main.zig
+
+$ ./main</code></pre>
+  </section>
+
+  <section>
+    <h2>All implementations</h2>
+    <ul>
+      
+      <li><a href="/UUIDv4/go.html">go</a></li>
+      
+      <li><a href="/UUIDv4/java.html">java</a></li>
+      
+      <li><a href="/UUIDv4/rust.html">rust</a></li>
+      
+      <li><a href="/UUIDv4/zig.html">zig</a></li>
+      
+    </ul>
+  </section>
+
+  <footer>
+    <p>Copyright 2022 Phil Eaton</p>
+    <p>
+      <a href="https://github.com/eatonphil/tinyprograms/blob/main/LICENSE.MD">MIT Licensed</a>
+    </p>
+  </footer>
+</article>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>

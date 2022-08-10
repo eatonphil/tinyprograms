@@ -5,68 +5,81 @@
 <link href="/materialicons.css" rel="stylesheet">
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Brainfuck in rust | Tiny Programs</title>
+<title>Brainfuck in rust | Tiny Programs Rosetta code for implementations</title>
 
-<a href="/">Home</a>
-<h1>Brainfuck in rust</h1>
+<article>
+  <a href="/">Tiny Programs</a>
+  <h1>Brainfuck in rust</h1>
 
-<a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/rust/main.rs">Source Code</a>
+  <section>
+    <h2>Implementation</h2>
+    <div class="description">
+      
+      <p>An implementation of the Brainfuck programming language.</p>
+<p>See <a href="https://en.wikipedia.org/wiki/Brainfuck">https://en.wikipedia.org/wiki/Brainfuck</a> for details.</p>
 
-<section>
-  <pre><code>use std::io::{self, Read};
-use std::env;
+      
+    </div>
+    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/rust/main.rs">Source Code</a>
+    <pre><code>use std::env;
 use std::fs;
+use std::io::{self, Read};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     let filename = &args[1];
 
-    let prog: Vec<char> = fs::read_to_string(filename).expect("Could not read file").chars().collect();
+    let prog: Vec<char> = fs::read_to_string(filename)
+        .expect("Could not read file")
+        .chars()
+        .collect();
 
-    let mut data_stack: [u8;30_000] = [0; 30_000];
+    let mut data_stack: [u8; 30_000] = [0; 30_000];
     let mut data_pointer: usize = 0;
     let mut instr_stack: Vec<usize> = Vec::new();
     let mut instr_pointer: usize = 0;
 
-    let mut stdin_buf: [u8;1] = [0; 1];
-    
+    let mut stdin_buf: [u8; 1] = [0; 1];
+
     while instr_pointer < prog.len() {
-	match prog[instr_pointer] {
-	    '>' => {
+        match prog[instr_pointer] {
+            '>' => {
                 data_pointer += 1;
-            },
+            }
             '<' => {
                 data_pointer -= 1;
-            },
+            }
             '+' => {
                 data_stack[data_pointer] += 1;
-            },
+            }
             '-' => {
                 data_stack[data_pointer] -= 1;
-            },
+            }
             '.' => {
-		print!("{}", data_stack[data_pointer] as char);
-            },
+                print!("{}", data_stack[data_pointer] as char);
+            }
             ',' => {
-		io::stdin().read_exact(&mut stdin_buf).expect("Could not read from stdin");
+                io::stdin()
+                    .read_exact(&mut stdin_buf)
+                    .expect("Could not read from stdin");
                 data_stack[data_pointer] = stdin_buf[0];
-            },
-	    '[' => {
-		let mut stack = 1;
+            }
+            '[' => {
+                let mut stack = 1;
                 let mut end = instr_pointer + 1;
                 'outer: loop {
                     match prog[end] {
                         '[' => {
                             stack += 1;
-                        },
+                        }
                         ']' => {
                             stack -= 1;
 
                             if stack == 0 {
                                 break 'outer;
                             }
-                        },
-                        _ => {},
+                        }
+                        _ => {}
                     }
 
                     end += 1;
@@ -77,34 +90,52 @@ fn main() {
                 } else {
                     instr_stack.push(instr_pointer);
                 }
-	    },
-	    ']' => {
-		let new_pointer = instr_stack.pop().unwrap() - 1;
+            }
+            ']' => {
+                let new_pointer = instr_stack.pop().unwrap() - 1;
                 if data_stack[data_pointer] != 0 {
                     instr_pointer = new_pointer;
                 }
-	    },
-	    _ => {},
-	}
+            }
+            _ => {}
+        }
 
-	instr_pointer += 1;
+        instr_pointer += 1;
     }
 }
 </code></pre>
-</section>
+  </section>
 
-<section>
-  <h2>All implementations</h2>
-  <ul>
-    
-    <li><a href="/Brainfuck/go.html">go</a></li>
-    
-    <li><a href="/Brainfuck/rust.html">rust</a></li>
-    
-    <li><a href="/Brainfuck/zig.html">zig</a></li>
-    
-  </ul>
-</section>
+  <section>
+    <h2>Build and run</h2>
+    <p>These steps are linux only.</p>
+    <pre><code>$ rustc main.rs
+
+$ ./main $myProgram</code></pre>
+  </section>
+
+  <section>
+    <h2>All implementations</h2>
+    <ul>
+      
+      <li><a href="/Brainfuck/go.html">go</a></li>
+      
+      <li><a href="/Brainfuck/java.html">java</a></li>
+      
+      <li><a href="/Brainfuck/rust.html">rust</a></li>
+      
+      <li><a href="/Brainfuck/zig.html">zig</a></li>
+      
+    </ul>
+  </section>
+
+  <footer>
+    <p>Copyright 2022 Phil Eaton</p>
+    <p>
+      <a href="https://github.com/eatonphil/tinyprograms/blob/main/LICENSE.MD">MIT Licensed</a>
+    </p>
+  </footer>
+</article>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
