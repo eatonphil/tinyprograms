@@ -34,7 +34,7 @@ $ {{run_step}}</code></pre>
     <h2>All implementations</h2>
     <ul>
       {% for language in project["implementations"] %}
-      <li><a href="/{{project_name}}/{{language}}.html">{{language}}</a></li>
+      <li><a href="/{{project_name}}/{{language}}.html">{{language}}{% if language == 'go' %} (Reference){% endif %}</a></li>
       {% endfor %}
     </ul>
   </section>

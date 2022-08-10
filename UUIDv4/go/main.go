@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
 func main() {
 	f, err := os.Open("/dev/random")

@@ -22,6 +22,7 @@ func skew[K Comparable](tree *AATree[K]) *AATree[K] {
 		return tree
 	}
 
+	// Red node to the left? Do a right rotation.
 	if tree.left.level == tree.level {
 		l := tree.left
 		tree.left = l.right
@@ -37,6 +38,7 @@ func split[K Comparable](tree *AATree[K]) *AATree[K] {
 		return tree
 	}
 
+	// Right-right red chain? Do a left rotation
 	if tree.right.right.level == tree.level {
 		l := tree.right
 		tree.right = l.left
@@ -79,6 +81,7 @@ func print[K Comparable](tree *AATree[K], space string) {
 	}
 }
 
+// Breaks up a file of integers separated by spaces into a list of integers
 func splitNumbersFromFile(file string) []int {
 	bytes, err := os.ReadFile(file)
 	if err != nil {
