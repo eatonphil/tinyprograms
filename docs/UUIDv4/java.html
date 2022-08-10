@@ -5,11 +5,11 @@
 <link href="/materialicons.css" rel="stylesheet">
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>UUIDv4 in rust | Tiny Programs Rosetta code for implementations</title>
+<title>UUIDv4 in java | Tiny Programs Rosetta code for implementations</title>
 
 <article>
   <a href="/">Tiny Programs</a>
-  <h1>UUIDv4 in rust</h1>
+  <h1>UUIDv4 in java</h1>
 
   <section>
     <h2>Implementation</h2>
@@ -20,50 +20,55 @@
 
       
     </div>
-    <a href="https://github.com/eatonphil/tinyprograms/blob/main/UUIDv4/rust/main.rs">Source Code</a>
-    <pre><code>use std::io::{Read};
-use std::fs::File;
+    <a href="https://github.com/eatonphil/tinyprograms/blob/main/UUIDv4/java/Main.java">Source Code</a>
+    <pre><code>import java.io.IOException;
+import java.io.FileInputStream;
+import java.util.Arrays;
 
-fn main() {
-    let mut f = File::open("/dev/random").expect("Could not open /dev/random");
-    let mut buf: [u8;16] = [0; 16];
-    
-    // Read file into vector.
-    f.read_exact(&mut buf).expect("Could not read 16 bytes");
+public class Main {
+    public static void main(final String[] args) throws IOException {
+	var file = new FileInputStream("/dev/random");
 
-    // Set bit 6 to 0
-    buf[8] &= !((1 as u8) << 6);
-    // Set bit 7 to 1
-    buf[8] |= 1 << 7;
+	var buf = new byte[16];
+	var n = file.read(buf);
+	if (n != buf.length) {
+	    System.out.println("Could not read 16 bytes.");
+	    return;
+	}
 
-    // Set version
-    buf[6] &= !((1 as u8) << 4);
-    buf[6] &= !((1 as u8) << 5);
-    buf[6] |= 1 << 6;
-    buf[6] &= !((1 as u8) << 7);
+	// Set bit 6 to 0
+	buf[8] &= ~(1 << 6);
+	// Set bit 7 to 1
+	buf[8] |= 1 << 7;
 
-    print!("{:02x}{:02x}{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}",
-	   buf[0],
-	   buf[1],
-	   buf[2],
-	   buf[3],
-	   // -
-	   buf[4],
-	   buf[5],
-	   // - 
-	   buf[6],
-	   buf[7],
-	   // -
-	   buf[8],
-	   buf[9],
-	   // -
-	   buf[10],
-	   buf[11],
-	   buf[12],
-	   buf[13],
-	   buf[14],
-	   buf[15],
-    )
+	// Set version
+	buf[6] &= ~(1 << 4);
+	buf[6] &= ~(1 << 5);
+	buf[6] |= 1 << 6;
+	buf[6] &= ~(1 << 7);
+
+	System.out.format("%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x\n",
+	       buf[0],
+	       buf[1],
+	       buf[2],
+	       buf[3],
+	       // -
+	       buf[4],
+	       buf[5],
+	       // - 
+	       buf[6],
+	       buf[7],
+	       // -
+	       buf[8],
+	       buf[9],
+	       // -
+	       buf[10],
+	       buf[11],
+	       buf[12],
+	       buf[13],
+	       buf[14],
+	       buf[15]);
+    }
 }
 </code></pre>
   </section>
@@ -71,9 +76,9 @@ fn main() {
   <section>
     <h2>Build and run</h2>
     <p>These steps are linux only.</p>
-    <pre><code>$ rustc main.rs
+    <pre><code>$ javac Main.java
 
-$ ./main</code></pre>
+$ java Main.java</code></pre>
   </section>
 
   <section>
@@ -101,5 +106,5 @@ $ ./main</code></pre>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/rust.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/java.min.js"></script>
 <script>hljs.highlightAll();</script>

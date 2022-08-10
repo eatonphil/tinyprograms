@@ -46,14 +46,14 @@ for i, arg in enumerate(sys.argv):
     
 for project in subdirs(REPO_ROOT):
     p_name = project.split('/')[-1]
-    if project_filter is not None and p_name != project_filter:
+    if project_filter is not None and p_name.lower() != project_filter.lower():
         continue
     if project in NON_PROJECT_DIRS:
         continue
 
     for language in subdirs(REPO_ROOT + project):
         l_name = language.split('/')[-1]
-        if language_filter is not None and l_name != language_filter:
+        if language_filter is not None and l_name.lower() != language_filter.lower():
             continue
 
         if "_tests" in language:
@@ -81,7 +81,7 @@ for project in subdirs(REPO_ROOT):
                     run_test_file(project, test)
             elif os.path.exists(project + "/test_runner.py"):
                 print("Running {}/test_runner.py for {}".format(project, l_name))
-                res = subprocess.run(os.path.abspath(project) + "/test_runner.py " + program["run"], shell=True, cwd=language, capture_output=True)
+                res = subprocess.run(os.path.abspath(project) + "/test_runner.py '" + program["run"]+"'", shell=True, cwd=language, capture_output=True)
                 if res.returncode != 0:
                     print(res.stdout.decode())
                     print(res.stderr.decode())

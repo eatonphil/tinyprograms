@@ -34,12 +34,12 @@ public class Main {
 	    return;
 	}
 
-	String prog = Files.readString(Path.of(args[0]), StandardCharsets.US_ASCII);
+	var prog = Files.readString(Path.of(args[0]), StandardCharsets.US_ASCII);
 
-	byte[] dataStack = new byte[30000];
+	var dataStack = new byte[30000];
 	int dataPointer = 0;
 
-	ArrayList<Integer> instrStack = new ArrayList<Integer>();
+	var instrStack = new ArrayList<Integer>();
 	int instrPointer = 0;
 
 	while (instrPointer < prog.length()) {
@@ -63,8 +63,8 @@ public class Main {
 		dataStack[dataPointer] = (byte)System.in.read();
 		break;
 	    case '[':
-		int stack = 1;
-		int end = instrPointer + 1;
+		var stack = 1;
+		var end = instrPointer + 1;
 	    loop: while (true) {
 		    switch (prog.charAt(end)) {
 		    case '[':
