@@ -21,13 +21,13 @@
       
     </div>
     <a href="https://github.com/eatonphil/tinyprograms/blob/main/UUIDv4/rust/main.rs">Source Code</a>
-    <pre><code>use std::io::{Read};
-use std::fs::File;
+    <pre><code>use std::fs::File;
+use std::io::Read;
 
 fn main() {
     let mut f = File::open("/dev/random").expect("Could not open /dev/random");
-    let mut buf: [u8;16] = [0; 16];
-    
+    let mut buf: [u8; 16] = [0; 16];
+
     // Read file into vector.
     f.read_exact(&mut buf).expect("Could not read 16 bytes");
 
@@ -81,6 +81,8 @@ $ ./main</code></pre>
     <ul>
       
       <li><a href="/UUIDv4/go.html">go</a></li>
+      
+      <li><a href="/UUIDv4/java.html">java</a></li>
       
       <li><a href="/UUIDv4/rust.html">rust</a></li>
       

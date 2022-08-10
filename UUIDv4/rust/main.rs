@@ -1,10 +1,10 @@
-use std::io::{Read};
 use std::fs::File;
+use std::io::Read;
 
 fn main() {
     let mut f = File::open("/dev/random").expect("Could not open /dev/random");
-    let mut buf: [u8;16] = [0; 16];
-    
+    let mut buf: [u8; 16] = [0; 16];
+
     // Read file into vector.
     f.read_exact(&mut buf).expect("Could not read 16 bytes");
 
