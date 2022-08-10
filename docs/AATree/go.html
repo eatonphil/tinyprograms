@@ -33,9 +33,9 @@ type Comparable interface {
 	~int | ~uint
 }
 
-type AATree[K Comparable] struct{
-	key int
-	left *AATree[K]
+type AATree[K Comparable] struct {
+	key   int
+	left  *AATree[K]
 	right *AATree[K]
 	level int
 }
@@ -74,8 +74,8 @@ func split[K Comparable](tree *AATree[K]) *AATree[K] {
 func insert[K Comparable](tree *AATree[K], key int) *AATree[K] {
 	if tree == nil {
 		return &AATree[K]{
-			key: key,
-			left: nil,
+			key:   key,
+			left:  nil,
 			right: nil,
 			level: 1,
 		}
@@ -92,13 +92,13 @@ func insert[K Comparable](tree *AATree[K], key int) *AATree[K] {
 
 func print[K Comparable](tree *AATree[K], space string) {
 	if tree.left != nil {
-		print(tree.left, space + "  ")
+		print(tree.left, space+"  ")
 	}
 
 	fmt.Printf("%s%v\n", space, tree.key)
 
 	if tree.right != nil {
-		print(tree.right, space + "  ")
+		print(tree.right, space+"  ")
 	}
 }
 
