@@ -6,14 +6,18 @@ import (
 	"strconv"
 )
 
-type AATree struct{
-	key int
-	left *AATree
-	right *AATree
+type Comparable interface {
+	~int | ~uint
+}
+
+type AATree[K Comparable] struct {
+	key   int
+	left  *AATree[K]
+	right *AATree[K]
 	level int
 }
 
-func skew(tree *AATree) *AATree {
+func skew[K Comparable](tree *AATree[K]) *AATree[K] {
 	if tree == nil || tree.left == nil {
 		return tree
 	}
@@ -28,7 +32,7 @@ func skew(tree *AATree) *AATree {
 	return tree
 }
 
-func split(tree *AATree) *AATree {
+func split[K Comparable](tree *AATree[K]) *AATree[K] {
 	if tree == nil || tree.right == nil || tree.right.right == nil {
 		return tree
 	}
@@ -44,11 +48,11 @@ func split(tree *AATree) *AATree {
 	return tree
 }
 
-func insert(tree *AATree, key int) *AATree {
+func insert[K Comparable](tree *AATree[K], key int) *AATree[K] {
 	if tree == nil {
-		return &AATree{
-			key: key,
-			left: nil,
+		return &AATree[K]{
+			key:   key,
+			left:  nil,
 			right: nil,
 			level: 1,
 		}
@@ -63,15 +67,15 @@ func insert(tree *AATree, key int) *AATree {
 	return split(skew(tree))
 }
 
-func print(tree *AATree, space string) {
+func print[K Comparable](tree *AATree[K], space string) {
 	if tree.left != nil {
-		print(tree.left, space + "  ")
+		print(tree.left, space+"  ")
 	}
 
 	fmt.Printf("%s%v\n", space, tree.key)
 
 	if tree.right != nil {
-		print(tree.right, space + "  ")
+		print(tree.right, space+"  ")
 	}
 }
 
@@ -116,7 +120,7 @@ func splitNumbersFromFile(file string) []int {
 }
 
 func main() {
-	var t *AATree
+	var t *AATree[int]
 	for _, number := range splitNumbersFromFile(os.Args[1]) {
 		t = insert(t, number)
 	}

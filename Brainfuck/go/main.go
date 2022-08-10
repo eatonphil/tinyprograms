@@ -1,11 +1,11 @@
 package main
 
 import (
-	"io"
-	"fmt"
-	"os"
-	"log"
 	"bufio"
+	"fmt"
+	"io"
+	"log"
+	"os"
 )
 
 func interpret(prog []byte) {
