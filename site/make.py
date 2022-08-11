@@ -8,7 +8,7 @@ import urllib.request
 
 import mistune
 import yaml
-from jinja2 import Template
+from jinja2 import Environment, FileSystemLoader
 
 from millify import millify
 
@@ -33,8 +33,10 @@ def subdirs(path):
         if f.is_dir():
             yield f.path
 
-with open(os.path.join(REPO_ROOT, 'site/template.html')) as file_:
-    template = Template(file_.read())
+jinja_loader = Environment(loader=FileSystemLoader("site"))
+
+with open(os.path.join(REPO_ROOT, 'site/program.html')) as file_:
+    template = jinja_loader.from_string(file_.read())
 
 PROJECTS = {}
 
@@ -89,7 +91,7 @@ for project_name, project in PROJECTS.items():
                 language=language))
 
 with open(os.path.join(REPO_ROOT, "site/index.html")) as f:
-    template = Template(f.read())
+    template = jinja_loader.from_string(f.read())
     with open(os.path.join(OUT_ROOT, "index.html"), 'w') as fw:
         fw.write(template.render(projects=sorted(PROJECTS.items())))
 

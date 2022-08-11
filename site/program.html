@@ -1,13 +1,8 @@
-<meta charset="UTF-8">
-<link href="/style.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="/reset.min.css" />
-<link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
-<link href="/materialicons.css" rel="stylesheet">
+{% extends "layout.html" %}
 
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>{{ project_name }} in {{ language }} | Tiny Programs Rosetta code for implementations</title>
+{% block title %}{{ project_name }} in {{ language }}{% endblock %}
 
-<article>
+{% block body %}
   <a href="/">Tiny Programs</a>
   <h1>{{ project_name }} in {{ language }}</h1>
 
@@ -39,15 +34,8 @@ $ {{run_step}}</code></pre>
     </ul>
   </section>
 
-  <footer>
-    <p>Copyright 2022 Phil Eaton</p>
-    <p>
-      <a href="https://github.com/eatonphil/tinyprograms/blob/main/LICENSE.MD">MIT Licensed</a>
-    </p>
-  </footer>
-</article>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/{{language}}.min.js"></script>
 <script>hljs.highlightAll();</script>
+{% endblock %}
