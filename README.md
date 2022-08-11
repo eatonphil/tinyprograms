@@ -60,3 +60,8 @@ Ultimately, Phil is the BDFL and reserves the right to be picky. :)
 * D
 * Standard ML
 * OCaml
+
+# Discussion
+
+Questions? Ideas? Suggestions? Bring it up in the #hacking channel on
+[discord.multiprocess.io](https://discord.multiprocess.io).
