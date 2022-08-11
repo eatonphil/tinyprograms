@@ -1,7 +1,0 @@
-source: main.go
-
-prepare:
-  - rm -f go.mod go.sum
-  - go mod init lisp
-  - go build
-run: ./lisp {PROGRAM}
