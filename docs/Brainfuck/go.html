@@ -1,0 +1,140 @@
+<meta charset="UTF-8">
+<link href="/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/reset.min.css" />
+<link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+<link href="/materialicons.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brainfuck in go | Tiny Programs Rosetta code for implementations</title>
+
+<article>
+  <a href="/">Tiny Programs</a>
+  <h1>Brainfuck in go</h1>
+
+  <section>
+    <h2>Implementation</h2>
+    <div class="description">
+      
+      <p>An implementation of the Brainfuck programming language.</p>
+<p>See <a href="https://en.wikipedia.org/wiki/Brainfuck">https://en.wikipedia.org/wiki/Brainfuck</a> for details.</p>
+
+      
+    </div>
+    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/go/main.go">Source Code</a>
+    <pre><code>package main
+
+import (
+	"bufio"
+	"fmt"
+	"io"
+	"os"
+)
+
+func main() {
+	prog, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+
+	stdin := bufio.NewReader(os.Stdin)
+	var dataStack [30_000]byte
+	var dataPointer int
+	var instructionStack []int
+	var instructionPointer int
+	for instructionPointer < len(prog) {
+		switch prog[instructionPointer] {
+		case '>':
+			dataPointer++
+		case '<':
+			dataPointer--
+		case '+':
+			dataStack[dataPointer]++
+		case '-':
+			dataStack[dataPointer]--
+		case '.':
+			fmt.Printf("%s", string(dataStack[dataPointer]))
+		case ',':
+			c, err := stdin.ReadByte()
+			if err != nil && err != io.EOF {
+				panic(err)
+			}
+
+			dataStack[dataPointer] = c
+		case '[':
+			// Find the equivalent (potentially nested) ending ']'
+			stack := 1
+			end := instructionPointer + 1
+		loop:
+			for {
+				switch prog[end] {
+				case '[':
+					stack++
+				case ']':
+					stack--
+
+					if stack == 0 {
+						break loop
+					}
+				}
+
+				end++
+			}
+
+			if dataStack[dataPointer] == 0 {
+				instructionPointer = end
+			} else {
+				instructionStack = append(instructionStack, instructionPointer)
+			}
+		case ']':
+			if dataStack[dataPointer] != 0 {
+				instructionPointer = instructionStack[len(instructionStack)-1] - 1
+			}
+
+			instructionStack = instructionStack[:len(instructionStack)-1]
+		}
+
+		instructionPointer++
+	}
+}
+</code></pre>
+  </section>
+
+  <section>
+    <h2>Build and run</h2>
+    <p>These steps are linux only.</p>
+    <pre><code>$ rm -f go.mod go.sum
+$ go mod init brainfuck
+$ go build
+
+$ ./brainfuck $myProgram</code></pre>
+  </section>
+
+  <section>
+    <h2>All implementations</h2>
+    <ul>
+      
+      <li><a href="/Brainfuck/go.html">go (Reference)</a></li>
+      
+      <li><a href="/Brainfuck/java.html">java</a></li>
+      
+      <li><a href="/Brainfuck/ocaml.html">ocaml</a></li>
+      
+      <li><a href="/Brainfuck/rust.html">rust</a></li>
+      
+      <li><a href="/Brainfuck/zig.html">zig</a></li>
+      
+    </ul>
+  </section>
+
+  <footer>
+    <p>Copyright 2022 Phil Eaton</p>
+    <p>
+      <a href="https://github.com/eatonphil/tinyprograms/blob/main/LICENSE.MD">MIT Licensed</a>
+    </p>
+  </footer>
+</article>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/go.min.js"></script>
+<script>hljs.highlightAll();</script>

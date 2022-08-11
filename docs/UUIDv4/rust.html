@@ -1,0 +1,105 @@
+<meta charset="UTF-8">
+<link href="/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/reset.min.css" />
+<link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+<link href="/materialicons.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>UUIDv4 in rust | Tiny Programs Rosetta code for implementations</title>
+
+<article>
+  <a href="/">Tiny Programs</a>
+  <h1>UUIDv4 in rust</h1>
+
+  <section>
+    <h2>Implementation</h2>
+    <div class="description">
+      
+      <p>A UUIDv4 generator.</p>
+<p>See <a href="https://www.rfc-editor.org/rfc/rfc4122">https://www.rfc-editor.org/rfc/rfc4122</a> for details.</p>
+
+      
+    </div>
+    <a href="https://github.com/eatonphil/tinyprograms/blob/main/UUIDv4/rust/main.rs">Source Code</a>
+    <pre><code>use std::fs::File;
+use std::io::Read;
+
+fn main() {
+    let mut f = File::open("/dev/random").expect("Could not open /dev/random");
+    let mut buf: [u8; 16] = [0; 16];
+
+    // Read file into vector.
+    f.read_exact(&mut buf).expect("Could not read 16 bytes");
+
+    // Set bit 6 to 0
+    buf[8] &= !((1 as u8) << 6);
+    // Set bit 7 to 1
+    buf[8] |= 1 << 7;
+
+    // Set version
+    buf[6] &= !((1 as u8) << 4);
+    buf[6] &= !((1 as u8) << 5);
+    buf[6] |= 1 << 6;
+    buf[6] &= !((1 as u8) << 7);
+
+    print!("{:02x}{:02x}{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}",
+	   buf[0],
+	   buf[1],
+	   buf[2],
+	   buf[3],
+	   // -
+	   buf[4],
+	   buf[5],
+	   // - 
+	   buf[6],
+	   buf[7],
+	   // -
+	   buf[8],
+	   buf[9],
+	   // -
+	   buf[10],
+	   buf[11],
+	   buf[12],
+	   buf[13],
+	   buf[14],
+	   buf[15],
+    )
+}
+</code></pre>
+  </section>
+
+  <section>
+    <h2>Build and run</h2>
+    <p>These steps are linux only.</p>
+    <pre><code>$ rustc main.rs
+
+$ ./main</code></pre>
+  </section>
+
+  <section>
+    <h2>All implementations</h2>
+    <ul>
+      
+      <li><a href="/UUIDv4/go.html">go (Reference)</a></li>
+      
+      <li><a href="/UUIDv4/java.html">java</a></li>
+      
+      <li><a href="/UUIDv4/rust.html">rust</a></li>
+      
+      <li><a href="/UUIDv4/zig.html">zig</a></li>
+      
+    </ul>
+  </section>
+
+  <footer>
+    <p>Copyright 2022 Phil Eaton</p>
+    <p>
+      <a href="https://github.com/eatonphil/tinyprograms/blob/main/LICENSE.MD">MIT Licensed</a>
+    </p>
+  </footer>
+</article>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/rust.min.js"></script>
+<script>hljs.highlightAll();</script>

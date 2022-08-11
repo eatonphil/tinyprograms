@@ -1,14 +1,18 @@
 package main
 
 import (
-	"io"
-	"fmt"
-	"os"
-	"log"
 	"bufio"
+	"fmt"
+	"io"
+	"os"
 )
 
-func interpret(prog []byte) {
+func main() {
+	prog, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+
 	stdin := bufio.NewReader(os.Stdin)
 	var dataStack [30_000]byte
 	var dataPointer int
@@ -29,11 +33,12 @@ func interpret(prog []byte) {
 		case ',':
 			c, err := stdin.ReadByte()
 			if err != nil && err != io.EOF {
-				log.Fatal(err)
+				panic(err)
 			}
 
 			dataStack[dataPointer] = c
 		case '[':
+			// Find the equivalent (potentially nested) ending ']'
 			stack := 1
 			end := instructionPointer + 1
 		loop:
@@ -67,13 +72,4 @@ func interpret(prog []byte) {
 
 		instructionPointer++
 	}
-}
-
-func main() {
-	prog, err := os.ReadFile(os.Args[1])
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	interpret(prog)
 }

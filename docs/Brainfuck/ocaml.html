@@ -1,0 +1,112 @@
+<meta charset="UTF-8">
+<link href="/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/reset.min.css" />
+<link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+<link href="/materialicons.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brainfuck in ocaml | Tiny Programs Rosetta code for implementations</title>
+
+<article>
+  <a href="/">Tiny Programs</a>
+  <h1>Brainfuck in ocaml</h1>
+
+  <section>
+    <h2>Implementation</h2>
+    <div class="description">
+      
+      <p>An implementation of the Brainfuck programming language.</p>
+<p>See <a href="https://en.wikipedia.org/wiki/Brainfuck">https://en.wikipedia.org/wiki/Brainfuck</a> for details.</p>
+
+      
+    </div>
+    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/ocaml/bf.ml">Source Code</a>
+    <pre><code>let interpret src =
+  let len = String.length src in
+  let data_ptr = ref 0 in
+  let data_stack  = Array.make 30_000 0 in
+  let instruction_ptr = ref 0 in
+  let instruction_stack  = ref [] in
+  while !instruction_ptr < len do
+    let () = match src.[!instruction_ptr] with
+    | '+' -> data_stack .(!data_ptr) <- data_stack .(!data_ptr) + 1
+    | '-' -> data_stack .(!data_ptr) <- data_stack .(!data_ptr) - 1
+    | '>' -> incr data_ptr
+    | '<' -> decr data_ptr
+    | '.' -> print_char @@ char_of_int data_stack .(!data_ptr)
+    | ',' -> data_stack .(!data_ptr) <- input_byte stdin
+    | '[' ->
+      let stack = ref 1 in
+      let end_ = ref (!instruction_ptr + 1) in
+      let break = ref false in
+      let () = while !end_ < len && not !break do
+        match src.[!end_] with
+        | '[' -> incr stack; incr end_
+        | ']' ->
+          let () = decr stack in
+          if !stack = 0
+          then break := true
+          else incr end_
+        | _ -> incr end_
+      done in
+      if data_stack .(!data_ptr) = 0
+      then instruction_ptr := !end_
+      else instruction_stack  := !instruction_ptr :: !instruction_stack 
+    | ']' ->
+      let () =
+        if data_stack .(!data_ptr) <> 0
+        then instruction_ptr := List.hd !instruction_stack  - 1
+      in
+      instruction_stack  := List.tl !instruction_stack 
+    | _ -> () in
+    incr instruction_ptr
+  done
+
+let argv = Sys.argv
+let src = argv.(1)
+let src, len =
+  let fd = open_in src in
+  let s = input_line fd in
+  let () = close_in fd in
+  s, String.length s
+
+let () = interpret src</code></pre>
+  </section>
+
+  <section>
+    <h2>Build and run</h2>
+    <p>These steps are linux only.</p>
+    <pre><code>$ opam exec -- ocamlc bf.ml -o bf
+
+$ ./bf $myProgram</code></pre>
+  </section>
+
+  <section>
+    <h2>All implementations</h2>
+    <ul>
+      
+      <li><a href="/Brainfuck/go.html">go (Reference)</a></li>
+      
+      <li><a href="/Brainfuck/java.html">java</a></li>
+      
+      <li><a href="/Brainfuck/ocaml.html">ocaml</a></li>
+      
+      <li><a href="/Brainfuck/rust.html">rust</a></li>
+      
+      <li><a href="/Brainfuck/zig.html">zig</a></li>
+      
+    </ul>
+  </section>
+
+  <footer>
+    <p>Copyright 2022 Phil Eaton</p>
+    <p>
+      <a href="https://github.com/eatonphil/tinyprograms/blob/main/LICENSE.MD">MIT Licensed</a>
+    </p>
+  </footer>
+</article>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/ocaml.min.js"></script>
+<script>hljs.highlightAll();</script>

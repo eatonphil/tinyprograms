@@ -2,6 +2,6 @@ source: main.go
 
 prepare:
   - rm -f go.mod go.sum
-  - go mod init brainfuck
+  - go mod init aatree
   - go build
-run: ./brainfuck {PROGRAM}
+run: ./aatree {PROGRAM}

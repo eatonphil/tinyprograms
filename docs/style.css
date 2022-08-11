@@ -1,0 +1,88 @@
+:root {
+    --tabs: #f3f3ff;
+    --background-dark: #f4f4f7;
+    --color: black;
+    --link: #1723FF;
+
+    /* See: https://paletton.com/#uid=c3Y194r3v0kGK++mI+bt1+W+VSTZKvc */
+    --purple: #6F0EFF;
+    --orange: #FFBC00;
+    --green: #157f6e;
+    --blue: #1723FF;
+    --primary: var(--blue);
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 15px;
+    color: black;
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+article {
+    width: 600px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 1.9rem;
+}
+
+h3 {
+    font-size: 1.3rem;
+}
+
+strong {
+    padding: 0 5px;
+    font-weight: bold;
+}
+
+a {
+    cursor: pointer;
+    cursor: hand;
+    text-decoration: none;
+    color: var(--link);
+}
+
+a:visited {
+    color: var(--link);
+}
+
+section {
+    margin-top: 3rem;
+}
+
+.description {
+    font-size: .9rem;
+    color: #555;
+}
+
+.description a {
+    color: #555;
+    text-decoration: underline;
+}
+
+footer {
+    border-top: 1px solid #ccc;
+    font-size: .9rem;
+    margin-top: 30px;
+    padding-top: 30px;
+}
+
+footer p {
+    padding: 0;
+    margin: 0;
+}

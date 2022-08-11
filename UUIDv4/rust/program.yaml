@@ -1,4 +1,4 @@
 source: main.rs
 prepare:
   - rustc main.rs
-run: ./main {PROGRAM}
+run: ./main

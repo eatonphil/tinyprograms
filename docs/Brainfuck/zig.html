@@ -1,0 +1,160 @@
+<meta charset="UTF-8">
+<link href="/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="/reset.min.css" />
+<link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+<link href="/materialicons.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brainfuck in zig | Tiny Programs Rosetta code for implementations</title>
+
+<article>
+  <a href="/">Tiny Programs</a>
+  <h1>Brainfuck in zig</h1>
+
+  <section>
+    <h2>Implementation</h2>
+    <div class="description">
+      
+      <p>An implementation of the Brainfuck programming language.</p>
+<p>See <a href="https://en.wikipedia.org/wiki/Brainfuck">https://en.wikipedia.org/wiki/Brainfuck</a> for details.</p>
+
+      
+    </div>
+    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/zig/main.zig">Source Code</a>
+    <pre><code>const std = @import("std");
+
+var stdout_mutex = std.Thread.Mutex{};
+
+pub fn print(comptime fmt: []const u8, args: anytype) void {
+    stdout_mutex.lock();
+    defer stdout_mutex.unlock();
+    const stdout = std.io.getStdOut().writer();
+    nosuspend stdout.print(fmt, args) catch return;
+}
+
+pub fn main() !void {
+    if (std.os.argv.len < 2) {
+        std.debug.print("Expected file name to interpret", .{});
+        return;
+    }
+
+    const allocator = std.heap.page_allocator;
+
+    const file = try std.fs.cwd().openFileZ(std.os.argv[1], .{});
+    defer file.close();
+
+    const file_size = try file.getEndPos();
+    var prog = try allocator.alloc(u8, file_size);
+    defer allocator.free(prog);
+
+    _ = try file.read(prog);
+
+    var data_stack = std.mem.zeroes([30_000]u8);
+    var data_pointer: usize = 0;
+
+    var instr_stack = std.ArrayList(usize).init(allocator);
+    defer instr_stack.deinit();
+
+    var instr_pointer: usize = 0;
+
+    var stdin_stream = std.io.bufferedReader(std.io.getStdIn().reader());
+
+    while (instr_pointer < prog.len) {
+        switch (prog[instr_pointer]) {
+            '>' => {
+                data_pointer = data_pointer + 1;
+            },
+            '<' => {
+                data_pointer = data_pointer - 1;
+            },
+            '+' => {
+                data_stack[data_pointer] = data_stack[data_pointer] + 1;
+            },
+            '-' => {
+                data_stack[data_pointer] = data_stack[data_pointer] - 1;
+            },
+            '.' => {
+                print("{c}", .{data_stack[data_pointer]});
+            },
+            ',' => {
+                data_stack[data_pointer] = try stdin_stream.reader().readByte();
+            },
+            '[' => {
+                var stack: i64 = 1;
+                var end = instr_pointer + 1;
+                loop: while (true) {
+                    switch (prog[end]) {
+                        '[' => {
+                            stack = stack + 1;
+                        },
+                        ']' => {
+                            stack = stack - 1;
+
+                            if (stack == 0) {
+                                break :loop;
+                            }
+                        },
+                        else => {},
+                    }
+
+                    end = end + 1;
+                }
+
+                if (data_stack[data_pointer] == 0) {
+                    instr_pointer = end;
+                } else {
+                    try instr_stack.append(instr_pointer);
+                }
+            },
+            ']' => {
+                const new_pointer = instr_stack.pop() - 1;
+                if (data_stack[data_pointer] != 0) {
+                    instr_pointer = new_pointer;
+                }
+            },
+            else => {},
+        }
+
+        instr_pointer = instr_pointer + 1;
+    }
+}
+</code></pre>
+  </section>
+
+  <section>
+    <h2>Build and run</h2>
+    <p>These steps are linux only.</p>
+    <pre><code>$ zig build-exe main.zig
+
+$ ./main $myProgram</code></pre>
+  </section>
+
+  <section>
+    <h2>All implementations</h2>
+    <ul>
+      
+      <li><a href="/Brainfuck/go.html">go (Reference)</a></li>
+      
+      <li><a href="/Brainfuck/java.html">java</a></li>
+      
+      <li><a href="/Brainfuck/ocaml.html">ocaml</a></li>
+      
+      <li><a href="/Brainfuck/rust.html">rust</a></li>
+      
+      <li><a href="/Brainfuck/zig.html">zig</a></li>
+      
+    </ul>
+  </section>
+
+  <footer>
+    <p>Copyright 2022 Phil Eaton</p>
+    <p>
+      <a href="https://github.com/eatonphil/tinyprograms/blob/main/LICENSE.MD">MIT Licensed</a>
+    </p>
+  </footer>
+</article>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/zig.min.js"></script>
+<script>hljs.highlightAll();</script>
