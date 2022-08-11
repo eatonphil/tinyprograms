@@ -1,0 +1,3 @@
+source: bf.R
+prepare: []
+run: Rscript bf.R {PROGRAM}

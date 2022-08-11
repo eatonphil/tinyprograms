@@ -23,6 +23,9 @@ jobs:
       with:
         version: master
 
+    # Sets up R environment
+    - uses: r-lib/actions/setup-r@master
+
     # Set up OCaml
     - name: Use OCaml 4.14.x
       uses: ocaml/setup-ocaml@v2
