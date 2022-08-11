@@ -17,4 +17,7 @@ jobs:
       with:
         version: master
 
+    # Sets up R environment
+    - uses: r-lib/actions/setup-r@master
+
     - run: ./scripts/test.py
