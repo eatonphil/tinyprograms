@@ -16,6 +16,7 @@ necessarily 100% bug-free.
 * [Brainfuck](./Brainfuck): A complete Brainfuck implementation
 * [UUIDv4](./UUIDv4): A UUIDv4 generator
 * [AATree](./AATree): A generic, balanced binary tree
+* [Base64](./Base64): A Base64 encoder & decoder
 * Potential:
   * Lisp: A tree-walking s-expression interpreter capable of running a fibonacci function
   * JQ: A tiny JQ clone
