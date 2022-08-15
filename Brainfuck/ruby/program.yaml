@@ -1,0 +1,2 @@
+source: main.rb
+run: ruby main.rb {PROGRAM}
