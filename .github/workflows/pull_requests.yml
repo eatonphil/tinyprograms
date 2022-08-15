@@ -13,9 +13,7 @@ jobs:
     - uses: actions/checkout@master
 
     # Set up FreePascal
-    - run: curl -L -o fpc.tar https://sourceforge.net/projects/freepascal/files/Linux/3.2.2/fpc-3.2.2.x86_64-linux.tar/download
-    - run: tar xvf fpc.tar
-    - run: ./fpc-3.2.2.x86_64-linux/install.sh
+    - run: sudo apt-get install fpc
 
     # Set up Go
     - uses: actions/setup-go@v3
