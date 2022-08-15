@@ -12,6 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
+    # Set up FreePascal
+    - run: sudo apt-get install fpc
+
     # Set up Go
     - uses: actions/setup-go@v3
       with:

@@ -1,0 +1,9 @@
+source: main.go
+
+prepare:
+  - fpc -gl main.pp
+run: ./main {PROGRAM}
+
+notes:
+  - There has to be a better way to read files than character at a time. I tried using `ReadFile` but it just wouldn't read the whole file!
+  - Maybe there's a builtin resizable array and this custom vector type is not necessary. The probably with `array` is that it doesn't have a separate concept of capacity versus length. So an `append` function for it without a new type would have to increase the size of the array every time you insert which is not efficient.
