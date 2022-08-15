@@ -1,2 +1,4 @@
 source: main.rb
+
+prepare: []
 run: ruby main.rb {PROGRAM}
