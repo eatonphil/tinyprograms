@@ -1,0 +1,5 @@
+source: main.go
+
+prepare:
+  - fpc -gl main.pp
+run: ./main {PROGRAM}
