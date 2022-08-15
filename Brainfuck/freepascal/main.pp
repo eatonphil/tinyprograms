@@ -106,4 +106,6 @@ begin
 
     instrPointer += 1;
   end;
+
+  FreeAndNil(instrStack);
 end.
