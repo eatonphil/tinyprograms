@@ -2,12 +2,16 @@
 <link href="/style.css" rel="stylesheet" type="text/css" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Brainfuck in RTiny Programs: Rosetta code for implementations</title>
+<title>Brainfuck in rTiny Programs: Rosetta code for implementations</title>
 
 <article>
   
   <a href="/">Tiny Programs</a>
-  <h1>Brainfuck in R</h1>
+  <h1>Brainfuck in r</h1>
+  <div class="authors">
+    <img src="https://github.com/spasticus74.png" / >
+    <span>Contributed by <a href="https://github.com/spasticus74">spasticus74</a></span>
+  </div>
 
   <section>
     <h2>Implementation</h2>
@@ -18,7 +22,7 @@
 
       
     </div>
-    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/R/bf.R">Source Code</a>
+    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/r/bf.R">Source Code</a>
     <pre><code>args <- commandArgs(trailingOnly=TRUE)
 
 program <- strsplit(readChar(args[1], file.info(args[1])$size), "")[[1]]
@@ -80,17 +84,23 @@ while (instructionPointer < (length(program) + 1)) {
 $ Rscript bf.R $myProgram</code></pre>
   </section>
 
+  
+
   <section>
     <h2>All implementations</h2>
     <ul>
       
-      <li><a href="/Brainfuck/R.html">R</a></li>
+      <li><a href="/Brainfuck/freepascal.html">freepascal</a></li>
       
       <li><a href="/Brainfuck/go.html">go (Reference)</a></li>
       
       <li><a href="/Brainfuck/java.html">java</a></li>
       
       <li><a href="/Brainfuck/ocaml.html">ocaml</a></li>
+      
+      <li><a href="/Brainfuck/r.html">r</a></li>
+      
+      <li><a href="/Brainfuck/ruby.html">ruby</a></li>
       
       <li><a href="/Brainfuck/rust.html">rust</a></li>
       
@@ -101,7 +111,7 @@ $ Rscript bf.R $myProgram</code></pre>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/R.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/r.min.js"></script>
 <script>hljs.highlightAll();</script>
 
 

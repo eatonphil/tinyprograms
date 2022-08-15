@@ -1,6 +1,10 @@
 source: main.go
+
 prepare:
   - rm -f go.mod go.sum
   - go mod init uuid
   - go build
 run: ./uuid
+
+authors:
+  - eatonphil

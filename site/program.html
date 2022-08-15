@@ -5,6 +5,10 @@
 {% block body %}
   <a href="/">Tiny Programs</a>
   <h1>{{ project_name }} in {{ language }}</h1>
+  <div class="authors">
+    <img src="https://github.com/{{authors[0]}}.png" / >
+    <span>Contributed by <a href="https://github.com/{{ authors[0] }}">{{ authors[0] }}</a></span>
+  </div>
 
   <section>
     <h2>Implementation</h2>
@@ -24,6 +28,17 @@
 {% endfor %}
 $ {{run_step}}</code></pre>
   </section>
+
+  {% if notes %}
+  <section>
+    <h2>Notes</h2>
+    <ul>
+      {% for note in notes %}
+      <li>{{ note }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
 
   <section>
     <h2>All implementations</h2>

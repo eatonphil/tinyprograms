@@ -2,3 +2,6 @@ source: main.rb
 
 prepare: []
 run: ruby main.rb
+
+authors:
+  - kddnewton

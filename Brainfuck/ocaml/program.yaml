@@ -4,3 +4,6 @@ prepare:
   - opam exec -- ocamlc bf.ml -o bf
 run:
   - ./bf {PROGRAM}
+
+authors:
+  - melwyn95

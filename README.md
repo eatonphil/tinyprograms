@@ -36,8 +36,9 @@ A few rules:
    rule 1.
 1. Avoid unnecessarily complex syntax, even if the complex syntax is
    more idiomatic in the language. See rule 1.
-1. Copy program.yaml and implement the `prepare` and `run` settings so
-   that your implementation is automatically tested in Github Actions.
+1. Copy program.yaml and implement the `source`, `authors`, `prepare`
+   and `run` settings so that your implementation is automatically
+   tested in Github Actions and set up correctly for the website.
 1. Definitely no 3rd-party libraries. And definitely not builtin
    libraries if they implement the entirety of the program.
 
