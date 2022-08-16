@@ -44,17 +44,13 @@ fn main() {
             '[' => {
                 let mut stack = 1;
                 let mut end = instr_pointer + 1;
-                'outer: loop {
+                while stack != 0 {
                     match prog[end] {
                         '[' => {
                             stack += 1;
                         }
                         ']' => {
                             stack -= 1;
-
-                            if stack == 0 {
-                                break 'outer;
-                            }
                         }
                         _ => {}
                     }

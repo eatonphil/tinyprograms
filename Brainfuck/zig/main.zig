@@ -59,17 +59,13 @@ pub fn main() !void {
             '[' => {
                 var stack: i64 = 1;
                 var end = instr_pointer + 1;
-                loop: while (true) {
+                while (stack != 0) {
                     switch (prog[end]) {
                         '[' => {
                             stack = stack + 1;
                         },
                         ']' => {
                             stack = stack - 1;
-
-                            if (stack == 0) {
-                                break :loop;
-                            }
                         },
                         else => {},
                     }

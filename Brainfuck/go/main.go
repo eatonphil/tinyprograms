@@ -41,17 +41,12 @@ func main() {
 			// Find the equivalent (potentially nested) ending ']'
 			stack := 1
 			end := instructionPointer + 1
-		loop:
-			for {
+			for stack != 0 {
 				switch prog[end] {
 				case '[':
 					stack++
 				case ']':
 					stack--
-
-					if stack == 0 {
-						break loop
-					}
 				}
 
 				end++

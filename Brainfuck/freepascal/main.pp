@@ -78,15 +78,13 @@ begin
         begin
 	  bracketStack := 1;
 	  closingBracket := instrPointer + 1;
-          while true do
+          while bracketStack <> 0 do
 	  begin
             if prog[closingBracket] = '[' then
 	      bracketStack += 1;
 	    if prog[closingBracket] = ']' then
 	    begin
 	      bracketStack -= 1;
-	      if bracketStack = 0 then
-	        break;
 	    end;
 
             closingBracket += 1;
