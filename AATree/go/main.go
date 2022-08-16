@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type Comparable interface {
@@ -81,51 +82,22 @@ func print[K Comparable](tree *AATree[K], space string) {
 	}
 }
 
-// Breaks up a file of integers separated by spaces into a list of integers
-func splitNumbersFromFile(file string) []int {
-	bytes, err := os.ReadFile(file)
+func main() {
+	bytes, err := os.ReadFile(os.Args[1])
 	if err != nil {
 		panic(err)
 	}
 
-	var tmp []byte
-	var list []int
-
-	for _, b := range bytes {
-		if b == ' ' {
-			i, err := strconv.Atoi(string(tmp))
-			if err != nil {
-				panic(err)
-			}
-
-			list = append(list, i)
-			tmp = nil
-			continue
-		}
-
-		if b == '\n' {
-			continue
-		}
-
-		tmp = append(tmp, b)
-	}
-
-	if len(tmp) > 0 {
-		i, err := strconv.Atoi(string(tmp))
+	numbers := strings.Fields(string(bytes))
+	
+	var t *AATree[int]
+	for _, number := range numbers {
+		i, err := strconv.Atoi(number)
 		if err != nil {
 			panic(err)
 		}
 
-		list = append(list, i)
-	}
-
-	return list
-}
-
-func main() {
-	var t *AATree[int]
-	for _, number := range splitNumbersFromFile(os.Args[1]) {
-		t = insert(t, number)
+		t = insert(t, i)
 	}
 
 	print(t, "")
