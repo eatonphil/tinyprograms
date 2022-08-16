@@ -1,0 +1,169 @@
+<meta charset="UTF-8">
+<link href="/style.css" rel="stylesheet" type="text/css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AATree in rustTiny Programs: Rosetta code for implementations</title>
+
+<article>
+  
+  <a href="/">Tiny Programs</a>
+  <h1>AATree in rust</h1>
+  <div class="authors">
+    <img src="https://github.com/eatonphil.png" / >
+    <span>Contributed by <a href="https://github.com/eatonphil">eatonphil</a></span>
+  </div>
+
+  <section>
+    <h2>Implementation</h2>
+    <div class="description">
+      
+      <p>A generic, balanced binary search tree.</p>
+<p>See <a href="https://www.cs.umd.edu/class/fall2019/cmsc420-0201/Lects/lect06-aa.pdf">https://www.cs.umd.edu/class/fall2019/cmsc420-0201/Lects/lect06-aa.pdf</a> for details.</p>
+
+      
+    </div>
+    <a href="https://github.com/eatonphil/tinyprograms/blob/main/AATree/rust/main.rs">Source Code</a>
+    <pre><code>use std::env;
+use std::fs;
+
+struct AATree<K: Ord + std::fmt::Display> {
+    key: K,
+    left: Option<Box<AATree<K>>>,
+    right: Option<Box<AATree<K>>>,
+    level: i64,
+}
+
+fn skew<K: Ord + std::fmt::Display>(mut tree: Option<Box<AATree<K>>>) -> Option<Box<AATree<K>>> {
+    if let Some(mut root) = tree.as_mut() {
+        if Some(root.level) == root.left.as_ref().map(|l| l.level) {
+            // Unwrap is safe if we pass the level condition check
+            let mut left = root.left.take().unwrap();
+            root.left = left.right.take();
+            left.right = tree;
+
+            return Some(left);
+        }
+    }
+
+    tree
+}
+
+fn split<K: Ord + std::fmt::Display>(mut tree: Option<Box<AATree<K>>>) -> Option<Box<AATree<K>>> {
+    if let Some(mut root) = tree.as_mut() {
+        if Some(root.level)
+            == root
+            .right
+            .as_ref()
+            .and_then(|r| r.right.as_ref().map(|rr| rr.level))
+        {
+            // Unwrap is safe if we pass the level condition check
+            let mut right = root.right.take().unwrap();
+            root.right = right.left.take();
+            right.left = tree;
+            right.level += 1;
+
+            return Some(right);
+        }
+    }
+
+    tree
+}
+
+fn insert<K: Ord + std::fmt::Display>(tree: Option<Box<AATree<K>>>, key: K) -> Option<Box<AATree<K>>> {
+    if let Some(mut t) = tree {
+        if key < t.key {
+            t.left = insert(t.left, key)
+        } else {
+            t.right = insert(t.right, key)
+        }
+
+        let skewed = skew(Some(t));
+        return split(skewed);
+    }
+
+    Some(Box::new(AATree {
+        key,
+        left: None,
+        right: None,
+        level: 1,
+    }))
+}
+
+fn print<K: Ord + std::fmt::Display>(tree: Option<Box<AATree<K>>>, space: &str) {
+    let next_space = &(space.to_owned()+"  ");
+    if let Some(t) = tree {
+	if t.left.is_some() {
+	    print(t.left, next_space);
+	}
+
+	print!("{}{}\n", space, t.key);
+
+	if t.right.is_some() {
+	    print(t.right, next_space);
+	}
+    }
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let filename = &args[1];
+
+    let numbers: Vec<i64> = fs::read_to_string(filename)
+        .expect("Could not read file")
+	.split_whitespace()
+	.map(|number| number.parse::<i64>().unwrap())
+	.collect();
+
+    let mut t: Option<Box<AATree<i64>>> = None;
+    for n in numbers {
+	t = insert(t, n);
+    }
+
+    print(t, "");
+}
+</code></pre>
+  </section>
+
+  <section>
+    <h2>Build and run</h2>
+    <p>These steps are linux only.</p>
+    <pre><code>$ rustc main.rs
+
+$ ./main $myProgram</code></pre>
+  </section>
+
+  
+
+  <section>
+    <h2>All implementations</h2>
+    <ul>
+      
+      <li><a href="/AATree/go.html">go (Reference)</a></li>
+      
+      <li><a href="/AATree/rust.html">rust</a></li>
+      
+    </ul>
+  </section>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/rust.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+
+  <footer>
+    <p>Copyright 2022 Phil Eaton</p>
+    <p>
+      <a href="https://github.com/eatonphil/tinyprograms/blob/main/LICENSE.MD">MIT Licensed</a>
+    </p>
+  </footer>
+</article>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D8MWLGQV56"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-D8MWLGQV56');
+</script>
