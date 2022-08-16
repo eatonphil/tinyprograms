@@ -1,3 +1,7 @@
 source: bf.R
+
 prepare: []
 run: Rscript bf.R {PROGRAM}
+
+authors:
+  - spasticus74

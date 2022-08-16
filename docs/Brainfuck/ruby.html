@@ -2,15 +2,15 @@
 <link href="/style.css" rel="stylesheet" type="text/css" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Brainfuck in goTiny Programs: Rosetta code for implementations</title>
+<title>Brainfuck in rubyTiny Programs: Rosetta code for implementations</title>
 
 <article>
   
   <a href="/">Tiny Programs</a>
-  <h1>Brainfuck in go</h1>
+  <h1>Brainfuck in ruby</h1>
   <div class="authors">
-    <img src="https://github.com/eatonphil.png" / >
-    <span>Contributed by <a href="https://github.com/eatonphil">eatonphil</a></span>
+    <img src="https://github.com/kddnewton.png" / >
+    <span>Contributed by <a href="https://github.com/kddnewton">kddnewton</a></span>
   </div>
 
   <section>
@@ -22,93 +22,72 @@
 
       
     </div>
-    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/go/main.go">Source Code</a>
-    <pre><code>package main
+    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/ruby/main.rb">Source Code</a>
+    <pre><code># frozen_string_literal: true
 
-import (
-	"bufio"
-	"fmt"
-	"io"
-	"os"
-)
+module Bf
+  def self.run(prog)
+    data_stack = Hash.new { 0 }
+    data_pointer = 0
 
-func main() {
-	prog, err := os.ReadFile(os.Args[1])
-	if err != nil {
-		panic(err)
-	}
+    instruction_pointer = 0
+    instruction_stack = []
 
-	stdin := bufio.NewReader(os.Stdin)
-	var dataStack [30_000]byte
-	var dataPointer int
-	var instructionStack []int
-	var instructionPointer int
-	for instructionPointer < len(prog) {
-		switch prog[instructionPointer] {
-		case '>':
-			dataPointer++
-		case '<':
-			dataPointer--
-		case '+':
-			dataStack[dataPointer]++
-		case '-':
-			dataStack[dataPointer]--
-		case '.':
-			fmt.Printf("%s", string(dataStack[dataPointer]))
-		case ',':
-			c, err := stdin.ReadByte()
-			if err != nil && err != io.EOF {
-				panic(err)
-			}
+    while instruction_pointer < prog.length
+      case prog[instruction_pointer]
+      when ">"
+        data_pointer += 1
+      when "<"
+        data_pointer -= 1
+      when "+"
+        data_stack[data_pointer] += 1
+      when "-"
+        data_stack[data_pointer] -= 1
+      when "."
+        STDOUT.putc(data_stack[data_pointer].chr)
+      when ","
+        data_stack[data_pointer] = STDIN.getc.ord
+      when "["
+        stack = 1
+        ending = instruction_pointer + 1
 
-			dataStack[dataPointer] = c
-		case '[':
-			// Find the equivalent (potentially nested) ending ']'
-			stack := 1
-			end := instructionPointer + 1
-		loop:
-			for {
-				switch prog[end] {
-				case '[':
-					stack++
-				case ']':
-					stack--
+        while stack > 0
+          case prog[ending]
+          when "["
+            stack += 1
+          when "]"
+            stack -= 1
+          end
 
-					if stack == 0 {
-						break loop
-					}
-				}
+          ending += 1  
+        end
 
-				end++
-			}
+        if data_stack[data_pointer] == 0
+          instruction_pointer = ending
+        else
+          instruction_stack << instruction_pointer
+        end
+      when "]"
+        if data_stack[data_pointer] != 0
+          instruction_pointer = instruction_stack.last - 1
+        end
+        instruction_stack.pop
+      end
 
-			if dataStack[dataPointer] == 0 {
-				instructionPointer = end
-			} else {
-				instructionStack = append(instructionStack, instructionPointer)
-			}
-		case ']':
-			if dataStack[dataPointer] != 0 {
-				instructionPointer = instructionStack[len(instructionStack)-1] - 1
-			}
+      instruction_pointer += 1
+    end
+  end
+end
 
-			instructionStack = instructionStack[:len(instructionStack)-1]
-		}
-
-		instructionPointer++
-	}
-}
+Bf.run(ARGF.read)
 </code></pre>
   </section>
 
   <section>
     <h2>Build and run</h2>
     <p>These steps are linux only.</p>
-    <pre><code>$ rm -f go.mod go.sum
-$ go mod init brainfuck
-$ go build
-
-$ ./brainfuck $myProgram</code></pre>
+    <pre><code>
+$ ruby main.rb $myProgram</code></pre>
   </section>
 
   
@@ -138,7 +117,7 @@ $ ./brainfuck $myProgram</code></pre>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/go.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/ruby.min.js"></script>
 <script>hljs.highlightAll();</script>
 
 

@@ -75,6 +75,22 @@ section {
     text-decoration: underline;
 }
 
+.authors {
+    display: flex;
+    align-items: center;
+}
+
+.authors img {
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    border: 2px solid black;
+}
+
+.authors span {
+    padding-left: 15px;
+}
+
 footer {
     border-top: 1px solid #ccc;
     font-size: .9rem;

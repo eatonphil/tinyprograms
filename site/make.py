@@ -62,7 +62,7 @@ for project in subdirs(REPO_ROOT):
 
         l_name = language.split('/')[-1]
         PROJECTS[p_name]["implementations"].append(l_name)
-        PROJECTS[p_name]["implementations"].sort()
+        PROJECTS[p_name]["implementations"].sort(key=str.lower)
 
     if len(PROJECTS[p_name]["implementations"]) == 0:
         del PROJECTS[p_name]
@@ -75,6 +75,9 @@ for project_name, project in PROJECTS.items():
     for language in project["implementations"]:
         with open(os.path.join(REPO_ROOT, project_name, language, "program.yaml")) as f:
             program_desc = yaml.load(f, Loader=yaml.Loader)
+
+            for i, note in enumerate(program_desc.get('notes', [])):
+                program_desc['notes'][i] = mistune.html(note)
 
         program = open(os.path.join(REPO_ROOT, project_name, language, program_desc["source"])).read()
 

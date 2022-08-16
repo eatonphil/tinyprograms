@@ -69,7 +69,7 @@ for project in subdirs(REPO_ROOT):
         with open(language + "/program.yaml") as f:
             program = yaml.load(f, Loader=yaml.Loader)
 
-            for step in program['prepare']:
+            for step in program.get('prepare', []):
                 res = subprocess.run(step, shell=True, cwd=language, capture_output=True)
                 if res.returncode != 0:
                     print(res.stdout.decode())

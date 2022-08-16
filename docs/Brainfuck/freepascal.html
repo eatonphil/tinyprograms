@@ -1,0 +1,206 @@
+<meta charset="UTF-8">
+<link href="/style.css" rel="stylesheet" type="text/css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brainfuck in freepascalTiny Programs: Rosetta code for implementations</title>
+
+<article>
+  
+  <a href="/">Tiny Programs</a>
+  <h1>Brainfuck in freepascal</h1>
+  <div class="authors">
+    <img src="https://github.com/eatonphil.png" / >
+    <span>Contributed by <a href="https://github.com/eatonphil">eatonphil</a></span>
+  </div>
+
+  <section>
+    <h2>Implementation</h2>
+    <div class="description">
+      
+      <p>An implementation of the Brainfuck programming language.</p>
+<p>See <a href="https://en.wikipedia.org/wiki/Brainfuck">https://en.wikipedia.org/wiki/Brainfuck</a> for details.</p>
+
+      
+    </div>
+    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/freepascal/main.pp">Source Code</a>
+    <pre><code>{$MODE objfpc}
+
+program Brainfuck;
+
+uses Sysutils;
+
+function readFile(const fileName: string): string;
+var c: char;
+var fp: file of char;
+begin
+  result := '';
+
+  assign(fp, fileName);
+  reset(fp);
+
+  while not eof(fp) do
+  begin
+    read(fp, c);
+    result := result + c;
+  end;
+
+  close(fp);
+end;
+
+type generic vector<T> = class
+  items: array of T;
+  index: int64;
+  procedure add(value: T);
+  function pop(): T;
+end;
+
+procedure vector.add(value: T);
+begin
+  if (items = nil) or (length(items) = index) then
+    setlength(items, (index + 1) * 2);
+
+  items[index] := value;
+  index += 1;
+end;
+
+function vector.pop(): T;
+begin
+  index -= 1;
+  result := items[index];
+end;
+
+type IVector = specialize vector<integer>;
+
+var prog: string;
+var instrPointer: integer = 0;
+var dataPointer: integer = 0;
+var data: array[0..30000] of byte;
+var instrStack: ivector;
+
+// Used by '[' case
+var bracketStack: integer;
+var closingBracket: integer;
+
+// Used by ']' case
+var last: integer;
+
+begin
+  instrStack := ivector.create;
+  fillchar(data, length(data), 0);
+
+  prog := readFile(paramStr(1));
+
+  while instrPointer < length(prog) do
+  begin
+    case (prog[instrPointer]) of
+      '>': dataPointer += 1;
+      '<': dataPointer -= 1;
+      '+': data[dataPointer] += byte(1);
+      '-': data[dataPointer] -= byte(1);
+      '.': write(chr(data[dataPointer]));
+      '[':
+        // Find the equivalent (potentially nested) ending ']'
+        begin
+	  bracketStack := 1;
+	  closingBracket := instrPointer + 1;
+          while true do
+	  begin
+            if prog[closingBracket] = '[' then
+	      bracketStack += 1;
+	    if prog[closingBracket] = ']' then
+	    begin
+	      bracketStack -= 1;
+	      if bracketStack = 0 then
+	        break;
+	    end;
+
+            closingBracket += 1;
+	  end;
+
+          if data[dataPointer] = 0 then
+	    instrPointer := closingBracket
+          else instrStack.add(instrPointer);
+	end;
+      ']':
+        begin
+	  last := instrStack.pop();
+          if data[dataPointer] <> 0 then
+	    instrPointer := last - 1;
+	end;
+    end;
+
+    instrPointer += 1;
+  end;
+
+  FreeAndNil(instrStack);
+end.</code></pre>
+  </section>
+
+  <section>
+    <h2>Build and run</h2>
+    <p>These steps are linux only.</p>
+    <pre><code>$ fpc -gl main.pp
+
+$ ./main $myProgram</code></pre>
+  </section>
+
+  
+  <section>
+    <h2>Notes</h2>
+    <ul>
+      
+      <li><p>There has to be a better way to read files than character at a time. I tried using <code>ReadFile</code> but it just wouldn't read the whole file!</p>
+</li>
+      
+      <li><p>Maybe there's a builtin resizable array and this custom vector type is not necessary. The probably with <code>array</code> is that it doesn't have a separate concept of capacity versus length. So an <code>append</code> function for it without a new type would have to increase the size of the array every time you insert which is not efficient.</p>
+</li>
+      
+    </ul>
+  </section>
+  
+
+  <section>
+    <h2>All implementations</h2>
+    <ul>
+      
+      <li><a href="/Brainfuck/freepascal.html">freepascal</a></li>
+      
+      <li><a href="/Brainfuck/go.html">go (Reference)</a></li>
+      
+      <li><a href="/Brainfuck/java.html">java</a></li>
+      
+      <li><a href="/Brainfuck/ocaml.html">ocaml</a></li>
+      
+      <li><a href="/Brainfuck/r.html">r</a></li>
+      
+      <li><a href="/Brainfuck/ruby.html">ruby</a></li>
+      
+      <li><a href="/Brainfuck/rust.html">rust</a></li>
+      
+      <li><a href="/Brainfuck/zig.html">zig</a></li>
+      
+    </ul>
+  </section>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/freepascal.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+
+  <footer>
+    <p>Copyright 2022 Phil Eaton</p>
+    <p>
+      <a href="https://github.com/eatonphil/tinyprograms/blob/main/LICENSE.MD">MIT Licensed</a>
+    </p>
+  </footer>
+</article>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D8MWLGQV56"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-D8MWLGQV56');
+</script>
