@@ -1,54 +1,50 @@
 use std::env;
 use std::fs;
-use std::io::{self, Read};
 
-struct AATree<K: Ord> {
+struct AATree<K: Ord + std::fmt::Display> {
     key: K,
     left: Option<Box<AATree<K>>>,
     right: Option<Box<AATree<K>>>,
     level: i64,
 }
 
-fn skew<K: Ord>(tree: Option<Box<AATree<K>>>) -> Option<Box<AATree<K>>> {
-    if tree.is_none() || tree.unwrap().left.is_none() {
-        return tree;
-    }
+fn skew<K: Ord + std::fmt::Display>(mut tree: Option<Box<AATree<K>>>) -> Option<Box<AATree<K>>> {
+    if let Some(mut root) = tree.as_mut() {
+        if Some(root.level) == root.left.as_ref().map(|l| l.level) {
+            // Unwrap is safe if we pass the level condition check
+            let mut left = root.left.take().unwrap();
+            root.left = left.right.take();
+            left.right = tree;
 
-    if tree.unwrap().level == tree.unwrap().left.unwrap().level {
-        let l = tree.unwrap();
-        tree.unwrap().left = l.right;
-        l.right = tree;
-        return Some(l);
-    }
-
-    return tree;
-}
-
-fn split<K: Ord>(tree: &mut Option<Box<AATree<K>>>) -> Option<Box<AATree<K>>> {
-    match tree {
-        Some(t) => {
-            match &t.right {
-                Some(tr) => match tr.right {
-                    Some(trr) => {
-                        if trr.level == t.level {
-                            t.right = tr.left;
-                            tr.left = *tree;
-                            tr.level += 1;
-                            return Some(*tr);
-                        }
-                    }
-                    _ => {}
-                },
-                _ => {}
-            };
+            return Some(left);
         }
-        _ => {}
-    };
+    }
 
-    return *tree;
+    tree
 }
 
-fn insert<K: Ord>(tree: Option<Box<AATree<K>>>, key: K) -> Option<Box<AATree<K>>> {
+fn split<K: Ord + std::fmt::Display>(mut tree: Option<Box<AATree<K>>>) -> Option<Box<AATree<K>>> {
+    if let Some(mut root) = tree.as_mut() {
+        if Some(root.level)
+            == root
+            .right
+            .as_ref()
+            .and_then(|r| r.right.as_ref().map(|rr| rr.level))
+        {
+            // Unwrap is safe if we pass the level condition check
+            let mut right = root.right.take().unwrap();
+            root.right = right.left.take();
+            right.left = tree;
+            right.level += 1;
+
+            return Some(right);
+        }
+    }
+
+    tree
+}
+
+fn insert<K: Ord + std::fmt::Display>(tree: Option<Box<AATree<K>>>, key: K) -> Option<Box<AATree<K>>> {
     if let Some(mut t) = tree {
         if key < t.key {
             t.left = insert(t.left, key)
@@ -56,24 +52,47 @@ fn insert<K: Ord>(tree: Option<Box<AATree<K>>>, key: K) -> Option<Box<AATree<K>>
             t.right = insert(t.right, key)
         }
 
-        let mut skewed = skew(Some(t));
-        return split(&mut skewed);
+        let skewed = skew(Some(t));
+        return split(skewed);
     }
 
-    return Some(Box::new(AATree {
-        key: key,
+    Some(Box::new(AATree {
+        key,
         left: None,
         right: None,
         level: 1,
-    }));
+    }))
+}
+
+fn print<K: Ord + std::fmt::Display>(tree: Option<Box<AATree<K>>>, space: &str) {
+    let next_space = &(space.to_owned()+"  ");
+    if let Some(t) = tree {
+	if t.left.is_some() {
+	    print(t.left, next_space);
+	}
+
+	print!("{}{}\n", space, t.key);
+
+	if t.right.is_some() {
+	    print(t.right, next_space);
+	}
+    }
 }
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     let filename = &args[1];
 
-    let numbers: Vec<char> = fs::read_to_string(filename)
+    let numbers: Vec<i64> = fs::read_to_string(filename)
         .expect("Could not read file")
-        .chars()
-        .collect();
+	.split_whitespace()
+	.map(|number| number.parse::<i64>().unwrap())
+	.collect();
+
+    let mut t: Option<Box<AATree<i64>>> = None;
+    for n in numbers {
+	t = insert(t, n);
+    }
+
+    print(t, "");
 }
