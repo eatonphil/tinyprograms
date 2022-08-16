@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@master
 
     # Set up FreePascal, D
-    - run: sudo apt-get install -y fpc ldc2
+    - run: sudo apt-get install -y fpc ldc
 
     # Set up Go
     - uses: actions/setup-go@v3
