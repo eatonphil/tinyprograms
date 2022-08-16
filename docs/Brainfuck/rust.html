@@ -69,17 +69,13 @@ fn main() {
             '[' => {
                 let mut stack = 1;
                 let mut end = instr_pointer + 1;
-                'outer: loop {
+                while stack != 0 {
                     match prog[end] {
                         '[' => {
                             stack += 1;
                         }
                         ']' => {
                             stack -= 1;
-
-                            if stack == 0 {
-                                break 'outer;
-                            }
                         }
                         _ => {}
                     }
@@ -121,6 +117,8 @@ $ ./main $myProgram</code></pre>
   <section>
     <h2>All implementations</h2>
     <ul>
+      
+      <li><a href="/Brainfuck/d.html">d</a></li>
       
       <li><a href="/Brainfuck/freepascal.html">freepascal</a></li>
       

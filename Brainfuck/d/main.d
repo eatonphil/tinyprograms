@@ -2,7 +2,7 @@ import std.file: readText;
 import std.stdio: printf;
 
 void main(string[] args) {
-  auto prog = readText(args[1]);
+  string prog = readText(args[1]);
 
   byte[30_000] data;
   int dataPointer;

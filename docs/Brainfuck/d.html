@@ -2,12 +2,12 @@
 <link href="/style.css" rel="stylesheet" type="text/css" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Brainfuck in javaTiny Programs: Rosetta code for implementations</title>
+<title>Brainfuck in dTiny Programs: Rosetta code for implementations</title>
 
 <article>
   
   <a href="/">Tiny Programs</a>
-  <h1>Brainfuck in java</h1>
+  <h1>Brainfuck in d</h1>
   <div class="authors">
     <img src="https://github.com/eatonphil.png" / >
     <span>Contributed by <a href="https://github.com/eatonphil">eatonphil</a></span>
@@ -22,87 +22,72 @@
 
       
     </div>
-    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/java/Main.java">Source Code</a>
-    <pre><code>import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Files;
-import java.util.ArrayList;
+    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/d/main.d">Source Code</a>
+    <pre><code>import std.file: readText;
+import std.stdio: printf;
 
-public class Main {
-    public static void main(final String[] args) throws IOException {
-	if (args.length < 1) {
-	    System.out.println("Expected file name to interpret");
-	    return;
+void main(string[] args) {
+  string prog = readText(args[1]);
+
+  byte[30_000] data;
+  int dataPointer;
+  int[] instructionStack;
+  int instructionPointer;
+  while (instructionPointer < prog.length) {
+    switch (prog[instructionPointer]) {
+    case '>':
+      dataPointer++;
+      break;
+    case '<':
+      dataPointer--;
+      break;
+    case '+':
+      data[dataPointer]++;
+      break;
+    case '-':
+      data[dataPointer]--;
+      break;
+    case '.':
+      printf("%c", data[dataPointer]);
+      break;
+    case '[':
+      // Find the equivalent (potentially nested) ending ']'
+      int stack = 1;
+      int end = instructionPointer + 1;
+    while (stack != 0) {
+	switch (prog[end]) {
+	case '[':
+	  stack++;
+	  break;
+	case ']':
+	  stack--;
+	  break;
+	default:
+	  break;
 	}
 
-	var prog = Files.readString(Path.of(args[0]), StandardCharsets.US_ASCII);
+	end++;
+      }
 
-	var dataStack = new byte[30000];
-	int dataPointer = 0;
+      if (data[dataPointer] == 0) {
+	instructionPointer = end;
+      } else {
+	instructionStack ~= instructionPointer;
+      }
+      break;
+    case ']':
+      if (data[dataPointer] != 0) {
+	instructionPointer = instructionStack[instructionStack.length-1] - 1;
+      }
 
-	var instrStack = new ArrayList<Integer>();
-	int instrPointer = 0;
-
-	while (instrPointer < prog.length()) {
-	    switch (prog.charAt(instrPointer)) {
-	    case '>':
-		dataPointer++;
-		break;
-	    case '<':
-		dataPointer--;
-		break;
-	    case '+':
-		dataStack[dataPointer]++;
-		break;
-	    case '-':
-		dataStack[dataPointer]--;
-		break;
-	    case '.':
-		System.out.format("%c", dataStack[dataPointer]);
-		break;
-	    case ',':
-		dataStack[dataPointer] = (byte)System.in.read();
-		break;
-	    case '[':
-		var stack = 1;
-		var end = instrPointer + 1;
-	    loop: while (true) {
-		    switch (prog.charAt(end)) {
-		    case '[':
-			stack++;
-			break;
-		    case ']':
-			stack--;
-
-			if (stack == 0) {
-			    break loop;
-			}
-
-			break;
-		    }
-
-		    end++;
-		}
-
-		if (dataStack[dataPointer] == 0) {
-		    instrPointer = end;
-		} else {
-		    instrStack.add(instrPointer);
-		}
-		break;
-	    case ']': 
-		int newPointer = instrStack.get(instrStack.size() - 1) - 1;
-		instrStack.remove(instrStack.size()-1);
-		if (dataStack[dataPointer] != 0) {
-		    instrPointer = newPointer;
-		}
-		break;
-	    }
-
-	    instrPointer++;
-	}
+      instructionStack = instructionStack[0 .. instructionStack.length-1];
+      break;
+    default:
+      break;
     }
+
+    instructionPointer++;
+  }
 }
 </code></pre>
   </section>
@@ -110,9 +95,9 @@ public class Main {
   <section>
     <h2>Build and run</h2>
     <p>These steps are linux only.</p>
-    <pre><code>$ javac Main.java
+    <pre><code>$ ldc2 main.d
 
-$ java Main $myProgram</code></pre>
+$ ./main $myProgram</code></pre>
   </section>
 
   
@@ -144,7 +129,7 @@ $ java Main $myProgram</code></pre>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/d.min.js"></script>
 <script>hljs.highlightAll();</script>
 
 
