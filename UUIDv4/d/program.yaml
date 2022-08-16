@@ -1,0 +1,8 @@
+source: main.d
+
+prepare:
+  - ldc2 main.d
+run: ./main
+
+authors:
+  - eatonphil

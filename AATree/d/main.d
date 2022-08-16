@@ -1,6 +1,6 @@
 import std.file: readText;
 import std.stdio: writeln;
-import std.format;
+import std.format: format;
 import std.array: split;
 import std.conv: to;
 
