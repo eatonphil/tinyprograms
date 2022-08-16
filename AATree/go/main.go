@@ -12,7 +12,7 @@ type Comparable interface {
 }
 
 type AATree[K Comparable] struct {
-	key   int
+	key   K
 	left  *AATree[K]
 	right *AATree[K]
 	level int
@@ -51,7 +51,7 @@ func split[K Comparable](tree *AATree[K]) *AATree[K] {
 	return tree
 }
 
-func insert[K Comparable](tree *AATree[K], key int) *AATree[K] {
+func insert[K Comparable](tree *AATree[K], key K) *AATree[K] {
 	if tree == nil {
 		return &AATree[K]{
 			key:   key,

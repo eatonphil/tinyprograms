@@ -1,0 +1,11 @@
+source: main.d
+
+prepare:
+  - ldc2 main.d
+run: ./main
+
+authors:
+  - eatonphil
+
+notes:
+  - There's probably a better way to do this formatting but I could not figure out a concise way to format a byte slice as a hex string.

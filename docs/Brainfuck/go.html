@@ -66,17 +66,12 @@ func main() {
 			// Find the equivalent (potentially nested) ending ']'
 			stack := 1
 			end := instructionPointer + 1
-		loop:
-			for {
+			for stack != 0 {
 				switch prog[end] {
 				case '[':
 					stack++
 				case ']':
 					stack--
-
-					if stack == 0 {
-						break loop
-					}
 				}
 
 				end++
@@ -116,6 +111,8 @@ $ ./brainfuck $myProgram</code></pre>
   <section>
     <h2>All implementations</h2>
     <ul>
+      
+      <li><a href="/Brainfuck/d.html">d</a></li>
       
       <li><a href="/Brainfuck/freepascal.html">freepascal</a></li>
       
