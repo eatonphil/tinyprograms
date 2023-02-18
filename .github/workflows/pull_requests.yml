@@ -35,4 +35,7 @@ jobs:
       with:
         ocaml-compiler: 4.14.x
 
-    - run: ./scripts/test.py
+    # Set up Swift
+    - uses: swift-actions/setup-swift@v1
+
+    - run: ./scripts/test.py      
