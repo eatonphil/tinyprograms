@@ -1,0 +1,8 @@
+source: main.swift
+
+prepare:
+  - swiftc main.swift
+run: ./main {PROGRAM}
+
+authors:
+  - eatonphil
