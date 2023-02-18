@@ -2,12 +2,12 @@
 <link href="/style.css" rel="stylesheet" type="text/css" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Brainfuck in javaTiny Programs: Rosetta code for implementations</title>
+<title>Brainfuck in swiftTiny Programs: Rosetta code for implementations</title>
 
 <article>
   
   <a href="/">Tiny Programs</a>
-  <h1>Brainfuck in java</h1>
+  <h1>Brainfuck in swift</h1>
   <div class="authors">
     <img src="https://github.com/eatonphil.png" / >
     <span>Contributed by <a href="https://github.com/eatonphil">eatonphil</a></span>
@@ -22,87 +22,65 @@
 
       
     </div>
-    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/java/Main.java">Source Code</a>
-    <pre><code>import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Files;
-import java.util.ArrayList;
+    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/swift/main.swift">Source Code</a>
+    <pre><code>import Foundation
 
-public class Main {
-    public static void main(final String[] args) throws IOException {
-	if (args.length < 1) {
-	    System.out.println("Expected file name to interpret");
-	    return;
-	}
+let file = CommandLine.arguments[1]
+let prog: [UInt8] = Array((try String(contentsOfFile: file)).utf8)
 
-	var prog = Files.readString(Path.of(args[0]), StandardCharsets.US_ASCII);
+var dataStack: [UInt8] = Array(repeating: 0, count: 30_000)
+var dataPointer = 0
+var instructionStack: [Int] = []
+var instructionPointer = 0
 
-	var dataStack = new byte[30000];
-	int dataPointer = 0;
+while instructionPointer < prog.count {
+    switch prog[instructionPointer] {
+    case UInt8(ascii: ">"):
+        dataPointer += 1
+    case UInt8(ascii: "<"):
+        dataPointer -= 1
+    case UInt8(ascii: "+"):
+        dataStack[dataPointer] += 1
+    case UInt8(ascii: "-"):
+        dataStack[dataPointer] -= 1
+    case UInt8(ascii: "."):
+        print(String(bytes: [dataStack[dataPointer]], encoding: .utf8)!, terminator: "")
+    case UInt8(ascii: ","):
+        assert(false)
+    case UInt8(ascii: "["):
+        // Find the equivalent (potentially nested) ending "]"
+        var stack = 1
+        var end = instructionPointer + 1
+        while stack != 0 {
+            switch prog[end] {
+            case UInt8(ascii: "["):
+                stack += 1
+            case UInt8(ascii: "]"):
+                stack -= 1
+            default:
+                break
+            }
 
-	var instrStack = new ArrayList<Integer>();
-	int instrPointer = 0;
+            end += 1
+        }
 
-	while (instrPointer < prog.length()) {
-	    switch (prog.charAt(instrPointer)) {
-	    case '>':
-		dataPointer++;
-		break;
-	    case '<':
-		dataPointer--;
-		break;
-	    case '+':
-		dataStack[dataPointer]++;
-		break;
-	    case '-':
-		dataStack[dataPointer]--;
-		break;
-	    case '.':
-		System.out.format("%c", dataStack[dataPointer]);
-		break;
-	    case ',':
-		dataStack[dataPointer] = (byte)System.in.read();
-		break;
-	    case '[':
-		var stack = 1;
-		var end = instrPointer + 1;
-	    loop: while (true) {
-		    switch (prog.charAt(end)) {
-		    case '[':
-			stack++;
-			break;
-		    case ']':
-			stack--;
+        if dataStack[dataPointer] == 0 {
+            instructionPointer = end
+        } else {
+            instructionStack.append(instructionPointer)
+        }
+    case UInt8(ascii: "]"):
+        if dataStack[dataPointer] != 0 {
+            instructionPointer = instructionStack[instructionStack.count-1] - 1
+        }
 
-			if (stack == 0) {
-			    break loop;
-			}
-
-			break;
-		    }
-
-		    end++;
-		}
-
-		if (dataStack[dataPointer] == 0) {
-		    instrPointer = end;
-		} else {
-		    instrStack.add(instrPointer);
-		}
-		break;
-	    case ']': 
-		int newPointer = instrStack.get(instrStack.size() - 1) - 1;
-		instrStack.remove(instrStack.size()-1);
-		if (dataStack[dataPointer] != 0) {
-		    instrPointer = newPointer;
-		}
-		break;
-	    }
-
-	    instrPointer++;
-	}
+        instructionStack = Array(instructionStack[0..<instructionStack.count-1])
+    default:
+        print("bad character", prog[instructionPointer])
+        exit(1)
     }
+
+    instructionPointer += 1
 }
 </code></pre>
   </section>
@@ -110,9 +88,9 @@ public class Main {
   <section>
     <h2>Build and run</h2>
     <p>These steps are linux only.</p>
-    <pre><code>$ javac Main.java
+    <pre><code>$ swiftc main.swift
 
-$ java Main $myProgram</code></pre>
+$ ./main $myProgram</code></pre>
   </section>
 
   
@@ -146,7 +124,7 @@ $ java Main $myProgram</code></pre>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/swift.min.js"></script>
 <script>hljs.highlightAll();</script>
 
 
