@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v3
 
     # Set up FreePascal, D
     - run: sudo apt-get install -y fpc ldc
@@ -27,7 +27,7 @@ jobs:
         version: master
 
     # Sets up R environment
-    - uses: r-lib/actions/setup-r@master
+    - uses: r-lib/actions/setup-r
 
     # Set up OCaml
     - name: Use OCaml 4.14.x
