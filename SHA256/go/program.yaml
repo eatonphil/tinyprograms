@@ -1,0 +1,10 @@
+source: main.go
+
+prepare:
+  - rm -f go.mod go.sum
+  - go mod init sha256
+  - go build
+run: ./sha256 {PROGRAM}
+
+authors:
+  - eatonphil

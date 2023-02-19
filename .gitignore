@@ -3,3 +3,4 @@ main
 zig-cache
 *.class
 .env
+go.mod
