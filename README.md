@@ -17,9 +17,10 @@ necessarily 100% bug-free.
 * [UUIDv4](./UUIDv4): A UUIDv4 generator
 * [AATree](./AATree): A generic, balanced binary tree
 * Potential:
-  * Lisp: A tree-walking s-expression interpreter capable of running a fibonacci function
-  * JQ: A tiny JQ clone
-  * HTTP: An HTTP server from UNIX sockets
+  * HTTP: An HTTP client from UNIX sockets
+  * Ring: Ring buffer/double linked list
+  * Log: Bitcask-style on-disk key-value store via an append-only log
+  * Snake: The arcade game
 
 # Contributing an implementation
 
@@ -27,7 +28,7 @@ A few rules:
 
 1. Keep it simple and readable.
 1. This isn't code golfing.
-1. Do not copy any existing code. Write the program from scratch. See
+1. Do not copy any external code. Write the program from scratch. See
    rule 1.
 1. Use existing implementations in this project as guidelines. Use the
    same or similar algorithms and data structures. See rule 1.
