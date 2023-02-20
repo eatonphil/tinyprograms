@@ -5,6 +5,13 @@ on:
     branches: [main]
 
 jobs:
+  site:
+    name: Validate site
+    steps:
+      - uses: actions/checkout@v3
+      - run: pip3 install mistune pyyaml jinja2
+      - run: ./scripts/fail_on_diff.sh
+
   tests:
     name: Run all tests
     runs-on: ubuntu-latest
