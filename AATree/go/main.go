@@ -89,7 +89,7 @@ func main() {
 	}
 
 	numbers := strings.Fields(string(bytes))
-	
+
 	var t *AATree[int]
 	for _, number := range numbers {
 		i, err := strconv.Atoi(number)
