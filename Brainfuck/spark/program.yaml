@@ -1,0 +1,11 @@
+source: src/spark.adb
+
+prepare:
+  - alr build 
+  - alr gnatprove
+
+run: ./bin/spark {PROGRAM}
+
+authors:
+  - eatonphil
+  - ceberly

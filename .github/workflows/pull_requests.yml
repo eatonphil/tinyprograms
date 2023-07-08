@@ -38,4 +38,7 @@ jobs:
     # Set up Swift
     - uses: swift-actions/setup-swift@v1
 
-    - run: ./scripts/test.py      
+    # Set up Ada/SPARK with Alire.dev
+    - uses: alire-project/setup-alire@v2
+
+    - run: ./scripts/test.py
