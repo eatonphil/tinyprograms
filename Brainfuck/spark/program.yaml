@@ -1,7 +1,7 @@
 source: src/spark.adb
 
 prepare:
-  - alr init --bin --in-place --non-interactive spark
+  - alr --non-interactive init --bin --in-place spark
   - alr build 
   - alr gnatprove
 
