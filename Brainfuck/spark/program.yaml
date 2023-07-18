@@ -7,5 +7,14 @@ prepare:
 
 run: ./bin/spark {PROGRAM}
 
+notes:
+  - In keeping with the spirit of `tinyprograms` we don't include the Alire package manager files here.
+  - You can use the `--in-place` init above or you can work around this and rely on `.gitignore`
+
+  - If you want to use Alire:
+    - Follow the instructions for downloading and setting up Alire https://alire.ada.dev
+    - `alr gnatprove` will run the proofs.
+    - `alr run --args=../_tests/helloworld.bf` will run the example program.
+
 authors:
   - ceberly
