@@ -1,0 +1,20 @@
+source: src/spark.adb
+
+prepare:
+  - alr --non-interactive init --bin --in-place spark
+  - alr build 
+  - alr gnatprove
+
+run: ./bin/spark {PROGRAM}
+
+notes:
+  - In keeping with the spirit of `tinyprograms` we don't include the Alire package manager files here.
+  - You can use the `--in-place` init above or you can work around this and rely on `.gitignore`
+
+  - If you want to use Alire
+    - Follow the instructions for downloading and setting up Alire https://alire.ada.dev
+    - Run the proofs with `alr gnatprove`.
+    - Run the example program with `alr run --args=../_tests/helloworld.bf`.
+
+authors:
+  - ceberly

@@ -1,0 +1,6 @@
+alire.toml
+spark.gpr
+/obj/
+/bin/
+/alire/
+/config/
