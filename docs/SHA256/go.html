@@ -85,7 +85,7 @@ func σ1(x uint32) uint32 {
 	return rotR(x, 17) ^ rotR(x, 19) ^ (x >> 10)
 }
 
-func (ctx* sha256Context) sha256Compute(data [64]uint8) {
+func (ctx *sha256Context) sha256Compute(data [64]uint8) {
 	var i, j, t1, t2 uint32
 	var w [64]uint32
 
@@ -187,14 +187,14 @@ func SHA256(data []byte) [32]uint8 {
 
 	var hash [32]uint8
 	for i = 0; i < 4; i++ {
-		hash[i]      = uint8((ctx.state[0] >> (24 - i * 8)) & 0x000000ff)
-		hash[i + 4]  = uint8((ctx.state[1] >> (24 - i * 8)) & 0x000000ff)
-		hash[i + 8]  = uint8((ctx.state[2] >> (24 - i * 8)) & 0x000000ff)
-		hash[i + 12] = uint8((ctx.state[3] >> (24 - i * 8)) & 0x000000ff)
-		hash[i + 16] = uint8((ctx.state[4] >> (24 - i * 8)) & 0x000000ff)
-		hash[i + 20] = uint8((ctx.state[5] >> (24 - i * 8)) & 0x000000ff)
-		hash[i + 24] = uint8((ctx.state[6] >> (24 - i * 8)) & 0x000000ff)
-		hash[i + 28] = uint8((ctx.state[7] >> (24 - i * 8)) & 0x000000ff)
+		hash[i] = uint8((ctx.state[0] >> (24 - i*8)) & 0x000000ff)
+		hash[i+4] = uint8((ctx.state[1] >> (24 - i*8)) & 0x000000ff)
+		hash[i+8] = uint8((ctx.state[2] >> (24 - i*8)) & 0x000000ff)
+		hash[i+12] = uint8((ctx.state[3] >> (24 - i*8)) & 0x000000ff)
+		hash[i+16] = uint8((ctx.state[4] >> (24 - i*8)) & 0x000000ff)
+		hash[i+20] = uint8((ctx.state[5] >> (24 - i*8)) & 0x000000ff)
+		hash[i+24] = uint8((ctx.state[6] >> (24 - i*8)) & 0x000000ff)
+		hash[i+28] = uint8((ctx.state[7] >> (24 - i*8)) & 0x000000ff)
 	}
 	return hash
 }

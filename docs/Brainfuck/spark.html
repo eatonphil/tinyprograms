@@ -1,0 +1,264 @@
+<meta charset="UTF-8">
+<link href="/style.css" rel="stylesheet" type="text/css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Brainfuck in sparkTiny Programs: Rosetta code for implementations</title>
+
+<article>
+  
+  <a href="/">Tiny Programs</a>
+  <h1>Brainfuck in spark</h1>
+  <div class="authors">
+    <img src="https://github.com/ceberly.png" / >
+    <span>Contributed by <a href="https://github.com/ceberly">ceberly</a></span>
+  </div>
+
+  <section>
+    <h2>Implementation</h2>
+    <div class="description">
+      
+      <p>An implementation of the Brainfuck programming language.</p>
+<p>See <a href="https://en.wikipedia.org/wiki/Brainfuck">https://en.wikipedia.org/wiki/Brainfuck</a> for details.</p>
+
+      
+    </div>
+    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/spark/src/spark.adb">Source Code</a>
+    <pre><code>with Ada.Text_IO;      use Ada.Text_IO;
+with Ada.Command_Line; use Ada.Command_Line;
+
+procedure Spark with
+   SPARK_Mode => On
+is
+   type Byte is mod 256;
+   --  Also defines the max file size to be ~1MB
+   type Instruction_Pointer_Type is mod 10**6;
+
+   --   Impose some reasonable bounds for this example.
+   subtype Data_Pointer_Type is Integer range 0 .. 10_000;
+   Data_Stack : array (Data_Pointer_Type'Range) of Byte := (others => 0);
+
+   --  10k loop depth (really the number of nested '[' characters).
+   type Loop_Index_Type is mod 10_000;
+   Loop_Stack : array (Loop_Index_Type'Range) of Instruction_Pointer_Type :=
+     (others => 0);
+
+   Loop_Stack_Index : Loop_Index_Type := 0;
+
+   Instruction_Pointer : Instruction_Pointer_Type := 0;
+   Data_Pointer        : Data_Pointer_Type        := 0;
+
+   --   ~1MB file max
+   Program : array (Instruction_Pointer_Type'Range) of Character :=
+     (others => ASCII.NUL);
+
+   Had_Error : Boolean := False;
+
+   procedure Read_Program
+     (File_Name : String; Len : out Instruction_Pointer_Type) with
+      Global => (In_Out => (Ada.Text_IO.File_System, Program))
+   is
+      File  : Ada.Text_IO.File_Type;
+      Input : Character;
+   begin
+      Ada.Text_IO.Open (File, Ada.Text_IO.In_File, File_Name);
+      pragma Assert (Ada.Text_IO.Is_Open (File));
+
+      Len := 0;
+
+      loop
+         if Len = Instruction_Pointer_Type'Last then
+            Put_Line ("Program is too big, sorry");
+            exit;
+         end if;
+
+         Ada.Text_IO.Get (File, Input);
+         Program (Len) := Input;
+
+         Len := Len + 1;
+         exit when Ada.Text_IO.End_Of_File (File);
+      end loop;
+
+      Ada.Text_IO.Close (File);
+      pragma Assert (Ada.Text_IO.Is_Open (File) = False);
+   end Read_Program;
+
+   procedure Step with
+      Global =>
+      (In_Out =>
+         (Data_Pointer, Data_Stack, Had_Error, Instruction_Pointer, Loop_Stack,
+          Loop_Stack_Index, Ada.Text_IO.File_System),
+       Input => Program)
+   is
+      Loop_Stack_Depth : Integer;
+      Loop_End         : Instruction_Pointer_Type;
+   begin
+      case Program (Instruction_Pointer) is
+         when '>' =>
+            if Data_Pointer = Data_Pointer_Type'Last then
+               Had_Error := True;
+               return;
+            end if;
+
+            Data_Pointer := Data_Pointer + 1;
+         when '<' =>
+            if Data_Pointer = Data_Pointer_Type'First then
+               Had_Error := True;
+               return;
+            end if;
+
+            Data_Pointer := Data_Pointer - 1;
+         when '+' =>
+            Data_Stack (Data_Pointer) := Data_Stack (Data_Pointer) + 1;
+         when '-' =>
+            Data_Stack (Data_Pointer) := Data_Stack (Data_Pointer) - 1;
+         when '.' =>
+            Put (Item => Character'Val (Data_Stack (Data_Pointer)));
+         when '[' =>
+            Loop_Stack_Depth := 1;
+            Loop_End         := Instruction_Pointer + 1;
+
+            while Loop_Stack_Depth > 0 loop
+               if Loop_Stack_Depth = Integer'Last then
+                  Had_Error := True;
+                  exit;
+               end if;
+
+               case Program (Loop_End) is
+                  when '[' =>
+                     Loop_Stack_Depth := Loop_Stack_Depth + 1;
+                  when ']' =>
+                     Loop_Stack_Depth := Loop_Stack_Depth - 1;
+                  when others =>
+                     null;
+               end case;
+
+               Loop_End := Loop_End + 1;
+            end loop;
+
+            if Data_Stack (Data_Pointer) = 0 then
+               Instruction_Pointer := Loop_End;
+            else
+               Loop_Stack (Loop_Stack_Index) := Instruction_Pointer;
+               Loop_Stack_Index              := Loop_Stack_Index + 1;
+            end if;
+         when ']' =>
+            Loop_Stack_Index := Loop_Stack_Index - 1;
+
+            if Data_Stack (Data_Pointer) /= 0 then
+               Instruction_Pointer := Loop_Stack (Loop_Stack_Index) - 1;
+            end if;
+         when ',' =>
+            --   TODO: support input.
+            Had_Error := True;
+         when others =>
+            Had_Error := True;
+      end case;
+   end Step;
+
+   --   Begin actual main :)
+   Len : Instruction_Pointer_Type;
+begin
+   if Argument_Count /= 1 then
+      Put_Line ("usage: ./spark <file>");
+      return;
+   end if;
+
+   declare
+      File_Name : constant String := Argument (1);
+   begin
+      Read_Program (File_Name, Len);
+   end;
+
+   while Instruction_Pointer < Len loop
+      Step;
+
+      if Had_Error then
+         Put_Line ("Something spooky happened...");
+         exit;
+      end if;
+
+      Instruction_Pointer := Instruction_Pointer + 1;
+   end loop;
+end Spark;
+</code></pre>
+  </section>
+
+  <section>
+    <h2>Build and run</h2>
+    <p>These steps are linux only.</p>
+    <pre><code>$ alr --non-interactive init --bin --in-place spark
+$ alr build
+$ alr gnatprove
+
+$ ./bin/spark $myProgram</code></pre>
+  </section>
+
+  
+  <section>
+    <h2>Notes</h2>
+    <ul>
+      
+      <li><p>In keeping with the spirit of <code>tinyprograms</code> we don't include the Alire package manager files here.</p>
+</li>
+      
+      <li><p>You can use the <code>--in-place</code> init above or you can work around this and rely on <code>.gitignore</code></p>
+</li>
+      
+      <li><p>If you want to use Alire - Follow the instructions for downloading and setting up Alire https://alire.ada.dev - Run the proofs with <code>alr gnatprove</code>. - Run the example program with <code>alr run --args=../_tests/helloworld.bf</code>.</p>
+</li>
+      
+    </ul>
+  </section>
+  
+
+  <section>
+    <h2>All implementations</h2>
+    <ul>
+      
+      <li><a href="/Brainfuck/d.html">d</a></li>
+      
+      <li><a href="/Brainfuck/freepascal.html">freepascal</a></li>
+      
+      <li><a href="/Brainfuck/go.html">go (Reference)</a></li>
+      
+      <li><a href="/Brainfuck/java.html">java</a></li>
+      
+      <li><a href="/Brainfuck/ocaml.html">ocaml</a></li>
+      
+      <li><a href="/Brainfuck/r.html">r</a></li>
+      
+      <li><a href="/Brainfuck/ruby.html">ruby</a></li>
+      
+      <li><a href="/Brainfuck/rust.html">rust</a></li>
+      
+      <li><a href="/Brainfuck/spark.html">spark</a></li>
+      
+      <li><a href="/Brainfuck/swift.html">swift</a></li>
+      
+      <li><a href="/Brainfuck/zig.html">zig</a></li>
+      
+    </ul>
+  </section>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/spark.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+
+  <footer>
+    <p>Copyright 2022 Phil Eaton</p>
+    <p>
+      <a href="https://github.com/eatonphil/tinyprograms/blob/main/LICENSE.MD">MIT Licensed</a>
+    </p>
+  </footer>
+</article>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D8MWLGQV56"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-D8MWLGQV56');
+</script>
