@@ -9,8 +9,11 @@ import urllib.request
 import mistune
 import yaml
 from jinja2 import Environment, FileSystemLoader
-
 from millify import millify
+from pygments import highlight
+from pygments.formatters import HtmlFormatter
+from pygments.lexers import guess_lexer, get_lexer_by_name
+
 
 REPO_BLOB_URL = "https://github.com/eatonphil/tinyprograms/blob/main/"
 
@@ -79,7 +82,12 @@ for project_name, project in PROJECTS.items():
             for i, note in enumerate(program_desc.get('notes', [])):
                 program_desc['notes'][i] = mistune.html(note)
 
-        program = open(os.path.join(REPO_ROOT, project_name, language, program_desc["source"])).read()
+        code = open(os.path.join(REPO_ROOT, project_name, language, program_desc["source"])).read()
+        l = get_lexer_by_name({
+            'freepascal': 'pascal',
+            'spark': 'ada',
+        }.get(language) or language)
+        program = highlight(code, l, HtmlFormatter())        
 
         print("Writing {} page for {}".format(language, project_name))
 

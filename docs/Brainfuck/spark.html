@@ -23,164 +23,165 @@
       
     </div>
     <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/spark/src/spark.adb">Source Code</a>
-    <pre><code>with Ada.Text_IO;      use Ada.Text_IO;
-with Ada.Command_Line; use Ada.Command_Line;
+    <div class="highlight"><pre><span></span><span class="kn">with</span> <span class="n">Ada.Text_IO</span><span class="p">;</span>      <span class="kn">use</span> <span class="n">Ada.Text_IO</span><span class="p">;</span>
+<span class="kn">with</span> <span class="n">Ada.Command_Line</span><span class="p">;</span> <span class="kn">use</span> <span class="n">Ada.Command_Line</span><span class="p">;</span>
 
-procedure Spark with
-   SPARK_Mode => On
-is
-   type Byte is mod 256;
-   --  Also defines the max file size to be ~1MB
-   type Instruction_Pointer_Type is mod 10**6;
+<span class="kd">procedure</span> <span class="nf">Spark</span> <span class="nf">with</span>
+   <span class="nf">SPARK_Mode</span> <span class="p">=&gt;</span> <span class="nf">On</span>
+<span class="kr">is</span>
+   <span class="kd">type</span> <span class="kt">Byte</span> <span class="kr">is</span> <span class="ow">mod</span> <span class="mi">256</span><span class="p">;</span>
+   <span class="c1">--  Also defines the max file size to be ~1MB</span>
+   <span class="kd">type</span> <span class="kt">Instruction_Pointer_Type</span> <span class="kr">is</span> <span class="ow">mod</span> <span class="mi">10</span><span class="o">**</span><span class="mi">6</span><span class="p">;</span>
 
-   --   Impose some reasonable bounds for this example.
-   subtype Data_Pointer_Type is Integer range 0 .. 10_000;
-   Data_Stack : array (Data_Pointer_Type'Range) of Byte := (others => 0);
+   <span class="c1">--   Impose some reasonable bounds for this example.</span>
+   <span class="kd">subtype</span> <span class="kt">Data_Pointer_Type</span> <span class="kr">is</span> <span class="kt">Integer</span> <span class="kr">range</span> <span class="mi">0</span> <span class="p">..</span> <span class="mi">10_000</span><span class="p">;</span>
+   <span class="n">Data_Stack</span> <span class="p">:</span> <span class="kr">array</span> <span class="p">(</span><span class="n">Data_Pointer_Type</span><span class="p">&#39;</span><span class="na">Range</span><span class="p">)</span> <span class="kr">of</span> <span class="kt">Byte</span> <span class="p">:=</span> <span class="p">(</span><span class="kr">others</span> <span class="p">=&gt;</span> <span class="mi">0</span><span class="p">);</span>
 
-   --  10k loop depth (really the number of nested '[' characters).
-   type Loop_Index_Type is mod 10_000;
-   Loop_Stack : array (Loop_Index_Type'Range) of Instruction_Pointer_Type :=
-     (others => 0);
+   <span class="c1">--  10k loop depth (really the number of nested &#39;[&#39; characters).</span>
+   <span class="kd">type</span> <span class="kt">Loop_Index_Type</span> <span class="kr">is</span> <span class="ow">mod</span> <span class="mi">10_000</span><span class="p">;</span>
+   <span class="n">Loop_Stack</span> <span class="p">:</span> <span class="kr">array</span> <span class="p">(</span><span class="n">Loop_Index_Type</span><span class="p">&#39;</span><span class="na">Range</span><span class="p">)</span> <span class="kr">of</span> <span class="n">Instruction_Pointer_Type</span> <span class="p">:=</span>
+     <span class="p">(</span><span class="kr">others</span> <span class="p">=&gt;</span> <span class="mi">0</span><span class="p">);</span>
 
-   Loop_Stack_Index : Loop_Index_Type := 0;
+   <span class="nl">Loop_Stack_Index</span> <span class="p">:</span> <span class="kr">Loop</span><span class="mi">_</span><span class="n">Index_Type</span> <span class="p">:=</span> <span class="mi">0</span><span class="p">;</span>
 
-   Instruction_Pointer : Instruction_Pointer_Type := 0;
-   Data_Pointer        : Data_Pointer_Type        := 0;
+   <span class="n">Instruction_Pointer</span> <span class="p">:</span> <span class="n">Instruction_Pointer_Type</span> <span class="p">:=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="n">Data_Pointer</span>        <span class="p">:</span> <span class="n">Data_Pointer_Type</span>        <span class="p">:=</span> <span class="mi">0</span><span class="p">;</span>
 
-   --   ~1MB file max
-   Program : array (Instruction_Pointer_Type'Range) of Character :=
-     (others => ASCII.NUL);
+   <span class="c1">--   ~1MB file max</span>
+   <span class="n">Program</span> <span class="p">:</span> <span class="kr">array</span> <span class="p">(</span><span class="n">Instruction_Pointer_Type</span><span class="p">&#39;</span><span class="na">Range</span><span class="p">)</span> <span class="kr">of</span> <span class="kt">Character</span> <span class="p">:=</span>
+     <span class="p">(</span><span class="kr">others</span> <span class="p">=&gt;</span> <span class="n">ASCII</span><span class="p">.</span><span class="n">NUL</span><span class="p">);</span>
 
-   Had_Error : Boolean := False;
+   <span class="n">Had_Error</span> <span class="p">:</span> <span class="kt">Boolean</span> <span class="p">:=</span> <span class="kc">False</span><span class="p">;</span>
 
-   procedure Read_Program
-     (File_Name : String; Len : out Instruction_Pointer_Type) with
-      Global => (In_Out => (Ada.Text_IO.File_System, Program))
-   is
-      File  : Ada.Text_IO.File_Type;
-      Input : Character;
-   begin
-      Ada.Text_IO.Open (File, Ada.Text_IO.In_File, File_Name);
-      pragma Assert (Ada.Text_IO.Is_Open (File));
+   <span class="kd">procedure</span> <span class="nf">Read_Program</span>
+     <span class="p">(</span><span class="nv">File_Name</span> <span class="p">: </span><span class="nv">String</span><span class="p">;</span> <span class="nv">Len</span> <span class="p">: </span><span class="nv">out</span> <span class="nv">Instruction_Pointer_Type</span><span class="p">)</span> <span class="kn">with</span>
+      <span class="n">Global</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="n">In_Out</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="n">Ada</span><span class="p">.</span><span class="n">Text_IO</span><span class="p">.</span><span class="n">File_System</span><span class="p">,</span> <span class="n">Program</span><span class="p">))</span>
+   <span class="kr">is</span>
+      <span class="n">File</span>  <span class="p">:</span> <span class="n">Ada</span><span class="p">.</span><span class="n">Text_IO</span><span class="p">.</span><span class="kt">File_Type</span><span class="p">;</span>
+      <span class="n">Input</span> <span class="p">:</span> <span class="kt">Character</span><span class="p">;</span>
+   <span class="kr">begin</span>
+      <span class="n">Ada</span><span class="p">.</span><span class="n">Text_IO</span><span class="p">.</span><span class="n">Open</span> <span class="p">(</span><span class="n">File</span><span class="p">,</span> <span class="n">Ada</span><span class="p">.</span><span class="n">Text_IO</span><span class="p">.</span><span class="n">In_File</span><span class="p">,</span> <span class="n">File_Name</span><span class="p">);</span>
+      <span class="kr">pragma</span> <span class="cp">Assert</span> <span class="p">(</span><span class="n">Ada</span><span class="p">.</span><span class="n">Text_IO</span><span class="p">.</span><span class="n">Is_Open</span> <span class="p">(</span><span class="n">File</span><span class="p">));</span>
 
-      Len := 0;
+      <span class="n">Len</span> <span class="p">:=</span> <span class="mi">0</span><span class="p">;</span>
 
-      loop
-         if Len = Instruction_Pointer_Type'Last then
-            Put_Line ("Program is too big, sorry");
-            exit;
-         end if;
+      <span class="kr">loop</span>
+         <span class="kr">if</span> <span class="n">Len</span> <span class="o">=</span> <span class="n">Instruction_Pointer_Type</span><span class="p">&#39;</span><span class="na">Last</span> <span class="kr">then</span>
+            <span class="n">Put_Line</span> <span class="p">(</span><span class="s">&quot;Program is too big, sorry&quot;</span><span class="p">);</span>
+            <span class="kr">exit</span><span class="p">;</span>
+         <span class="kr">end</span> <span class="kr">if</span><span class="p">;</span>
 
-         Ada.Text_IO.Get (File, Input);
-         Program (Len) := Input;
+         <span class="n">Ada</span><span class="p">.</span><span class="n">Text_IO</span><span class="p">.</span><span class="n">Get</span> <span class="p">(</span><span class="n">File</span><span class="p">,</span> <span class="n">Input</span><span class="p">);</span>
+         <span class="n">Program</span> <span class="p">(</span><span class="n">Len</span><span class="p">)</span> <span class="p">:=</span> <span class="n">Input</span><span class="p">;</span>
 
-         Len := Len + 1;
-         exit when Ada.Text_IO.End_Of_File (File);
-      end loop;
+         <span class="n">Len</span> <span class="p">:=</span> <span class="n">Len</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+         <span class="kr">exit</span> <span class="kr">when</span> <span class="n">Ada</span><span class="p">.</span><span class="n">Text_IO</span><span class="p">.</span><span class="n">End_Of_File</span> <span class="p">(</span><span class="n">File</span><span class="p">);</span>
+      <span class="kr">end</span> <span class="kr">loop</span><span class="p">;</span>
 
-      Ada.Text_IO.Close (File);
-      pragma Assert (Ada.Text_IO.Is_Open (File) = False);
-   end Read_Program;
+      <span class="n">Ada</span><span class="p">.</span><span class="n">Text_IO</span><span class="p">.</span><span class="n">Close</span> <span class="p">(</span><span class="n">File</span><span class="p">);</span>
+      <span class="kr">pragma</span> <span class="cp">Assert</span> <span class="p">(</span><span class="n">Ada</span><span class="p">.</span><span class="n">Text_IO</span><span class="p">.</span><span class="n">Is_Open</span> <span class="p">(</span><span class="n">File</span><span class="p">)</span> <span class="o">=</span> <span class="kc">False</span><span class="p">);</span>
+   <span class="kr">end</span> <span class="nf">Read_Program</span><span class="p">;</span>
 
-   procedure Step with
-      Global =>
-      (In_Out =>
-         (Data_Pointer, Data_Stack, Had_Error, Instruction_Pointer, Loop_Stack,
-          Loop_Stack_Index, Ada.Text_IO.File_System),
-       Input => Program)
-   is
-      Loop_Stack_Depth : Integer;
-      Loop_End         : Instruction_Pointer_Type;
-   begin
-      case Program (Instruction_Pointer) is
-         when '>' =>
-            if Data_Pointer = Data_Pointer_Type'Last then
-               Had_Error := True;
-               return;
-            end if;
+   <span class="kd">procedure</span> <span class="nf">Step</span> <span class="nf">with</span>
+      <span class="nf">Global</span> <span class="p">=&gt;</span>
+      <span class="p">(</span><span class="nv">In_Out</span> <span class="p">=&gt;</span>
+         <span class="p">(</span><span class="nv">Data_Pointer</span><span class="p">,</span> <span class="nv">Data_Stack</span><span class="p">,</span> <span class="nv">Had_Error</span><span class="p">,</span> <span class="nv">Instruction_Pointer</span><span class="p">,</span> <span class="nv">Loop_Stack</span><span class="p">,</span>
+          <span class="nv">Loop_Stack_Index</span><span class="p">,</span> <span class="nv">Ada</span><span class="p">.</span><span class="nv">Text_IO</span><span class="p">.</span><span class="nv">File_System</span><span class="p">),</span>
+       <span class="n">Input</span> <span class="p">=&gt;</span> <span class="n">Program</span><span class="p">)</span>
+   <span class="kr">is</span>
+      <span class="n">Loop_Stack_Depth</span> <span class="p">:</span> <span class="kt">Integer</span><span class="p">;</span>
+      <span class="n">Loop_End</span>         <span class="p">:</span> <span class="n">Instruction_Pointer_Type</span><span class="p">;</span>
+   <span class="kr">begin</span>
+      <span class="kr">case</span> <span class="n">Program</span> <span class="p">(</span><span class="n">Instruction_Pointer</span><span class="p">)</span> <span class="kr">is</span>
+         <span class="kr">when</span> <span class="s s-Character">&#39;&gt;&#39;</span> <span class="p">=&gt;</span>
+            <span class="kr">if</span> <span class="n">Data_Pointer</span> <span class="o">=</span> <span class="n">Data_Pointer_Type</span><span class="p">&#39;</span><span class="na">Last</span> <span class="kr">then</span>
+               <span class="n">Had_Error</span> <span class="p">:=</span> <span class="kc">True</span><span class="p">;</span>
+               <span class="kr">return</span><span class="p">;</span>
+            <span class="kr">end</span> <span class="kr">if</span><span class="p">;</span>
 
-            Data_Pointer := Data_Pointer + 1;
-         when '<' =>
-            if Data_Pointer = Data_Pointer_Type'First then
-               Had_Error := True;
-               return;
-            end if;
+            <span class="n">Data_Pointer</span> <span class="p">:=</span> <span class="n">Data_Pointer</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+         <span class="kr">when</span> <span class="s s-Character">&#39;&lt;&#39;</span> <span class="p">=&gt;</span>
+            <span class="kr">if</span> <span class="n">Data_Pointer</span> <span class="o">=</span> <span class="n">Data_Pointer_Type</span><span class="p">&#39;</span><span class="na">First</span> <span class="kr">then</span>
+               <span class="n">Had_Error</span> <span class="p">:=</span> <span class="kc">True</span><span class="p">;</span>
+               <span class="kr">return</span><span class="p">;</span>
+            <span class="kr">end</span> <span class="kr">if</span><span class="p">;</span>
 
-            Data_Pointer := Data_Pointer - 1;
-         when '+' =>
-            Data_Stack (Data_Pointer) := Data_Stack (Data_Pointer) + 1;
-         when '-' =>
-            Data_Stack (Data_Pointer) := Data_Stack (Data_Pointer) - 1;
-         when '.' =>
-            Put (Item => Character'Val (Data_Stack (Data_Pointer)));
-         when '[' =>
-            Loop_Stack_Depth := 1;
-            Loop_End         := Instruction_Pointer + 1;
+            <span class="n">Data_Pointer</span> <span class="p">:=</span> <span class="n">Data_Pointer</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+         <span class="kr">when</span> <span class="s s-Character">&#39;+&#39;</span> <span class="p">=&gt;</span>
+            <span class="n">Data_Stack</span> <span class="p">(</span><span class="n">Data_Pointer</span><span class="p">)</span> <span class="p">:=</span> <span class="n">Data_Stack</span> <span class="p">(</span><span class="n">Data_Pointer</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+         <span class="kr">when</span> <span class="s s-Character">&#39;-&#39;</span> <span class="p">=&gt;</span>
+            <span class="n">Data_Stack</span> <span class="p">(</span><span class="n">Data_Pointer</span><span class="p">)</span> <span class="p">:=</span> <span class="n">Data_Stack</span> <span class="p">(</span><span class="n">Data_Pointer</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+         <span class="kr">when</span> <span class="s s-Character">&#39;.&#39;</span> <span class="p">=&gt;</span>
+            <span class="n">Put</span> <span class="p">(</span><span class="n">Item</span> <span class="p">=&gt;</span> <span class="kt">Character</span><span class="p">&#39;</span><span class="na">Val</span> <span class="p">(</span><span class="n">Data_Stack</span> <span class="p">(</span><span class="n">Data_Pointer</span><span class="p">)));</span>
+         <span class="kr">when</span> <span class="s s-Character">&#39;[&#39;</span> <span class="p">=&gt;</span>
+            <span class="n">Loop_Stack_Depth</span> <span class="p">:=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">Loop_End</span>         <span class="p">:=</span> <span class="n">Instruction_Pointer</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
 
-            while Loop_Stack_Depth > 0 loop
-               if Loop_Stack_Depth = Integer'Last then
-                  Had_Error := True;
-                  exit;
-               end if;
+            <span class="kr">while</span> <span class="n">Loop_Stack_Depth</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="kr">loop</span>
+               <span class="kr">if</span> <span class="n">Loop_Stack_Depth</span> <span class="o">=</span> <span class="kt">Integer</span><span class="p">&#39;</span><span class="na">Last</span> <span class="kr">then</span>
+                  <span class="n">Had_Error</span> <span class="p">:=</span> <span class="kc">True</span><span class="p">;</span>
+                  <span class="kr">exit</span><span class="p">;</span>
+               <span class="kr">end</span> <span class="kr">if</span><span class="p">;</span>
 
-               case Program (Loop_End) is
-                  when '[' =>
-                     Loop_Stack_Depth := Loop_Stack_Depth + 1;
-                  when ']' =>
-                     Loop_Stack_Depth := Loop_Stack_Depth - 1;
-                  when others =>
-                     null;
-               end case;
+               <span class="kr">case</span> <span class="n">Program</span> <span class="p">(</span><span class="n">Loop_End</span><span class="p">)</span> <span class="kr">is</span>
+                  <span class="kr">when</span> <span class="s s-Character">&#39;[&#39;</span> <span class="p">=&gt;</span>
+                     <span class="n">Loop_Stack_Depth</span> <span class="p">:=</span> <span class="n">Loop_Stack_Depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                  <span class="kr">when</span> <span class="s s-Character">&#39;]&#39;</span> <span class="p">=&gt;</span>
+                     <span class="n">Loop_Stack_Depth</span> <span class="p">:=</span> <span class="n">Loop_Stack_Depth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+                  <span class="kr">when</span> <span class="kr">others</span> <span class="p">=&gt;</span>
+                     <span class="kc">null</span><span class="p">;</span>
+               <span class="kr">end</span> <span class="kr">case</span><span class="p">;</span>
 
-               Loop_End := Loop_End + 1;
-            end loop;
+               <span class="n">Loop_End</span> <span class="p">:=</span> <span class="n">Loop_End</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="kr">end</span> <span class="kr">loop</span><span class="p">;</span>
 
-            if Data_Stack (Data_Pointer) = 0 then
-               Instruction_Pointer := Loop_End;
-            else
-               Loop_Stack (Loop_Stack_Index) := Instruction_Pointer;
-               Loop_Stack_Index              := Loop_Stack_Index + 1;
-            end if;
-         when ']' =>
-            Loop_Stack_Index := Loop_Stack_Index - 1;
+            <span class="kr">if</span> <span class="n">Data_Stack</span> <span class="p">(</span><span class="n">Data_Pointer</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span> <span class="kr">then</span>
+               <span class="n">Instruction_Pointer</span> <span class="p">:=</span> <span class="n">Loop_End</span><span class="p">;</span>
+            <span class="kr">else</span>
+               <span class="n">Loop_Stack</span> <span class="p">(</span><span class="n">Loop_Stack_Index</span><span class="p">)</span> <span class="p">:=</span> <span class="n">Instruction_Pointer</span><span class="p">;</span>
+               <span class="n">Loop_Stack_Index</span>              <span class="p">:=</span> <span class="n">Loop_Stack_Index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="kr">end</span> <span class="kr">if</span><span class="p">;</span>
+         <span class="kr">when</span> <span class="s s-Character">&#39;]&#39;</span> <span class="p">=&gt;</span>
+            <span class="n">Loop_Stack_Index</span> <span class="p">:=</span> <span class="n">Loop_Stack_Index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
 
-            if Data_Stack (Data_Pointer) /= 0 then
-               Instruction_Pointer := Loop_Stack (Loop_Stack_Index) - 1;
-            end if;
-         when ',' =>
-            --   TODO: support input.
-            Had_Error := True;
-         when others =>
-            Had_Error := True;
-      end case;
-   end Step;
+            <span class="kr">if</span> <span class="n">Data_Stack</span> <span class="p">(</span><span class="n">Data_Pointer</span><span class="p">)</span> <span class="o">/=</span> <span class="mi">0</span> <span class="kr">then</span>
+               <span class="n">Instruction_Pointer</span> <span class="p">:=</span> <span class="n">Loop_Stack</span> <span class="p">(</span><span class="n">Loop_Stack_Index</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="kr">end</span> <span class="kr">if</span><span class="p">;</span>
+         <span class="kr">when</span> <span class="s s-Character">&#39;,&#39;</span> <span class="p">=&gt;</span>
+            <span class="c1">--   TODO: support input.</span>
+            <span class="n">Had_Error</span> <span class="p">:=</span> <span class="kc">True</span><span class="p">;</span>
+         <span class="kr">when</span> <span class="kr">others</span> <span class="p">=&gt;</span>
+            <span class="n">Had_Error</span> <span class="p">:=</span> <span class="kc">True</span><span class="p">;</span>
+      <span class="kr">end</span> <span class="kr">case</span><span class="p">;</span>
+   <span class="kr">end</span> <span class="nf">Step</span><span class="p">;</span>
 
-   --   Begin actual main :)
-   Len : Instruction_Pointer_Type;
-begin
-   if Argument_Count /= 1 then
-      Put_Line ("usage: ./spark <file>");
-      return;
-   end if;
+   <span class="c1">--   Begin actual main :)</span>
+   <span class="n">Len</span> <span class="p">:</span> <span class="n">Instruction_Pointer_Type</span><span class="p">;</span>
+<span class="kr">begin</span>
+   <span class="kr">if</span> <span class="n">Argument_Count</span> <span class="o">/=</span> <span class="mi">1</span> <span class="kr">then</span>
+      <span class="n">Put_Line</span> <span class="p">(</span><span class="s">&quot;usage: ./spark &lt;file&gt;&quot;</span><span class="p">);</span>
+      <span class="kr">return</span><span class="p">;</span>
+   <span class="kr">end</span> <span class="kr">if</span><span class="p">;</span>
 
-   declare
-      File_Name : constant String := Argument (1);
-   begin
-      Read_Program (File_Name, Len);
-   end;
+   <span class="kr">declare</span>
+      <span class="no">File_Name</span> <span class="p">:</span> <span class="kr">constant</span> <span class="kt">String</span> <span class="p">:=</span> <span class="n">Argument</span> <span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+   <span class="kr">begin</span>
+      <span class="n">Read_Program</span> <span class="p">(</span><span class="n">File_Name</span><span class="p">,</span> <span class="n">Len</span><span class="p">);</span>
+   <span class="kr">end</span><span class="p">;</span>
 
-   while Instruction_Pointer < Len loop
-      Step;
+   <span class="kr">while</span> <span class="n">Instruction_Pointer</span> <span class="o">&lt;</span> <span class="n">Len</span> <span class="kr">loop</span>
+      <span class="n">Step</span><span class="p">;</span>
 
-      if Had_Error then
-         Put_Line ("Something spooky happened...");
-         exit;
-      end if;
+      <span class="kr">if</span> <span class="n">Had_Error</span> <span class="kr">then</span>
+         <span class="n">Put_Line</span> <span class="p">(</span><span class="s">&quot;Something spooky happened...&quot;</span><span class="p">);</span>
+         <span class="kr">exit</span><span class="p">;</span>
+      <span class="kr">end</span> <span class="kr">if</span><span class="p">;</span>
 
-      Instruction_Pointer := Instruction_Pointer + 1;
-   end loop;
-end Spark;
-</code></pre>
+      <span class="n">Instruction_Pointer</span> <span class="p">:=</span> <span class="n">Instruction_Pointer</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="kr">end</span> <span class="kr">loop</span><span class="p">;</span>
+<span class="kr">end</span> <span class="nf">Spark</span><span class="p">;</span>
+</pre></div>
+
   </section>
 
   <section>
@@ -239,11 +240,6 @@ $ ./bin/spark $myProgram</code></pre>
       
     </ul>
   </section>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/spark.min.js"></script>
-<script>hljs.highlightAll();</script>
 
 
   <footer>

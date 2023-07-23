@@ -18,7 +18,7 @@
       {% endif %}
     </div>
     <a href="{{url}}">Source Code</a>
-    <pre><code>{{program}}</code></pre>
+    {{program}}
   </section>
 
   <section>
@@ -48,9 +48,4 @@ $ {{run_step}}</code></pre>
       {% endfor %}
     </ul>
   </section>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/{{language}}.min.js"></script>
-<script>hljs.highlightAll();</script>
 {% endblock %}

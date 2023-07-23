@@ -23,89 +23,90 @@
       
     </div>
     <a href="https://github.com/eatonphil/tinyprograms/blob/main/AATree/d/main.d">Source Code</a>
-    <pre><code>import std.file: readText;
-import std.stdio: writeln;
-import std.format: format;
-import std.array: split;
-import std.conv: to;
+    <div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">file</span><span class="p">:</span><span class="w"> </span><span class="n">readText</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">stdio</span><span class="p">:</span><span class="w"> </span><span class="n">writeln</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">format</span><span class="p">:</span><span class="w"> </span><span class="n">format</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">array</span><span class="p">:</span><span class="w"> </span><span class="n">split</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="n">std</span><span class="p">.</span><span class="n">conv</span><span class="p">:</span><span class="w"> </span><span class="n">to</span><span class="p">;</span>
 
-struct AATree(T) {
-  T key;
-  AATree!(T)* left;
-  AATree!(T)* right;
-  int level;
-};
+<span class="k">struct</span><span class="w"> </span><span class="n">AATree</span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="n">key</span><span class="p">;</span>
+<span class="w">  </span><span class="n">AATree</span><span class="p">!(</span><span class="n">T</span><span class="p">)*</span><span class="w"> </span><span class="n">left</span><span class="p">;</span>
+<span class="w">  </span><span class="n">AATree</span><span class="p">!(</span><span class="n">T</span><span class="p">)*</span><span class="w"> </span><span class="n">right</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">level</span><span class="p">;</span>
+<span class="p">};</span>
 
-AATree!(T)* skew(T)(AATree!(T)* tree) {
-  if ( tree == null || tree.left == null ){
-    return tree;
-  }
+<span class="n">AATree</span><span class="p">!(</span><span class="n">T</span><span class="p">)*</span><span class="w"> </span><span class="n">skew</span><span class="p">(</span><span class="n">T</span><span class="p">)(</span><span class="n">AATree</span><span class="p">!(</span><span class="n">T</span><span class="p">)*</span><span class="w"> </span><span class="n">tree</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">tree</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">||</span><span class="w"> </span><span class="n">tree</span><span class="p">.</span><span class="n">left</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">){</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">tree</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
 
-  // Red node to the left? Do a right rotation.
-  if (tree.left.level == tree.level) {
-    AATree!(T)* l = tree.left;
-    tree.left = l.right;
-    l.right = tree;
-    return l;
-  }
-  
-  return tree;
-}
+<span class="w">  </span><span class="c1">// Red node to the left? Do a right rotation.</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tree</span><span class="p">.</span><span class="n">left</span><span class="p">.</span><span class="n">level</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="n">tree</span><span class="p">.</span><span class="n">level</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">AATree</span><span class="p">!(</span><span class="n">T</span><span class="p">)*</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">tree</span><span class="p">.</span><span class="n">left</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tree</span><span class="p">.</span><span class="n">left</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">right</span><span class="p">;</span>
+<span class="w">    </span><span class="n">l</span><span class="p">.</span><span class="n">right</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">tree</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">l</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">tree</span><span class="p">;</span>
+<span class="p">}</span>
 
-AATree!(T)* split(T)(AATree!(T)* tree) {
-  if (tree == null || tree.right == null || tree.right.right == null) {
-    return tree;
-  }
+<span class="n">AATree</span><span class="p">!(</span><span class="n">T</span><span class="p">)*</span><span class="w"> </span><span class="n">split</span><span class="p">(</span><span class="n">T</span><span class="p">)(</span><span class="n">AATree</span><span class="p">!(</span><span class="n">T</span><span class="p">)*</span><span class="w"> </span><span class="n">tree</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tree</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">||</span><span class="w"> </span><span class="n">tree</span><span class="p">.</span><span class="n">right</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="p">||</span><span class="w"> </span><span class="n">tree</span><span class="p">.</span><span class="n">right</span><span class="p">.</span><span class="n">right</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">tree</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
 
-  // Right-right red chain? Do a left rotation
-  if (tree.right.right.level == tree.level) {
-    AATree!(T)* l = tree.right;
-    tree.right = l.left;
-    l.left = tree;
-    l.level++;
-    return l;
-  }
+<span class="w">  </span><span class="c1">// Right-right red chain? Do a left rotation</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tree</span><span class="p">.</span><span class="n">right</span><span class="p">.</span><span class="n">right</span><span class="p">.</span><span class="n">level</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="n">tree</span><span class="p">.</span><span class="n">level</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">AATree</span><span class="p">!(</span><span class="n">T</span><span class="p">)*</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">tree</span><span class="p">.</span><span class="n">right</span><span class="p">;</span>
+<span class="w">    </span><span class="n">tree</span><span class="p">.</span><span class="n">right</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="n">left</span><span class="p">;</span>
+<span class="w">    </span><span class="n">l</span><span class="p">.</span><span class="n">left</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">tree</span><span class="p">;</span>
+<span class="w">    </span><span class="n">l</span><span class="p">.</span><span class="n">level</span><span class="p">++;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">l</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
 
-  return tree;
-}
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">tree</span><span class="p">;</span>
+<span class="p">}</span>
 
-AATree!(T)* insert(T)(AATree!(T)* tree, T key) {
-  if (tree == null) {
-    return new AATree!(T)(key, null, null, 1);
-  }
+<span class="n">AATree</span><span class="p">!(</span><span class="n">T</span><span class="p">)*</span><span class="w"> </span><span class="n">insert</span><span class="p">(</span><span class="n">T</span><span class="p">)(</span><span class="n">AATree</span><span class="p">!(</span><span class="n">T</span><span class="p">)*</span><span class="w"> </span><span class="n">tree</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tree</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AATree</span><span class="p">!(</span><span class="n">T</span><span class="p">)(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
 
-  if (key < tree.key) {
-    tree.left = insert(tree.left, key);
-  } else {
-    tree.right = insert(tree.right, key);
-  }
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="n">tree</span><span class="p">.</span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">tree</span><span class="p">.</span><span class="n">left</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">insert</span><span class="p">(</span><span class="n">tree</span><span class="p">.</span><span class="n">left</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">tree</span><span class="p">.</span><span class="n">right</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">insert</span><span class="p">(</span><span class="n">tree</span><span class="p">.</span><span class="n">right</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
 
-  return split(skew(tree));
-}
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">split</span><span class="p">(</span><span class="n">skew</span><span class="p">(</span><span class="n">tree</span><span class="p">));</span>
+<span class="p">}</span>
 
-void print(T)(AATree!(T)* tree, string space) {
-  if (tree.left != null) {
-    print(tree.left, space~"  ");
-  }
+<span class="kt">void</span><span class="w"> </span><span class="n">print</span><span class="p">(</span><span class="n">T</span><span class="p">)(</span><span class="n">AATree</span><span class="p">!(</span><span class="n">T</span><span class="p">)*</span><span class="w"> </span><span class="n">tree</span><span class="p">,</span><span class="w"> </span><span class="nb">string</span><span class="w"> </span><span class="n">space</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tree</span><span class="p">.</span><span class="n">left</span><span class="w"> </span><span class="p">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">print</span><span class="p">(</span><span class="n">tree</span><span class="p">.</span><span class="n">left</span><span class="p">,</span><span class="w"> </span><span class="n">space</span><span class="p">~</span><span class="s">&quot;  &quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
 
-  writeln(format("%s%s", space, tree.key));
+<span class="w">  </span><span class="n">writeln</span><span class="p">(</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;%s%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">space</span><span class="p">,</span><span class="w"> </span><span class="n">tree</span><span class="p">.</span><span class="n">key</span><span class="p">));</span>
 
-  if (tree.right != null) {
-    print(tree.right, space~"  ");
-  }
-}
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tree</span><span class="p">.</span><span class="n">right</span><span class="w"> </span><span class="p">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">print</span><span class="p">(</span><span class="n">tree</span><span class="p">.</span><span class="n">right</span><span class="p">,</span><span class="w"> </span><span class="n">space</span><span class="p">~</span><span class="s">&quot;  &quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 
-void main(string[] args) {
-  string numbers = readText(args[1]);
+<span class="kt">void</span><span class="w"> </span><span class="n">main</span><span class="p">(</span><span class="nb">string</span><span class="p">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nb">string</span><span class="w"> </span><span class="n">numbers</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">readText</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
 
-  AATree!(int)* t;
-  foreach (number; numbers.split) {
-    t = insert(t, number.to!(int));
-  }
+<span class="w">  </span><span class="n">AATree</span><span class="p">!(</span><span class="kt">int</span><span class="p">)*</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
+<span class="w">  </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="n">number</span><span class="p">;</span><span class="w"> </span><span class="n">numbers</span><span class="p">.</span><span class="n">split</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">t</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">insert</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">number</span><span class="p">.</span><span class="n">to</span><span class="p">!(</span><span class="kt">int</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
 
-  print(t, "");
-}
-</code></pre>
+<span class="w">  </span><span class="n">print</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
   </section>
 
   <section>
@@ -130,11 +131,6 @@ $ ./main $myProgram</code></pre>
       
     </ul>
   </section>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/d.min.js"></script>
-<script>hljs.highlightAll();</script>
 
 
   <footer>

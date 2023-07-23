@@ -23,26 +23,27 @@
       
     </div>
     <a href="https://github.com/eatonphil/tinyprograms/blob/main/UUIDv4/ruby/main.rb">Source Code</a>
-    <pre><code>File.open("/dev/random") do |file|
-  buffer = file.read(16).bytes
+    <div class="highlight"><pre><span></span><span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;/dev/random&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">file</span><span class="o">|</span>
+<span class="w">  </span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="o">.</span><span class="n">bytes</span>
 
-  # Set bit 6 to 0
-  buffer[8] &= ~(1 << 6);
-  # Set bit 7 to 1
-  buffer[8] |= (1 << 7);
+<span class="w">  </span><span class="c1"># Set bit 6 to 0</span>
+<span class="w">  </span><span class="n">buffer</span><span class="o">[</span><span class="mi">8</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span>
+<span class="w">  </span><span class="c1"># Set bit 7 to 1</span>
+<span class="w">  </span><span class="n">buffer</span><span class="o">[</span><span class="mi">8</span><span class="o">]</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">);</span>
 
-  # Set version
-  buffer[6] &= ~(1 << 4);
-  buffer[6] &= ~(1 << 5);
-  buffer[6] |= (1 << 6);
-  buffer[6] &= ~(1 << 7);
+<span class="w">  </span><span class="c1"># Set version</span>
+<span class="w">  </span><span class="n">buffer</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+<span class="w">  </span><span class="n">buffer</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
+<span class="w">  </span><span class="n">buffer</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span>
+<span class="w">  </span><span class="n">buffer</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">);</span>
 
-  chars = buffer.map { |byte| "%02x" % byte }
-  segments = [chars[0..3], chars[4..5], chars[6..7], chars[8..9], chars[10..15]]
+<span class="w">  </span><span class="n">chars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffer</span><span class="o">.</span><span class="n">map</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">|</span><span class="n">byte</span><span class="o">|</span><span class="w"> </span><span class="s2">&quot;%02x&quot;</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="n">segments</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">chars</span><span class="o">[</span><span class="mi">0</span><span class="o">..</span><span class="mi">3</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">chars</span><span class="o">[</span><span class="mi">4</span><span class="o">..</span><span class="mi">5</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">chars</span><span class="o">[</span><span class="mi">6</span><span class="o">..</span><span class="mi">7</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">chars</span><span class="o">[</span><span class="mi">8</span><span class="o">..</span><span class="mi">9</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">chars</span><span class="o">[</span><span class="mi">10</span><span class="o">..</span><span class="mi">15</span><span class="o">]]</span>
 
-  puts segments.map(&:join).join("-")
-end
-</code></pre>
+<span class="w">  </span><span class="nb">puts</span><span class="w"> </span><span class="n">segments</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:join</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+<span class="k">end</span>
+</pre></div>
+
   </section>
 
   <section>
@@ -74,11 +75,6 @@ $ ruby main.rb</code></pre>
       
     </ul>
   </section>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/ruby.min.js"></script>
-<script>hljs.highlightAll();</script>
 
 
   <footer>

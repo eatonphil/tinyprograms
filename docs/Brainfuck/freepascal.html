@@ -23,115 +23,117 @@
       
     </div>
     <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/freepascal/main.pp">Source Code</a>
-    <pre><code>{$MODE objfpc}
+    <div class="highlight"><pre><span></span><span class="cm">{$MODE objfpc}</span>
 
-program Brainfuck;
+<span class="k">program</span><span class="w"> </span><span class="n">Brainfuck</span><span class="o">;</span>
 
-uses Sysutils;
+<span class="k">uses</span><span class="w"> </span><span class="n">Sysutils</span><span class="o">;</span>
 
-function readFile(const fileName: string): string;
-var c: char;
-var fp: file of char;
-begin
-  result := '';
+<span class="k">function</span><span class="w"> </span><span class="nf">readFile</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">fileName</span><span class="o">:</span><span class="w"> </span><span class="k">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="k">string</span><span class="o">;</span>
+<span class="k">var</span><span class="w"> </span><span class="n">c</span><span class="o">:</span><span class="w"> </span><span class="kt">char</span><span class="o">;</span>
+<span class="k">var</span><span class="w"> </span><span class="n">fp</span><span class="o">:</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="kt">char</span><span class="o">;</span>
+<span class="k">begin</span>
+<span class="w">  </span><span class="bp">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#39;&#39;</span><span class="o">;</span>
 
-  assign(fp, fileName);
-  reset(fp);
+<span class="w">  </span><span class="n">assign</span><span class="p">(</span><span class="n">fp</span><span class="o">,</span><span class="w"> </span><span class="n">fileName</span><span class="p">)</span><span class="o">;</span>
+<span class="w">  </span><span class="nb">reset</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span><span class="o">;</span>
 
-  while not eof(fp) do
-  begin
-    read(fp, c);
-    result := result + c;
-  end;
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="nb">eof</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="k">begin</span>
+<span class="w">    </span><span class="nb">read</span><span class="p">(</span><span class="n">fp</span><span class="o">,</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="o">;</span>
+<span class="w">    </span><span class="bp">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="bp">result</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c</span><span class="o">;</span>
+<span class="w">  </span><span class="k">end</span><span class="o">;</span>
 
-  close(fp);
-end;
+<span class="w">  </span><span class="nb">close</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span><span class="o">;</span>
+<span class="k">end</span><span class="o">;</span>
 
-type generic vector<T> = class
-  items: array of T;
-  index: int64;
-  procedure add(value: T);
-  function pop(): T;
-end;
+<span class="k">type</span><span class="w"> </span><span class="n">generic</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">class</span>
+<span class="w">  </span><span class="n">items</span><span class="o">:</span><span class="w"> </span><span class="k">array</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">T</span><span class="o">;</span>
+<span class="w">  </span><span class="kp">index</span><span class="o">:</span><span class="w"> </span><span class="kt">int64</span><span class="o">;</span>
+<span class="w">  </span><span class="k">procedure</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">value</span><span class="o">:</span><span class="w"> </span><span class="n">T</span><span class="p">)</span><span class="o">;</span>
+<span class="w">  </span><span class="k">function</span><span class="w"> </span><span class="nf">pop</span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="n">T</span><span class="o">;</span>
+<span class="k">end</span><span class="o">;</span>
 
-procedure vector.add(value: T);
-begin
-  if (items = nil) or (length(items) = index) then
-    setlength(items, (index + 1) * 2);
+<span class="k">procedure</span><span class="w"> </span><span class="nc">vector</span><span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="n">value</span><span class="o">:</span><span class="w"> </span><span class="n">T</span><span class="p">)</span><span class="o">;</span>
+<span class="k">begin</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">items</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nil</span><span class="p">)</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kp">index</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">setlength</span><span class="p">(</span><span class="n">items</span><span class="o">,</span><span class="w"> </span><span class="p">(</span><span class="kp">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="o">;</span>
 
-  items[index] := value;
-  index += 1;
-end;
+<span class="w">  </span><span class="n">items</span><span class="p">[</span><span class="kp">index</span><span class="p">]</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">value</span><span class="o">;</span>
+<span class="w">  </span><span class="kp">index</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="o">;</span>
+<span class="k">end</span><span class="o">;</span>
 
-function vector.pop(): T;
-begin
-  index -= 1;
-  result := items[index];
-end;
+<span class="k">function</span><span class="w"> </span><span class="nc">vector</span><span class="o">.</span><span class="nf">pop</span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="n">T</span><span class="o">;</span>
+<span class="k">begin</span>
+<span class="w">  </span><span class="kp">index</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="o">;</span>
+<span class="w">  </span><span class="bp">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">items</span><span class="p">[</span><span class="kp">index</span><span class="p">]</span><span class="o">;</span>
+<span class="k">end</span><span class="o">;</span>
 
-type IVector = specialize vector<integer>;
+<span class="k">type</span><span class="w"> </span><span class="n">IVector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">specialize</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">integer</span><span class="o">&gt;;</span>
 
-var prog: string;
-var instrPointer: integer = 0;
-var dataPointer: integer = 0;
-var data: array[0..30000] of byte;
-var instrStack: ivector;
+<span class="k">var</span><span class="w"> </span><span class="n">prog</span><span class="o">:</span><span class="w"> </span><span class="k">string</span><span class="o">;</span>
+<span class="k">var</span><span class="w"> </span><span class="n">instrPointer</span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="o">;</span>
+<span class="k">var</span><span class="w"> </span><span class="n">dataPointer</span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="o">;</span>
+<span class="k">var</span><span class="w"> </span><span class="n">data</span><span class="o">:</span><span class="w"> </span><span class="k">array</span><span class="p">[</span><span class="mi">0</span><span class="o">..</span><span class="mi">30000</span><span class="p">]</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="kt">byte</span><span class="o">;</span>
+<span class="k">var</span><span class="w"> </span><span class="n">instrStack</span><span class="o">:</span><span class="w"> </span><span class="n">ivector</span><span class="o">;</span>
 
-// Used by '[' case
-var bracketStack: integer;
-var closingBracket: integer;
+<span class="c1">// Used by &#39;[&#39; case</span>
+<span class="k">var</span><span class="w"> </span><span class="n">bracketStack</span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="o">;</span>
+<span class="k">var</span><span class="w"> </span><span class="n">closingBracket</span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="o">;</span>
 
-// Used by ']' case
-var last: integer;
+<span class="c1">// Used by &#39;]&#39; case</span>
+<span class="k">var</span><span class="w"> </span><span class="n">last</span><span class="o">:</span><span class="w"> </span><span class="kt">integer</span><span class="o">;</span>
 
-begin
-  instrStack := ivector.create;
-  fillchar(data, length(data), 0);
+<span class="k">begin</span>
+<span class="w">  </span><span class="n">instrStack</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">ivector</span><span class="o">.</span><span class="n">create</span><span class="o">;</span>
+<span class="w">  </span><span class="nb">fillchar</span><span class="p">(</span><span class="n">data</span><span class="o">,</span><span class="w"> </span><span class="nb">length</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="o">;</span>
 
-  prog := readFile(paramStr(1));
+<span class="w">  </span><span class="n">prog</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">readFile</span><span class="p">(</span><span class="nb">paramStr</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">;</span>
 
-  while instrPointer < length(prog) do
-  begin
-    case (prog[instrPointer]) of
-      '>': dataPointer += 1;
-      '<': dataPointer -= 1;
-      '+': data[dataPointer] += byte(1);
-      '-': data[dataPointer] -= byte(1);
-      '.': write(chr(data[dataPointer]));
-      '[':
-        // Find the equivalent (potentially nested) ending ']'
-        begin
-	  bracketStack := 1;
-	  closingBracket := instrPointer + 1;
-          while bracketStack <> 0 do
-	  begin
-            if prog[closingBracket] = '[' then
-	      bracketStack += 1;
-	    if prog[closingBracket] = ']' then
-	    begin
-	      bracketStack -= 1;
-	    end;
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="n">instrPointer</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nb">length</span><span class="p">(</span><span class="n">prog</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="k">begin</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">prog</span><span class="p">[</span><span class="n">instrPointer</span><span class="p">])</span><span class="w"> </span><span class="k">of</span>
+<span class="w">      </span><span class="s">&#39;&gt;&#39;</span><span class="o">:</span><span class="w"> </span><span class="n">dataPointer</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="o">;</span>
+<span class="w">      </span><span class="s">&#39;&lt;&#39;</span><span class="o">:</span><span class="w"> </span><span class="n">dataPointer</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="o">;</span>
+<span class="w">      </span><span class="s">&#39;+&#39;</span><span class="o">:</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">dataPointer</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="kt">byte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">;</span>
+<span class="w">      </span><span class="s">&#39;-&#39;</span><span class="o">:</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">dataPointer</span><span class="p">]</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="kt">byte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">;</span>
+<span class="w">      </span><span class="s">&#39;.&#39;</span><span class="o">:</span><span class="w"> </span><span class="nb">write</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">dataPointer</span><span class="p">]))</span><span class="o">;</span>
+<span class="w">      </span><span class="s">&#39;[&#39;</span><span class="o">:</span>
+<span class="w">        </span><span class="c1">// Find the equivalent (potentially nested) ending &#39;]&#39;</span>
+<span class="w">        </span><span class="k">begin</span>
+<span class="w">	  </span><span class="n">bracketStack</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span><span class="o">;</span>
+<span class="w">	  </span><span class="n">closingBracket</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">instrPointer</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="o">;</span>
+<span class="w">          </span><span class="k">while</span><span class="w"> </span><span class="n">bracketStack</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">do</span>
+<span class="w">	  </span><span class="k">begin</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="n">prog</span><span class="p">[</span><span class="n">closingBracket</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;[&#39;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">	      </span><span class="n">bracketStack</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="o">;</span>
+<span class="w">	    </span><span class="k">if</span><span class="w"> </span><span class="n">prog</span><span class="p">[</span><span class="n">closingBracket</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;]&#39;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">	    </span><span class="k">begin</span>
+<span class="w">	      </span><span class="n">bracketStack</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="o">;</span>
+<span class="w">	    </span><span class="k">end</span><span class="o">;</span>
 
-            closingBracket += 1;
-	  end;
+<span class="w">            </span><span class="n">closingBracket</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="o">;</span>
+<span class="w">	  </span><span class="k">end</span><span class="o">;</span>
 
-          if data[dataPointer] = 0 then
-	    instrPointer := closingBracket
-          else instrStack.add(instrPointer);
-	end;
-      ']':
-        begin
-	  last := instrStack.pop();
-          if data[dataPointer] <> 0 then
-	    instrPointer := last - 1;
-	end;
-    end;
+<span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">dataPointer</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">then</span>
+<span class="w">	    </span><span class="n">instrPointer</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">closingBracket</span>
+<span class="w">          </span><span class="k">else</span><span class="w"> </span><span class="n">instrStack</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">instrPointer</span><span class="p">)</span><span class="o">;</span>
+<span class="w">	</span><span class="k">end</span><span class="o">;</span>
+<span class="w">      </span><span class="s">&#39;]&#39;</span><span class="o">:</span>
+<span class="w">        </span><span class="k">begin</span>
+<span class="w">	  </span><span class="n">last</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">instrStack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span><span class="o">;</span>
+<span class="w">          </span><span class="k">if</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">dataPointer</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">then</span>
+<span class="w">	    </span><span class="n">instrPointer</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="o">;</span>
+<span class="w">	</span><span class="k">end</span><span class="o">;</span>
+<span class="w">    </span><span class="k">end</span><span class="o">;</span>
 
-    instrPointer += 1;
-  end;
+<span class="w">    </span><span class="n">instrPointer</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="o">;</span>
+<span class="w">  </span><span class="k">end</span><span class="o">;</span>
 
-  FreeAndNil(instrStack);
-end.</code></pre>
+<span class="w">  </span><span class="nb">FreeAndNil</span><span class="p">(</span><span class="n">instrStack</span><span class="p">)</span><span class="o">;</span>
+<span class="k">end</span><span class="o">.</span>
+</pre></div>
+
   </section>
 
   <section>
@@ -185,11 +187,6 @@ $ ./main $myProgram</code></pre>
       
     </ul>
   </section>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/freepascal.min.js"></script>
-<script>hljs.highlightAll();</script>
 
 
   <footer>

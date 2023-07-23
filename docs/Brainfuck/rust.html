@@ -23,85 +23,86 @@
       
     </div>
     <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/rust/main.rs">Source Code</a>
-    <pre><code>use std::env;
-use std::fs;
-use std::io::{self, Read};
+    <div class="highlight"><pre><span></span><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">env</span><span class="p">;</span>
+<span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">fs</span><span class="p">;</span>
+<span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">io</span>::<span class="p">{</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">Read</span><span class="p">};</span>
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    let filename = &args[1];
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">args</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">env</span>::<span class="n">args</span><span class="p">().</span><span class="n">collect</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">filename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
 
-    let prog: Vec<char> = fs::read_to_string(filename)
-        .expect("Could not read file")
-        .chars()
-        .collect();
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">prog</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fs</span>::<span class="n">read_to_string</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="n">expect</span><span class="p">(</span><span class="s">&quot;Could not read file&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="n">chars</span><span class="p">()</span>
+<span class="w">        </span><span class="p">.</span><span class="n">collect</span><span class="p">();</span>
 
-    let mut data_stack: [u8; 30_000] = [0; 30_000];
-    let mut data_pointer: usize = 0;
-    let mut instr_stack: Vec<usize> = Vec::new();
-    let mut instr_pointer: usize = 0;
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data_stack</span>: <span class="p">[</span><span class="kt">u8</span><span class="p">;</span><span class="w"> </span><span class="mi">30_000</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="mi">30_000</span><span class="p">];</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data_pointer</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">instr_stack</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">usize</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="n">new</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">instr_pointer</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 
-    let mut stdin_buf: [u8; 1] = [0; 1];
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">stdin_buf</span>: <span class="p">[</span><span class="kt">u8</span><span class="p">;</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
 
-    while instr_pointer < prog.len() {
-        match prog[instr_pointer] {
-            '>' => {
-                data_pointer += 1;
-            }
-            '<' => {
-                data_pointer -= 1;
-            }
-            '+' => {
-                data_stack[data_pointer] += 1;
-            }
-            '-' => {
-                data_stack[data_pointer] -= 1;
-            }
-            '.' => {
-                print!("{}", data_stack[data_pointer] as char);
-            }
-            ',' => {
-                io::stdin()
-                    .read_exact(&mut stdin_buf)
-                    .expect("Could not read from stdin");
-                data_stack[data_pointer] = stdin_buf[0];
-            }
-            '[' => {
-                let mut stack = 1;
-                let mut end = instr_pointer + 1;
-                while stack != 0 {
-                    match prog[end] {
-                        '[' => {
-                            stack += 1;
-                        }
-                        ']' => {
-                            stack -= 1;
-                        }
-                        _ => {}
-                    }
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="n">instr_pointer</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">prog</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">match</span><span class="w"> </span><span class="n">prog</span><span class="p">[</span><span class="n">instr_pointer</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="sc">&#39;&gt;&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">data_pointer</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="sc">&#39;&lt;&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">data_pointer</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="sc">&#39;+&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">data_stack</span><span class="p">[</span><span class="n">data_pointer</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="sc">&#39;-&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">data_stack</span><span class="p">[</span><span class="n">data_pointer</span><span class="p">]</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="sc">&#39;.&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="fm">print!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data_stack</span><span class="p">[</span><span class="n">data_pointer</span><span class="p">]</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">char</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="sc">&#39;,&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">io</span>::<span class="n">stdin</span><span class="p">()</span>
+<span class="w">                    </span><span class="p">.</span><span class="n">read_exact</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">stdin_buf</span><span class="p">)</span>
+<span class="w">                    </span><span class="p">.</span><span class="n">expect</span><span class="p">(</span><span class="s">&quot;Could not read from stdin&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="n">data_stack</span><span class="p">[</span><span class="n">data_pointer</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stdin_buf</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="sc">&#39;[&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">                </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">instr_pointer</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="k">match</span><span class="w"> </span><span class="n">prog</span><span class="p">[</span><span class="n">end</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="sc">&#39;[&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                            </span><span class="n">stack</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">                        </span><span class="p">}</span>
+<span class="w">                        </span><span class="sc">&#39;]&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                            </span><span class="n">stack</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">                        </span><span class="p">}</span>
+<span class="w">                        </span><span class="n">_</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">                    </span><span class="p">}</span>
 
-                    end += 1;
-                }
+<span class="w">                    </span><span class="n">end</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
 
-                if data_stack[data_pointer] == 0 {
-                    instr_pointer = end;
-                } else {
-                    instr_stack.push(instr_pointer);
-                }
-            }
-            ']' => {
-                let new_pointer = instr_stack.pop().unwrap() - 1;
-                if data_stack[data_pointer] != 0 {
-                    instr_pointer = new_pointer;
-                }
-            }
-            _ => {}
-        }
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="n">data_stack</span><span class="p">[</span><span class="n">data_pointer</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">instr_pointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">end</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">instr_stack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">instr_pointer</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="sc">&#39;]&#39;</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="kd">let</span><span class="w"> </span><span class="n">new_pointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">instr_stack</span><span class="p">.</span><span class="n">pop</span><span class="p">().</span><span class="n">unwrap</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="n">data_stack</span><span class="p">[</span><span class="n">data_pointer</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">instr_pointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">new_pointer</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">_</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">        </span><span class="p">}</span>
 
-        instr_pointer += 1;
-    }
-}
-</code></pre>
+<span class="w">        </span><span class="n">instr_pointer</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
   </section>
 
   <section>
@@ -142,11 +143,6 @@ $ ./main $myProgram</code></pre>
       
     </ul>
   </section>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/rust.min.js"></script>
-<script>hljs.highlightAll();</script>
 
 
   <footer>

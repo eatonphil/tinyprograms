@@ -23,88 +23,89 @@
       
     </div>
     <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/java/Main.java">Source Code</a>
-    <pre><code>import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Files;
-import java.util.ArrayList;
+    <div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.nio.charset.StandardCharsets</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.nio.file.Path</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.nio.file.Files</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.ArrayList</span><span class="p">;</span>
 
-public class Main {
-    public static void main(final String[] args) throws IOException {
-	if (args.length < 1) {
-	    System.out.println("Expected file name to interpret");
-	    return;
-	}
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Main</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="na">length</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Expected file name to interpret&quot;</span><span class="p">);</span>
+<span class="w">	    </span><span class="k">return</span><span class="p">;</span>
+<span class="w">	</span><span class="p">}</span>
 
-	var prog = Files.readString(Path.of(args[0]), StandardCharsets.US_ASCII);
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="n">prog</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Files</span><span class="p">.</span><span class="na">readString</span><span class="p">(</span><span class="n">Path</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">),</span><span class="w"> </span><span class="n">StandardCharsets</span><span class="p">.</span><span class="na">US_ASCII</span><span class="p">);</span>
 
-	var dataStack = new byte[30000];
-	int dataPointer = 0;
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="n">dataStack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">byte</span><span class="o">[</span><span class="mi">30000</span><span class="o">]</span><span class="p">;</span>
+<span class="w">	</span><span class="kt">int</span><span class="w"> </span><span class="n">dataPointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 
-	var instrStack = new ArrayList<Integer>();
-	int instrPointer = 0;
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="n">instrStack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">	</span><span class="kt">int</span><span class="w"> </span><span class="n">instrPointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 
-	while (instrPointer < prog.length()) {
-	    switch (prog.charAt(instrPointer)) {
-	    case '>':
-		dataPointer++;
-		break;
-	    case '<':
-		dataPointer--;
-		break;
-	    case '+':
-		dataStack[dataPointer]++;
-		break;
-	    case '-':
-		dataStack[dataPointer]--;
-		break;
-	    case '.':
-		System.out.format("%c", dataStack[dataPointer]);
-		break;
-	    case ',':
-		dataStack[dataPointer] = (byte)System.in.read();
-		break;
-	    case '[':
-		var stack = 1;
-		var end = instrPointer + 1;
-	    loop: while (true) {
-		    switch (prog.charAt(end)) {
-		    case '[':
-			stack++;
-			break;
-		    case ']':
-			stack--;
+<span class="w">	</span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">instrPointer</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">prog</span><span class="p">.</span><span class="na">length</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">prog</span><span class="p">.</span><span class="na">charAt</span><span class="p">(</span><span class="n">instrPointer</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	    </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;&gt;&#39;</span><span class="p">:</span>
+<span class="w">		</span><span class="n">dataPointer</span><span class="o">++</span><span class="p">;</span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span>
+<span class="w">	    </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;&lt;&#39;</span><span class="p">:</span>
+<span class="w">		</span><span class="n">dataPointer</span><span class="o">--</span><span class="p">;</span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span>
+<span class="w">	    </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;+&#39;</span><span class="p">:</span>
+<span class="w">		</span><span class="n">dataStack</span><span class="o">[</span><span class="n">dataPointer</span><span class="o">]++</span><span class="p">;</span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span>
+<span class="w">	    </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;-&#39;</span><span class="p">:</span>
+<span class="w">		</span><span class="n">dataStack</span><span class="o">[</span><span class="n">dataPointer</span><span class="o">]--</span><span class="p">;</span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span>
+<span class="w">	    </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;.&#39;</span><span class="p">:</span>
+<span class="w">		</span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">format</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">dataStack</span><span class="o">[</span><span class="n">dataPointer</span><span class="o">]</span><span class="p">);</span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span>
+<span class="w">	    </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;,&#39;</span><span class="p">:</span>
+<span class="w">		</span><span class="n">dataStack</span><span class="o">[</span><span class="n">dataPointer</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">byte</span><span class="p">)</span><span class="n">System</span><span class="p">.</span><span class="na">in</span><span class="p">.</span><span class="na">read</span><span class="p">();</span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span>
+<span class="w">	    </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;[&#39;</span><span class="p">:</span>
+<span class="w">		</span><span class="kd">var</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">		</span><span class="kd">var</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">instrPointer</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">	    </span><span class="n">loop</span><span class="p">:</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">prog</span><span class="p">.</span><span class="na">charAt</span><span class="p">(</span><span class="n">end</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		    </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;[&#39;</span><span class="p">:</span>
+<span class="w">			</span><span class="n">stack</span><span class="o">++</span><span class="p">;</span>
+<span class="w">			</span><span class="k">break</span><span class="p">;</span>
+<span class="w">		    </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;]&#39;</span><span class="p">:</span>
+<span class="w">			</span><span class="n">stack</span><span class="o">--</span><span class="p">;</span>
 
-			if (stack == 0) {
-			    break loop;
-			}
+<span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">stack</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">			    </span><span class="k">break</span><span class="w"> </span><span class="n">loop</span><span class="p">;</span>
+<span class="w">			</span><span class="p">}</span>
 
-			break;
-		    }
+<span class="w">			</span><span class="k">break</span><span class="p">;</span>
+<span class="w">		    </span><span class="p">}</span>
 
-		    end++;
-		}
+<span class="w">		    </span><span class="n">end</span><span class="o">++</span><span class="p">;</span>
+<span class="w">		</span><span class="p">}</span>
 
-		if (dataStack[dataPointer] == 0) {
-		    instrPointer = end;
-		} else {
-		    instrStack.add(instrPointer);
-		}
-		break;
-	    case ']': 
-		int newPointer = instrStack.get(instrStack.size() - 1) - 1;
-		instrStack.remove(instrStack.size()-1);
-		if (dataStack[dataPointer] != 0) {
-		    instrPointer = newPointer;
-		}
-		break;
-	    }
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dataStack</span><span class="o">[</span><span class="n">dataPointer</span><span class="o">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		    </span><span class="n">instrPointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">end</span><span class="p">;</span>
+<span class="w">		</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		    </span><span class="n">instrStack</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">instrPointer</span><span class="p">);</span>
+<span class="w">		</span><span class="p">}</span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span>
+<span class="w">	    </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;]&#39;</span><span class="p">:</span><span class="w"> </span>
+<span class="w">		</span><span class="kt">int</span><span class="w"> </span><span class="n">newPointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">instrStack</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">instrStack</span><span class="p">.</span><span class="na">size</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">		</span><span class="n">instrStack</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">instrStack</span><span class="p">.</span><span class="na">size</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dataStack</span><span class="o">[</span><span class="n">dataPointer</span><span class="o">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		    </span><span class="n">instrPointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newPointer</span><span class="p">;</span>
+<span class="w">		</span><span class="p">}</span>
+<span class="w">		</span><span class="k">break</span><span class="p">;</span>
+<span class="w">	    </span><span class="p">}</span>
 
-	    instrPointer++;
-	}
-    }
-}
-</code></pre>
+<span class="w">	    </span><span class="n">instrPointer</span><span class="o">++</span><span class="p">;</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
   </section>
 
   <section>
@@ -145,11 +146,6 @@ $ java Main $myProgram</code></pre>
       
     </ul>
   </section>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/java.min.js"></script>
-<script>hljs.highlightAll();</script>
 
 
   <footer>

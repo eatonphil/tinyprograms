@@ -23,51 +23,52 @@
       
     </div>
     <a href="https://github.com/eatonphil/tinyprograms/blob/main/UUIDv4/rust/main.rs">Source Code</a>
-    <pre><code>use std::fs::File;
-use std::io::Read;
+    <div class="highlight"><pre><span></span><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">fs</span>::<span class="n">File</span><span class="p">;</span>
+<span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">io</span>::<span class="n">Read</span><span class="p">;</span>
 
-fn main() {
-    let mut f = File::open("/dev/random").expect("Could not open /dev/random");
-    let mut buf: [u8; 16] = [0; 16];
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">File</span>::<span class="n">open</span><span class="p">(</span><span class="s">&quot;/dev/random&quot;</span><span class="p">).</span><span class="n">expect</span><span class="p">(</span><span class="s">&quot;Could not open /dev/random&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">buf</span>: <span class="p">[</span><span class="kt">u8</span><span class="p">;</span><span class="w"> </span><span class="mi">16</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="mi">16</span><span class="p">];</span>
 
-    // Read file into vector.
-    f.read_exact(&mut buf).expect("Could not read 16 bytes");
+<span class="w">    </span><span class="c1">// Read file into vector.</span>
+<span class="w">    </span><span class="n">f</span><span class="p">.</span><span class="n">read_exact</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">buf</span><span class="p">).</span><span class="n">expect</span><span class="p">(</span><span class="s">&quot;Could not read 16 bytes&quot;</span><span class="p">);</span>
 
-    // Set bit 6 to 0
-    buf[8] &= !((1 as u8) << 6);
-    // Set bit 7 to 1
-    buf[8] |= 1 << 7;
+<span class="w">    </span><span class="c1">// Set bit 6 to 0</span>
+<span class="w">    </span><span class="n">buf</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">!</span><span class="p">((</span><span class="mi">1</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// Set bit 7 to 1</span>
+<span class="w">    </span><span class="n">buf</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
 
-    // Set version
-    buf[6] &= !((1 as u8) << 4);
-    buf[6] &= !((1 as u8) << 5);
-    buf[6] |= 1 << 6;
-    buf[6] &= !((1 as u8) << 7);
+<span class="w">    </span><span class="c1">// Set version</span>
+<span class="w">    </span><span class="n">buf</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">!</span><span class="p">((</span><span class="mi">1</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+<span class="w">    </span><span class="n">buf</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">!</span><span class="p">((</span><span class="mi">1</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
+<span class="w">    </span><span class="n">buf</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">    </span><span class="n">buf</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">!</span><span class="p">((</span><span class="mi">1</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">);</span>
 
-    print!("{:02x}{:02x}{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}",
-	   buf[0],
-	   buf[1],
-	   buf[2],
-	   buf[3],
-	   // -
-	   buf[4],
-	   buf[5],
-	   // - 
-	   buf[6],
-	   buf[7],
-	   // -
-	   buf[8],
-	   buf[9],
-	   // -
-	   buf[10],
-	   buf[11],
-	   buf[12],
-	   buf[13],
-	   buf[14],
-	   buf[15],
-    )
-}
-</code></pre>
+<span class="w">    </span><span class="fm">print!</span><span class="p">(</span><span class="s">&quot;{:02x}{:02x}{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}&quot;</span><span class="p">,</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+<span class="w">	   </span><span class="c1">// -</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+<span class="w">	   </span><span class="c1">// - </span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+<span class="w">	   </span><span class="c1">// -</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+<span class="w">	   </span><span class="c1">// -</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span>
+<span class="w">	   </span><span class="n">buf</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+
   </section>
 
   <section>
@@ -100,11 +101,6 @@ $ ./main</code></pre>
       
     </ul>
   </section>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/rust.min.js"></script>
-<script>hljs.highlightAll();</script>
 
 
   <footer>

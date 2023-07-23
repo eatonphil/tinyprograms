@@ -23,111 +23,112 @@
       
     </div>
     <a href="https://github.com/eatonphil/tinyprograms/blob/main/AATree/go/main.go">Source Code</a>
-    <pre><code>package main
+    <div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
 
-import (
-	"fmt"
-	"os"
-	"strconv"
-	"strings"
-)
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">	</span><span class="s">&quot;fmt&quot;</span>
+<span class="w">	</span><span class="s">&quot;os&quot;</span>
+<span class="w">	</span><span class="s">&quot;strconv&quot;</span>
+<span class="w">	</span><span class="s">&quot;strings&quot;</span>
+<span class="p">)</span>
 
-type Comparable interface {
-	~int | ~uint
-}
+<span class="kd">type</span><span class="w"> </span><span class="nx">Comparable</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="o">~</span><span class="kt">int</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">~</span><span class="kt">uint</span>
+<span class="p">}</span>
 
-type AATree[K Comparable] struct {
-	key   K
-	left  *AATree[K]
-	right *AATree[K]
-	level int
-}
+<span class="kd">type</span><span class="w"> </span><span class="nx">AATree</span><span class="p">[</span><span class="nx">K</span><span class="w"> </span><span class="nx">Comparable</span><span class="p">]</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">key</span><span class="w">   </span><span class="nx">K</span>
+<span class="w">	</span><span class="nx">left</span><span class="w">  </span><span class="o">*</span><span class="nx">AATree</span><span class="p">[</span><span class="nx">K</span><span class="p">]</span>
+<span class="w">	</span><span class="nx">right</span><span class="w"> </span><span class="o">*</span><span class="nx">AATree</span><span class="p">[</span><span class="nx">K</span><span class="p">]</span>
+<span class="w">	</span><span class="nx">level</span><span class="w"> </span><span class="kt">int</span>
+<span class="p">}</span>
 
-func skew[K Comparable](tree *AATree[K]) *AATree[K] {
-	if tree == nil || tree.left == nil {
-		return tree
-	}
+<span class="kd">func</span><span class="w"> </span><span class="nx">skew</span><span class="p">[</span><span class="nx">K</span><span class="w"> </span><span class="nx">Comparable</span><span class="p">](</span><span class="nx">tree</span><span class="w"> </span><span class="o">*</span><span class="nx">AATree</span><span class="p">[</span><span class="nx">K</span><span class="p">])</span><span class="w"> </span><span class="o">*</span><span class="nx">AATree</span><span class="p">[</span><span class="nx">K</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">tree</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">tree</span>
+<span class="w">	</span><span class="p">}</span>
 
-	// Red node to the left? Do a right rotation.
-	if tree.left.level == tree.level {
-		l := tree.left
-		tree.left = l.right
-		l.right = tree
-		return l
-	}
+<span class="w">	</span><span class="c1">// Red node to the left? Do a right rotation.</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">.</span><span class="nx">level</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">tree</span><span class="p">.</span><span class="nx">level</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">l</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">tree</span><span class="p">.</span><span class="nx">left</span>
+<span class="w">		</span><span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">l</span><span class="p">.</span><span class="nx">right</span>
+<span class="w">		</span><span class="nx">l</span><span class="p">.</span><span class="nx">right</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">tree</span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">l</span>
+<span class="w">	</span><span class="p">}</span>
 
-	return tree
-}
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">tree</span>
+<span class="p">}</span>
 
-func split[K Comparable](tree *AATree[K]) *AATree[K] {
-	if tree == nil || tree.right == nil || tree.right.right == nil {
-		return tree
-	}
+<span class="kd">func</span><span class="w"> </span><span class="nx">split</span><span class="p">[</span><span class="nx">K</span><span class="w"> </span><span class="nx">Comparable</span><span class="p">](</span><span class="nx">tree</span><span class="w"> </span><span class="o">*</span><span class="nx">AATree</span><span class="p">[</span><span class="nx">K</span><span class="p">])</span><span class="w"> </span><span class="o">*</span><span class="nx">AATree</span><span class="p">[</span><span class="nx">K</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">tree</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">.</span><span class="nx">right</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">tree</span>
+<span class="w">	</span><span class="p">}</span>
 
-	// Right-right red chain? Do a left rotation
-	if tree.right.right.level == tree.level {
-		l := tree.right
-		tree.right = l.left
-		l.left = tree
-		l.level++
-		return l
-	}
+<span class="w">	</span><span class="c1">// Right-right red chain? Do a left rotation</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">.</span><span class="nx">right</span><span class="p">.</span><span class="nx">level</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">tree</span><span class="p">.</span><span class="nx">level</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">l</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span>
+<span class="w">		</span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">l</span><span class="p">.</span><span class="nx">left</span>
+<span class="w">		</span><span class="nx">l</span><span class="p">.</span><span class="nx">left</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">tree</span>
+<span class="w">		</span><span class="nx">l</span><span class="p">.</span><span class="nx">level</span><span class="o">++</span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">l</span>
+<span class="w">	</span><span class="p">}</span>
 
-	return tree
-}
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">tree</span>
+<span class="p">}</span>
 
-func insert[K Comparable](tree *AATree[K], key K) *AATree[K] {
-	if tree == nil {
-		return &AATree[K]{
-			key:   key,
-			left:  nil,
-			right: nil,
-			level: 1,
-		}
-	}
+<span class="kd">func</span><span class="w"> </span><span class="nx">insert</span><span class="p">[</span><span class="nx">K</span><span class="w"> </span><span class="nx">Comparable</span><span class="p">](</span><span class="nx">tree</span><span class="w"> </span><span class="o">*</span><span class="nx">AATree</span><span class="p">[</span><span class="nx">K</span><span class="p">],</span><span class="w"> </span><span class="nx">key</span><span class="w"> </span><span class="nx">K</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">AATree</span><span class="p">[</span><span class="nx">K</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">tree</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">AATree</span><span class="p">[</span><span class="nx">K</span><span class="p">]{</span>
+<span class="w">			</span><span class="nx">key</span><span class="p">:</span><span class="w">   </span><span class="nx">key</span><span class="p">,</span>
+<span class="w">			</span><span class="nx">left</span><span class="p">:</span><span class="w">  </span><span class="kc">nil</span><span class="p">,</span>
+<span class="w">			</span><span class="nx">right</span><span class="p">:</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span>
+<span class="w">			</span><span class="nx">level</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">		</span><span class="p">}</span>
+<span class="w">	</span><span class="p">}</span>
 
-	if key < tree.key {
-		tree.left = insert(tree.left, key)
-	} else {
-		tree.right = insert(tree.right, key)
-	}
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">key</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nx">tree</span><span class="p">.</span><span class="nx">key</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">insert</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">,</span><span class="w"> </span><span class="nx">key</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">insert</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">,</span><span class="w"> </span><span class="nx">key</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
 
-	return split(skew(tree))
-}
+<span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">split</span><span class="p">(</span><span class="nx">skew</span><span class="p">(</span><span class="nx">tree</span><span class="p">))</span>
+<span class="p">}</span>
 
-func print[K Comparable](tree *AATree[K], space string) {
-	if tree.left != nil {
-		print(tree.left, space+"  ")
-	}
+<span class="kd">func</span><span class="w"> </span><span class="nx">print</span><span class="p">[</span><span class="nx">K</span><span class="w"> </span><span class="nx">Comparable</span><span class="p">](</span><span class="nx">tree</span><span class="w"> </span><span class="o">*</span><span class="nx">AATree</span><span class="p">[</span><span class="nx">K</span><span class="p">],</span><span class="w"> </span><span class="nx">space</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nb">print</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">,</span><span class="w"> </span><span class="nx">space</span><span class="o">+</span><span class="s">&quot;  &quot;</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
 
-	fmt.Printf("%s%v\n", space, tree.key)
+<span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%s%v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">space</span><span class="p">,</span><span class="w"> </span><span class="nx">tree</span><span class="p">.</span><span class="nx">key</span><span class="p">)</span>
 
-	if tree.right != nil {
-		print(tree.right, space+"  ")
-	}
-}
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nb">print</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">,</span><span class="w"> </span><span class="nx">space</span><span class="o">+</span><span class="s">&quot;  &quot;</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
 
-func main() {
-	bytes, err := os.ReadFile(os.Args[1])
-	if err != nil {
-		panic(err)
-	}
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">bytes</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
 
-	numbers := strings.Fields(string(bytes))
+<span class="w">	</span><span class="nx">numbers</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nx">Fields</span><span class="p">(</span><span class="nb">string</span><span class="p">(</span><span class="nx">bytes</span><span class="p">))</span>
 
-	var t *AATree[int]
-	for _, number := range numbers {
-		i, err := strconv.Atoi(number)
-		if err != nil {
-			panic(err)
-		}
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">AATree</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">number</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">numbers</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">strconv</span><span class="p">.</span><span class="nx">Atoi</span><span class="p">(</span><span class="nx">number</span><span class="p">)</span>
+<span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">			</span><span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">		</span><span class="p">}</span>
 
-		t = insert(t, i)
-	}
+<span class="w">		</span><span class="nx">t</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">insert</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
 
-	print(t, "")
-}
-</code></pre>
+<span class="w">	</span><span class="nb">print</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+
   </section>
 
   <section>
@@ -154,11 +155,6 @@ $ ./aatree $myProgram</code></pre>
       
     </ul>
   </section>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/go.min.js"></script>
-<script>hljs.highlightAll();</script>
 
 
   <footer>

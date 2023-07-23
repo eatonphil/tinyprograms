@@ -23,56 +23,58 @@
       
     </div>
     <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/ocaml/bf.ml">Source Code</a>
-    <pre><code>let interpret src =
-  let len = String.length src in
-  let data_ptr = ref 0 in
-  let data_stack  = Array.make 30_000 0 in
-  let instruction_ptr = ref 0 in
-  let instruction_stack  = ref [] in
-  while !instruction_ptr < len do
-    let () = match src.[!instruction_ptr] with
-    | '+' -> data_stack .(!data_ptr) <- data_stack .(!data_ptr) + 1
-    | '-' -> data_stack .(!data_ptr) <- data_stack .(!data_ptr) - 1
-    | '>' -> incr data_ptr
-    | '<' -> decr data_ptr
-    | '.' -> print_char @@ char_of_int data_stack .(!data_ptr)
-    | ',' -> data_stack .(!data_ptr) <- input_byte stdin
-    | '[' ->
-      let stack = ref 1 in
-      let end_ = ref (!instruction_ptr + 1) in
-      let break = ref false in
-      let () = while !end_ < len && not !break do
-        match src.[!end_] with
-        | '[' -> incr stack; incr end_
-        | ']' ->
-          let () = decr stack in
-          if !stack = 0
-          then break := true
-          else incr end_
-        | _ -> incr end_
-      done in
-      if data_stack .(!data_ptr) = 0
-      then instruction_ptr := !end_
-      else instruction_stack  := !instruction_ptr :: !instruction_stack 
-    | ']' ->
-      let () =
-        if data_stack .(!data_ptr) <> 0
-        then instruction_ptr := List.hd !instruction_stack  - 1
-      in
-      instruction_stack  := List.tl !instruction_stack 
-    | _ -> () in
-    incr instruction_ptr
-  done
+    <div class="highlight"><pre><span></span><span class="k">let</span> <span class="n">interpret</span> <span class="n">src</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="n">len</span> <span class="o">=</span> <span class="nn">String</span><span class="p">.</span><span class="n">length</span> <span class="n">src</span> <span class="k">in</span>
+  <span class="k">let</span> <span class="n">data_ptr</span> <span class="o">=</span> <span class="n">ref</span> <span class="mi">0</span> <span class="k">in</span>
+  <span class="k">let</span> <span class="n">data_stack</span>  <span class="o">=</span> <span class="nn">Array</span><span class="p">.</span><span class="n">make</span> <span class="mi">30_000</span> <span class="mi">0</span> <span class="k">in</span>
+  <span class="k">let</span> <span class="n">instruction_ptr</span> <span class="o">=</span> <span class="n">ref</span> <span class="mi">0</span> <span class="k">in</span>
+  <span class="k">let</span> <span class="n">instruction_stack</span>  <span class="o">=</span> <span class="n">ref</span> <span class="bp">[]</span> <span class="k">in</span>
+  <span class="k">while</span> <span class="o">!</span><span class="n">instruction_ptr</span> <span class="o">&lt;</span> <span class="n">len</span> <span class="k">do</span>
+    <span class="k">let</span> <span class="bp">()</span> <span class="o">=</span> <span class="k">match</span> <span class="n">src</span><span class="o">.[!</span><span class="n">instruction_ptr</span><span class="o">]</span> <span class="k">with</span>
+    <span class="o">|</span> <span class="sc">&#39;+&#39;</span> <span class="o">-&gt;</span> <span class="n">data_stack</span> <span class="o">.(!</span><span class="n">data_ptr</span><span class="o">)</span> <span class="o">&lt;-</span> <span class="n">data_stack</span> <span class="o">.(!</span><span class="n">data_ptr</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="o">|</span> <span class="sc">&#39;-&#39;</span> <span class="o">-&gt;</span> <span class="n">data_stack</span> <span class="o">.(!</span><span class="n">data_ptr</span><span class="o">)</span> <span class="o">&lt;-</span> <span class="n">data_stack</span> <span class="o">.(!</span><span class="n">data_ptr</span><span class="o">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="o">|</span> <span class="sc">&#39;&gt;&#39;</span> <span class="o">-&gt;</span> <span class="n">incr</span> <span class="n">data_ptr</span>
+    <span class="o">|</span> <span class="sc">&#39;&lt;&#39;</span> <span class="o">-&gt;</span> <span class="n">decr</span> <span class="n">data_ptr</span>
+    <span class="o">|</span> <span class="sc">&#39;.&#39;</span> <span class="o">-&gt;</span> <span class="n">print_char</span> <span class="o">@@</span> <span class="n">char_of_int</span> <span class="n">data_stack</span> <span class="o">.(!</span><span class="n">data_ptr</span><span class="o">)</span>
+    <span class="o">|</span> <span class="sc">&#39;,&#39;</span> <span class="o">-&gt;</span> <span class="n">data_stack</span> <span class="o">.(!</span><span class="n">data_ptr</span><span class="o">)</span> <span class="o">&lt;-</span> <span class="n">input_byte</span> <span class="n">stdin</span>
+    <span class="o">|</span> <span class="sc">&#39;[&#39;</span> <span class="o">-&gt;</span>
+      <span class="k">let</span> <span class="n">stack</span> <span class="o">=</span> <span class="n">ref</span> <span class="mi">1</span> <span class="k">in</span>
+      <span class="k">let</span> <span class="n">end_</span> <span class="o">=</span> <span class="n">ref</span> <span class="o">(!</span><span class="n">instruction_ptr</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="k">in</span>
+      <span class="k">let</span> <span class="n">break</span> <span class="o">=</span> <span class="n">ref</span> <span class="bp">false</span> <span class="k">in</span>
+      <span class="k">let</span> <span class="bp">()</span> <span class="o">=</span> <span class="k">while</span> <span class="o">!</span><span class="n">end_</span> <span class="o">&lt;</span> <span class="n">len</span> <span class="o">&amp;&amp;</span> <span class="n">not</span> <span class="o">!</span><span class="n">break</span> <span class="k">do</span>
+        <span class="k">match</span> <span class="n">src</span><span class="o">.[!</span><span class="n">end_</span><span class="o">]</span> <span class="k">with</span>
+        <span class="o">|</span> <span class="sc">&#39;[&#39;</span> <span class="o">-&gt;</span> <span class="n">incr</span> <span class="n">stack</span><span class="o">;</span> <span class="n">incr</span> <span class="n">end_</span>
+        <span class="o">|</span> <span class="sc">&#39;]&#39;</span> <span class="o">-&gt;</span>
+          <span class="k">let</span> <span class="bp">()</span> <span class="o">=</span> <span class="n">decr</span> <span class="n">stack</span> <span class="k">in</span>
+          <span class="k">if</span> <span class="o">!</span><span class="n">stack</span> <span class="o">=</span> <span class="mi">0</span>
+          <span class="k">then</span> <span class="n">break</span> <span class="o">:=</span> <span class="bp">true</span>
+          <span class="k">else</span> <span class="n">incr</span> <span class="n">end_</span>
+        <span class="o">|</span> <span class="o">_</span> <span class="o">-&gt;</span> <span class="n">incr</span> <span class="n">end_</span>
+      <span class="k">done</span> <span class="k">in</span>
+      <span class="k">if</span> <span class="n">data_stack</span> <span class="o">.(!</span><span class="n">data_ptr</span><span class="o">)</span> <span class="o">=</span> <span class="mi">0</span>
+      <span class="k">then</span> <span class="n">instruction_ptr</span> <span class="o">:=</span> <span class="o">!</span><span class="n">end_</span>
+      <span class="k">else</span> <span class="n">instruction_stack</span>  <span class="o">:=</span> <span class="o">!</span><span class="n">instruction_ptr</span> <span class="o">::</span> <span class="o">!</span><span class="n">instruction_stack</span> 
+    <span class="o">|</span> <span class="sc">&#39;]&#39;</span> <span class="o">-&gt;</span>
+      <span class="k">let</span> <span class="bp">()</span> <span class="o">=</span>
+        <span class="k">if</span> <span class="n">data_stack</span> <span class="o">.(!</span><span class="n">data_ptr</span><span class="o">)</span> <span class="o">&lt;&gt;</span> <span class="mi">0</span>
+        <span class="k">then</span> <span class="n">instruction_ptr</span> <span class="o">:=</span> <span class="nn">List</span><span class="p">.</span><span class="n">hd</span> <span class="o">!</span><span class="n">instruction_stack</span>  <span class="o">-</span> <span class="mi">1</span>
+      <span class="k">in</span>
+      <span class="n">instruction_stack</span>  <span class="o">:=</span> <span class="nn">List</span><span class="p">.</span><span class="n">tl</span> <span class="o">!</span><span class="n">instruction_stack</span> 
+    <span class="o">|</span> <span class="o">_</span> <span class="o">-&gt;</span> <span class="bp">()</span> <span class="k">in</span>
+    <span class="n">incr</span> <span class="n">instruction_ptr</span>
+  <span class="k">done</span>
 
-let argv = Sys.argv
-let src = argv.(1)
-let src, len =
-  let fd = open_in src in
-  let s = input_line fd in
-  let () = close_in fd in
-  s, String.length s
+<span class="k">let</span> <span class="n">argv</span> <span class="o">=</span> <span class="nn">Sys</span><span class="p">.</span><span class="n">argv</span>
+<span class="k">let</span> <span class="n">src</span> <span class="o">=</span> <span class="n">argv</span><span class="o">.(</span><span class="mi">1</span><span class="o">)</span>
+<span class="k">let</span> <span class="n">src</span><span class="o">,</span> <span class="n">len</span> <span class="o">=</span>
+  <span class="k">let</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">open_in</span> <span class="n">src</span> <span class="k">in</span>
+  <span class="k">let</span> <span class="n">s</span> <span class="o">=</span> <span class="n">input_line</span> <span class="n">fd</span> <span class="k">in</span>
+  <span class="k">let</span> <span class="bp">()</span> <span class="o">=</span> <span class="n">close_in</span> <span class="n">fd</span> <span class="k">in</span>
+  <span class="n">s</span><span class="o">,</span> <span class="nn">String</span><span class="p">.</span><span class="n">length</span> <span class="n">s</span>
 
-let () = interpret src</code></pre>
+<span class="k">let</span> <span class="bp">()</span> <span class="o">=</span> <span class="n">interpret</span> <span class="n">src</span>
+</pre></div>
+
   </section>
 
   <section>
@@ -113,11 +115,6 @@ $ ./bf $myProgram</code></pre>
       
     </ul>
   </section>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/ocaml.min.js"></script>
-<script>hljs.highlightAll();</script>
 
 
   <footer>

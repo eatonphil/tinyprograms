@@ -23,58 +23,59 @@
       
     </div>
     <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/r/bf.R">Source Code</a>
-    <pre><code>args <- commandArgs(trailingOnly=TRUE)
+    <div class="highlight"><pre><span></span><span class="n">args</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">commandArgs</span><span class="p">(</span><span class="n">trailingOnly</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
 
-program <- strsplit(readChar(args[1], file.info(args[1])$size), "")[[1]]
+<span class="n">program</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">strsplit</span><span class="p">(</span><span class="nf">readChar</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="nf">file.info</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="m">1</span><span class="p">])</span><span class="o">$</span><span class="n">size</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">)[[</span><span class="m">1</span><span class="p">]]</span>
 
-dataStack <- c(rep(0, 30000))
-dataPointer <- 1
+<span class="n">dataStack</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">30000</span><span class="p">))</span>
+<span class="n">dataPointer</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span>
 
-instructionStack <- c()
-instructionPointer <- 1
+<span class="n">instructionStack</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">()</span>
+<span class="n">instructionPointer</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span>
 
-while (instructionPointer < (length(program) + 1)) {
-  switch (program[instructionPointer],
-    '>' = dataPointer <- dataPointer + 1,
-    '<' = dataPointer <- dataPointer - 1,
-    '+' = dataStack[dataPointer] <- dataStack[dataPointer] + 1,
-    '-' = dataStack[dataPointer] <- dataStack[dataPointer] - 1,
-    '.' = cat(rawToChar(as.raw(dataStack[dataPointer]))),
-    ',' = {
-      c <- readChar(con = file("stdin"), nchars = 1)
-      dataStack[dataPointer] <- c
-    },
-    '[' = {
-      stack <- 1
-      end <- instructionPointer + 1
-      repeat {
-        switch(program[end],
-               '[' = stack <- stack + 1,
-               ']' = {
-                 stack <- stack - 1
-                 if(stack == 0) {
-                   break
-                 }
-               }
-               )
-        end <- end + 1
-      }
-      if(dataStack[dataPointer] == 0) {
-        instructionPointer <- end
-      } else {
-        instructionStack <- append(instructionStack, instructionPointer - 1)
-      }
-    },
-    ']' = {
-      if(dataStack[dataPointer] != 0) {
-        instructionPointer <- instructionStack[length(instructionStack)]
-      }
-      instructionStack <- instructionStack[1:(length(instructionStack)-1)]
-    }
-  )
-  instructionPointer <- instructionPointer + 1
-}
-</code></pre>
+<span class="nf">while </span><span class="p">(</span><span class="n">instructionPointer</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="n">program</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nf">switch </span><span class="p">(</span><span class="n">program</span><span class="p">[</span><span class="n">instructionPointer</span><span class="p">],</span>
+<span class="w">    </span><span class="s">&#39;&gt;&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dataPointer</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dataPointer</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&#39;&lt;&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dataPointer</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dataPointer</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&#39;+&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dataStack</span><span class="p">[</span><span class="n">dataPointer</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dataStack</span><span class="p">[</span><span class="n">dataPointer</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&#39;-&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dataStack</span><span class="p">[</span><span class="n">dataPointer</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">dataStack</span><span class="p">[</span><span class="n">dataPointer</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&#39;.&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">cat</span><span class="p">(</span><span class="nf">rawToChar</span><span class="p">(</span><span class="nf">as.raw</span><span class="p">(</span><span class="n">dataStack</span><span class="p">[</span><span class="n">dataPointer</span><span class="p">]))),</span>
+<span class="w">    </span><span class="s">&#39;,&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">c</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">readChar</span><span class="p">(</span><span class="n">con</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">file</span><span class="p">(</span><span class="s">&quot;stdin&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">nchars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
+<span class="w">      </span><span class="n">dataStack</span><span class="p">[</span><span class="n">dataPointer</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">c</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s">&#39;[&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">stack</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span>
+<span class="w">      </span><span class="n">end</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">instructionPointer</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span>
+<span class="w">      </span><span class="n">repeat</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nf">switch</span><span class="p">(</span><span class="n">program</span><span class="p">[</span><span class="n">end</span><span class="p">],</span>
+<span class="w">               </span><span class="s">&#39;[&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
+<span class="w">               </span><span class="s">&#39;]&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                 </span><span class="n">stack</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span>
+<span class="w">                 </span><span class="nf">if</span><span class="p">(</span><span class="n">stack</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                   </span><span class="n">break</span>
+<span class="w">                 </span><span class="p">}</span>
+<span class="w">               </span><span class="p">}</span>
+<span class="w">               </span><span class="p">)</span>
+<span class="w">        </span><span class="n">end</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="nf">if</span><span class="p">(</span><span class="n">dataStack</span><span class="p">[</span><span class="n">dataPointer</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">instructionPointer</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">end</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="n">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">instructionStack</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="n">instructionStack</span><span class="p">,</span><span class="w"> </span><span class="n">instructionPointer</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="s">&#39;]&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nf">if</span><span class="p">(</span><span class="n">dataStack</span><span class="p">[</span><span class="n">dataPointer</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="m">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">instructionPointer</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">instructionStack</span><span class="p">[</span><span class="nf">length</span><span class="p">(</span><span class="n">instructionStack</span><span class="p">)]</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="n">instructionStack</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">instructionStack</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="n">instructionStack</span><span class="p">)</span><span class="m">-1</span><span class="p">)]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">)</span>
+<span class="w">  </span><span class="n">instructionPointer</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">instructionPointer</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="m">1</span>
+<span class="p">}</span>
+</pre></div>
+
   </section>
 
   <section>
@@ -114,11 +115,6 @@ $ Rscript bf.R $myProgram</code></pre>
       
     </ul>
   </section>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/r.min.js"></script>
-<script>hljs.highlightAll();</script>
 
 
   <footer>

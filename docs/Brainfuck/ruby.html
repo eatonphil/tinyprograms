@@ -23,64 +23,65 @@
       
     </div>
     <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/ruby/main.rb">Source Code</a>
-    <pre><code># frozen_string_literal: true
+    <div class="highlight"><pre><span></span><span class="c1"># frozen_string_literal: true</span>
 
-module Bf
-  def self.run(prog)
-    data_stack = Hash.new { 0 }
-    data_pointer = 0
+<span class="k">module</span><span class="w"> </span><span class="nn">Bf</span>
+<span class="w">  </span><span class="k">def</span><span class="w"> </span><span class="nc">self</span><span class="o">.</span><span class="nf">run</span><span class="p">(</span><span class="n">prog</span><span class="p">)</span>
+<span class="w">    </span><span class="n">data_stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">Hash</span><span class="o">.</span><span class="n">new</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="n">data_pointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
 
-    instruction_pointer = 0
-    instruction_stack = []
+<span class="w">    </span><span class="n">instruction_pointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="n">instruction_stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[]</span>
 
-    while instruction_pointer < prog.length
-      case prog[instruction_pointer]
-      when ">"
-        data_pointer += 1
-      when "<"
-        data_pointer -= 1
-      when "+"
-        data_stack[data_pointer] += 1
-      when "-"
-        data_stack[data_pointer] -= 1
-      when "."
-        STDOUT.putc(data_stack[data_pointer].chr)
-      when ","
-        data_stack[data_pointer] = STDIN.getc.ord
-      when "["
-        stack = 1
-        ending = instruction_pointer + 1
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="n">instruction_pointer</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">prog</span><span class="o">.</span><span class="n">length</span>
+<span class="w">      </span><span class="k">case</span><span class="w"> </span><span class="n">prog</span><span class="o">[</span><span class="n">instruction_pointer</span><span class="o">]</span>
+<span class="w">      </span><span class="k">when</span><span class="w"> </span><span class="s2">&quot;&gt;&quot;</span>
+<span class="w">        </span><span class="n">data_pointer</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">      </span><span class="k">when</span><span class="w"> </span><span class="s2">&quot;&lt;&quot;</span>
+<span class="w">        </span><span class="n">data_pointer</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">      </span><span class="k">when</span><span class="w"> </span><span class="s2">&quot;+&quot;</span>
+<span class="w">        </span><span class="n">data_stack</span><span class="o">[</span><span class="n">data_pointer</span><span class="o">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">      </span><span class="k">when</span><span class="w"> </span><span class="s2">&quot;-&quot;</span>
+<span class="w">        </span><span class="n">data_stack</span><span class="o">[</span><span class="n">data_pointer</span><span class="o">]</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">      </span><span class="k">when</span><span class="w"> </span><span class="s2">&quot;.&quot;</span>
+<span class="w">        </span><span class="no">STDOUT</span><span class="o">.</span><span class="n">putc</span><span class="p">(</span><span class="n">data_stack</span><span class="o">[</span><span class="n">data_pointer</span><span class="o">].</span><span class="n">chr</span><span class="p">)</span>
+<span class="w">      </span><span class="k">when</span><span class="w"> </span><span class="s2">&quot;,&quot;</span>
+<span class="w">        </span><span class="n">data_stack</span><span class="o">[</span><span class="n">data_pointer</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">STDIN</span><span class="o">.</span><span class="n">getc</span><span class="o">.</span><span class="n">ord</span>
+<span class="w">      </span><span class="k">when</span><span class="w"> </span><span class="s2">&quot;[&quot;</span>
+<span class="w">        </span><span class="n">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">        </span><span class="n">ending</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">instruction_pointer</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
 
-        while stack > 0
-          case prog[ending]
-          when "["
-            stack += 1
-          when "]"
-            stack -= 1
-          end
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">          </span><span class="k">case</span><span class="w"> </span><span class="n">prog</span><span class="o">[</span><span class="n">ending</span><span class="o">]</span>
+<span class="w">          </span><span class="k">when</span><span class="w"> </span><span class="s2">&quot;[&quot;</span>
+<span class="w">            </span><span class="n">stack</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">          </span><span class="k">when</span><span class="w"> </span><span class="s2">&quot;]&quot;</span>
+<span class="w">            </span><span class="n">stack</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">          </span><span class="k">end</span>
 
-          ending += 1  
-        end
+<span class="w">          </span><span class="n">ending</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="w">  </span>
+<span class="w">        </span><span class="k">end</span>
 
-        if data_stack[data_pointer] == 0
-          instruction_pointer = ending
-        else
-          instruction_stack << instruction_pointer
-        end
-      when "]"
-        if data_stack[data_pointer] != 0
-          instruction_pointer = instruction_stack.last - 1
-        end
-        instruction_stack.pop
-      end
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">data_stack</span><span class="o">[</span><span class="n">data_pointer</span><span class="o">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">          </span><span class="n">instruction_pointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ending</span>
+<span class="w">        </span><span class="k">else</span>
+<span class="w">          </span><span class="n">instruction_stack</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">instruction_pointer</span>
+<span class="w">        </span><span class="k">end</span>
+<span class="w">      </span><span class="k">when</span><span class="w"> </span><span class="s2">&quot;]&quot;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">data_stack</span><span class="o">[</span><span class="n">data_pointer</span><span class="o">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">          </span><span class="n">instruction_pointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">instruction_stack</span><span class="o">.</span><span class="n">last</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">        </span><span class="k">end</span>
+<span class="w">        </span><span class="n">instruction_stack</span><span class="o">.</span><span class="n">pop</span>
+<span class="w">      </span><span class="k">end</span>
 
-      instruction_pointer += 1
-    end
-  end
-end
+<span class="w">      </span><span class="n">instruction_pointer</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
 
-Bf.run(ARGF.read)
-</code></pre>
+<span class="no">Bf</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="no">ARGF</span><span class="o">.</span><span class="n">read</span><span class="p">)</span>
+</pre></div>
+
   </section>
 
   <section>
@@ -120,11 +121,6 @@ $ ruby main.rb $myProgram</code></pre>
       
     </ul>
   </section>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/ruby.min.js"></script>
-<script>hljs.highlightAll();</script>
 
 
   <footer>

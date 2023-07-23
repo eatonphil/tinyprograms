@@ -23,77 +23,78 @@
       
     </div>
     <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/go/main.go">Source Code</a>
-    <pre><code>package main
+    <div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
 
-import (
-	"bufio"
-	"fmt"
-	"io"
-	"os"
-)
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">	</span><span class="s">&quot;bufio&quot;</span>
+<span class="w">	</span><span class="s">&quot;fmt&quot;</span>
+<span class="w">	</span><span class="s">&quot;io&quot;</span>
+<span class="w">	</span><span class="s">&quot;os&quot;</span>
+<span class="p">)</span>
 
-func main() {
-	prog, err := os.ReadFile(os.Args[1])
-	if err != nil {
-		panic(err)
-	}
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">	</span><span class="nx">prog</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">	</span><span class="p">}</span>
 
-	stdin := bufio.NewReader(os.Stdin)
-	var dataStack [30_000]byte
-	var dataPointer int
-	var instructionStack []int
-	var instructionPointer int
-	for instructionPointer < len(prog) {
-		switch prog[instructionPointer] {
-		case '>':
-			dataPointer++
-		case '<':
-			dataPointer--
-		case '+':
-			dataStack[dataPointer]++
-		case '-':
-			dataStack[dataPointer]--
-		case '.':
-			fmt.Printf("%s", string(dataStack[dataPointer]))
-		case ',':
-			c, err := stdin.ReadByte()
-			if err != nil && err != io.EOF {
-				panic(err)
-			}
+<span class="w">	</span><span class="nx">stdin</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">bufio</span><span class="p">.</span><span class="nx">NewReader</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdin</span><span class="p">)</span>
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">dataStack</span><span class="w"> </span><span class="p">[</span><span class="mi">30</span><span class="nx">_000</span><span class="p">]</span><span class="kt">byte</span>
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">dataPointer</span><span class="w"> </span><span class="kt">int</span>
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">instructionStack</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span>
+<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">instructionPointer</span><span class="w"> </span><span class="kt">int</span>
+<span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">instructionPointer</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">prog</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="k">switch</span><span class="w"> </span><span class="nx">prog</span><span class="p">[</span><span class="nx">instructionPointer</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;&gt;&#39;</span><span class="p">:</span>
+<span class="w">			</span><span class="nx">dataPointer</span><span class="o">++</span>
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;&lt;&#39;</span><span class="p">:</span>
+<span class="w">			</span><span class="nx">dataPointer</span><span class="o">--</span>
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;+&#39;</span><span class="p">:</span>
+<span class="w">			</span><span class="nx">dataStack</span><span class="p">[</span><span class="nx">dataPointer</span><span class="p">]</span><span class="o">++</span>
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;-&#39;</span><span class="p">:</span>
+<span class="w">			</span><span class="nx">dataStack</span><span class="p">[</span><span class="nx">dataPointer</span><span class="p">]</span><span class="o">--</span>
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;.&#39;</span><span class="p">:</span>
+<span class="w">			</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">string</span><span class="p">(</span><span class="nx">dataStack</span><span class="p">[</span><span class="nx">dataPointer</span><span class="p">]))</span>
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;,&#39;</span><span class="p">:</span>
+<span class="w">			</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">stdin</span><span class="p">.</span><span class="nx">ReadByte</span><span class="p">()</span>
+<span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">io</span><span class="p">.</span><span class="nx">EOF</span><span class="w"> </span><span class="p">{</span>
+<span class="w">				</span><span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">			</span><span class="p">}</span>
 
-			dataStack[dataPointer] = c
-		case '[':
-			// Find the equivalent (potentially nested) ending ']'
-			stack := 1
-			end := instructionPointer + 1
-			for stack != 0 {
-				switch prog[end] {
-				case '[':
-					stack++
-				case ']':
-					stack--
-				}
+<span class="w">			</span><span class="nx">dataStack</span><span class="p">[</span><span class="nx">dataPointer</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">c</span>
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;[&#39;</span><span class="p">:</span>
+<span class="w">			</span><span class="c1">// Find the equivalent (potentially nested) ending &#39;]&#39;</span>
+<span class="w">			</span><span class="nx">stack</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">			</span><span class="nx">end</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">instructionPointer</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">			</span><span class="k">for</span><span class="w"> </span><span class="nx">stack</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">				</span><span class="k">switch</span><span class="w"> </span><span class="nx">prog</span><span class="p">[</span><span class="nx">end</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">				</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;[&#39;</span><span class="p">:</span>
+<span class="w">					</span><span class="nx">stack</span><span class="o">++</span>
+<span class="w">				</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;]&#39;</span><span class="p">:</span>
+<span class="w">					</span><span class="nx">stack</span><span class="o">--</span>
+<span class="w">				</span><span class="p">}</span>
 
-				end++
-			}
+<span class="w">				</span><span class="nx">end</span><span class="o">++</span>
+<span class="w">			</span><span class="p">}</span>
 
-			if dataStack[dataPointer] == 0 {
-				instructionPointer = end
-			} else {
-				instructionStack = append(instructionStack, instructionPointer)
-			}
-		case ']':
-			if dataStack[dataPointer] != 0 {
-				instructionPointer = instructionStack[len(instructionStack)-1] - 1
-			}
+<span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="nx">dataStack</span><span class="p">[</span><span class="nx">dataPointer</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">				</span><span class="nx">instructionPointer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">end</span>
+<span class="w">			</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">				</span><span class="nx">instructionStack</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">instructionStack</span><span class="p">,</span><span class="w"> </span><span class="nx">instructionPointer</span><span class="p">)</span>
+<span class="w">			</span><span class="p">}</span>
+<span class="w">		</span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;]&#39;</span><span class="p">:</span>
+<span class="w">			</span><span class="k">if</span><span class="w"> </span><span class="nx">dataStack</span><span class="p">[</span><span class="nx">dataPointer</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">				</span><span class="nx">instructionPointer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">instructionStack</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="nx">instructionStack</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">			</span><span class="p">}</span>
 
-			instructionStack = instructionStack[:len(instructionStack)-1]
-		}
+<span class="w">			</span><span class="nx">instructionStack</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">instructionStack</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="nx">instructionStack</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="w">		</span><span class="p">}</span>
 
-		instructionPointer++
-	}
-}
-</code></pre>
+<span class="w">		</span><span class="nx">instructionPointer</span><span class="o">++</span>
+<span class="w">	</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
   </section>
 
   <section>
@@ -136,11 +137,6 @@ $ ./brainfuck $myProgram</code></pre>
       
     </ul>
   </section>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/languages/go.min.js"></script>
-<script>hljs.highlightAll();</script>
 
 
   <footer>
