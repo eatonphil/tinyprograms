@@ -1,9 +1,9 @@
 import Foundation
 
 let file = CommandLine.arguments[1]
-let prog: [UInt8] = Array((try String(contentsOfFile: file)).utf8)
+let prog: [UInt8] = try Array(String(contentsOfFile: file).utf8)
 
-var dataStack: [UInt8] = Array(repeating: 0, count: 30_000)
+var dataStack: [UInt8] = Array(repeating: 0, count: 30000)
 var dataPointer = 0
 var instructionStack: [Int] = []
 var instructionPointer = 0
@@ -21,7 +21,7 @@ while instructionPointer < prog.count {
     case UInt8(ascii: "."):
         print(String(bytes: [dataStack[dataPointer]], encoding: .utf8)!, terminator: "")
     case UInt8(ascii: ","):
-        assert(false)
+        assertionFailure()
     case UInt8(ascii: "["):
         // Find the equivalent (potentially nested) ending "]"
         var stack = 1
@@ -46,10 +46,10 @@ while instructionPointer < prog.count {
         }
     case UInt8(ascii: "]"):
         if dataStack[dataPointer] != 0 {
-            instructionPointer = instructionStack[instructionStack.count-1] - 1
+            instructionPointer = instructionStack[instructionStack.count - 1] - 1
         }
 
-        instructionStack = Array(instructionStack[0..<instructionStack.count-1])
+        instructionStack = Array(instructionStack[0 ..< instructionStack.count - 1])
     default:
         print("bad character", prog[instructionPointer])
         exit(1)
