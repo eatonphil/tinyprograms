@@ -1,0 +1,166 @@
+<meta charset="UTF-8">
+<link href="/style.css" rel="stylesheet" type="text/css" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AATree in swiftTiny Programs: Rosetta code for implementations</title>
+
+<article>
+  
+  <a href="/">Tiny Programs</a>
+  <h1>AATree in swift</h1>
+  <a href="https://github.com/eatonphil/tinyprograms/blob/main/AATree/swift/main.swift">Source</a>
+  <div class="authors">
+    <img src="https://github.com/eatonphil.png" / >
+    <span>Contributed by <a href="https://github.com/eatonphil">eatonphil</a></span>
+  </div>
+
+  <section>
+    <h2>Implementation</h2>
+    <div class="description">
+      
+      <p>A generic, balanced binary search tree.</p>
+<p>See <a href="https://www.cs.umd.edu/class/fall2019/cmsc420-0201/Lects/lect06-aa.pdf">https://www.cs.umd.edu/class/fall2019/cmsc420-0201/Lects/lect06-aa.pdf</a> for details.</p>
+
+      
+    </div>
+    <div class="highlight"><pre><span></span><span class="kd">import</span> <span class="nc">Foundation</span>
+
+<span class="kd">class</span> <span class="nc">AATree</span><span class="p">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="nb">Comparable</span><span class="p">&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nv">key</span><span class="p">:</span> <span class="n">T</span>
+    <span class="kd">var</span> <span class="nv">left</span><span class="p">:</span> <span class="n">AATree</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;?</span>
+    <span class="kd">var</span> <span class="nv">right</span><span class="p">:</span> <span class="n">AATree</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;?</span>
+    <span class="kd">var</span> <span class="nv">level</span><span class="p">:</span> <span class="nb">Int</span> <span class="p">=</span> <span class="mi">1</span>
+
+    <span class="kd">init</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">key</span> <span class="p">=</span> <span class="n">key</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">skew</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">tree</span><span class="p">:</span> <span class="n">AATree</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;?)</span> <span class="p">-&gt;</span> <span class="n">AATree</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;?</span> <span class="p">{</span>
+    <span class="k">guard</span> <span class="kd">let</span> <span class="nv">t</span> <span class="p">=</span> <span class="n">tree</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">nil</span>
+    <span class="p">}</span>
+
+    <span class="k">guard</span> <span class="kd">let</span> <span class="nv">left</span> <span class="p">=</span> <span class="n">t</span><span class="p">.</span><span class="kr">left</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">t</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Red node to the left? Do a right rotation.</span>
+    <span class="k">if</span> <span class="kr">left</span><span class="p">.</span><span class="n">level</span> <span class="p">==</span> <span class="n">t</span><span class="p">.</span><span class="n">level</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nv">l</span> <span class="p">=</span> <span class="kr">left</span>
+        <span class="n">t</span><span class="p">.</span><span class="kr">left</span> <span class="p">=</span> <span class="n">l</span><span class="p">.</span><span class="kr">right</span>
+        <span class="n">l</span><span class="p">.</span><span class="kr">right</span> <span class="p">=</span> <span class="n">t</span>
+        <span class="k">return</span> <span class="n">l</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">t</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">split</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">tree</span><span class="p">:</span> <span class="n">AATree</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;?)</span> <span class="p">-&gt;</span> <span class="n">AATree</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;?</span> <span class="p">{</span>
+    <span class="k">guard</span> <span class="kd">let</span> <span class="nv">t</span> <span class="p">=</span> <span class="n">tree</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">nil</span>
+    <span class="p">}</span>
+
+    <span class="k">guard</span> <span class="kd">let</span> <span class="nv">right</span> <span class="p">=</span> <span class="n">t</span><span class="p">.</span><span class="kr">right</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">t</span>
+    <span class="p">}</span>
+
+    <span class="k">guard</span> <span class="kd">let</span> <span class="nv">rightRight</span> <span class="p">=</span> <span class="kr">right</span><span class="p">.</span><span class="kr">right</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">t</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Right-right red chain? Do a left rotation</span>
+    <span class="k">if</span> <span class="n">rightRight</span><span class="p">.</span><span class="n">level</span> <span class="p">==</span> <span class="n">t</span><span class="p">.</span><span class="n">level</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nv">l</span> <span class="p">=</span> <span class="kr">right</span>
+        <span class="n">t</span><span class="p">.</span><span class="kr">right</span> <span class="p">=</span> <span class="n">l</span><span class="p">.</span><span class="kr">left</span>
+        <span class="n">l</span><span class="p">.</span><span class="kr">left</span> <span class="p">=</span> <span class="n">t</span>
+        <span class="n">l</span><span class="p">.</span><span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">l</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">t</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">insert</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">tree</span><span class="p">:</span> <span class="n">AATree</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;?,</span> <span class="n">key</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">AATree</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;?</span> <span class="p">{</span>
+    <span class="k">guard</span> <span class="kd">let</span> <span class="nv">t</span> <span class="p">=</span> <span class="n">tree</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">AATree</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">key</span><span class="p">:</span> <span class="n">key</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">key</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">.</span><span class="n">key</span> <span class="p">{</span>
+        <span class="n">t</span><span class="p">.</span><span class="kr">left</span> <span class="p">=</span> <span class="bp">insert</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">t</span><span class="p">.</span><span class="kr">left</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">key</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">t</span><span class="p">.</span><span class="kr">right</span> <span class="p">=</span> <span class="bp">insert</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">t</span><span class="p">.</span><span class="kr">right</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">key</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">let</span> <span class="nv">skewed</span> <span class="p">=</span> <span class="n">skew</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">t</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">split</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">skewed</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">display</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">tree</span><span class="p">:</span> <span class="n">AATree</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;?,</span> <span class="n">space</span><span class="p">:</span> <span class="nb">String</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">guard</span> <span class="kd">let</span> <span class="nv">t</span> <span class="p">=</span> <span class="n">tree</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+
+    <span class="n">display</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">t</span><span class="p">.</span><span class="kr">left</span><span class="p">,</span> <span class="n">space</span><span class="p">:</span> <span class="n">space</span> <span class="o">+</span> <span class="s">&quot;  &quot;</span><span class="p">)</span>
+
+    <span class="bp">print</span><span class="p">(</span><span class="s">&quot;</span><span class="si">\(</span><span class="n">space</span><span class="si">)\(</span><span class="n">t</span><span class="p">.</span><span class="n">key</span><span class="si">)</span><span class="s">&quot;</span><span class="p">)</span>
+
+    <span class="n">display</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">t</span><span class="p">.</span><span class="kr">right</span><span class="p">,</span> <span class="n">space</span><span class="p">:</span> <span class="n">space</span> <span class="o">+</span> <span class="s">&quot;  &quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">let</span> <span class="nv">fileName</span> <span class="p">=</span> <span class="n">CommandLine</span><span class="p">.</span><span class="n">arguments</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="kd">let</span> <span class="nv">numbers</span> <span class="p">=</span> <span class="k">try</span> <span class="nb">String</span><span class="p">(</span><span class="n">contentsOfFile</span><span class="p">:</span> <span class="n">fileName</span><span class="p">)</span>
+
+<span class="kd">var</span> <span class="nv">t</span><span class="p">:</span> <span class="n">AATree</span><span class="p">&lt;</span><span class="nb">Int</span><span class="p">&gt;?</span>
+
+<span class="k">for</span> <span class="n">number</span> <span class="k">in</span> <span class="n">numbers</span><span class="p">.</span><span class="n">components</span><span class="p">(</span><span class="n">separatedBy</span><span class="p">:</span> <span class="s">&quot; &quot;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nv">stripped</span> <span class="p">=</span> <span class="n">number</span><span class="p">.</span><span class="n">trimmingCharacters</span><span class="p">(</span><span class="k">in</span><span class="p">:</span> <span class="p">.</span><span class="n">whitespacesAndNewlines</span><span class="p">)</span>
+    <span class="k">guard</span> <span class="kd">let</span> <span class="nv">n</span> <span class="p">=</span> <span class="nb">Int</span><span class="p">(</span><span class="n">stripped</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="bp">print</span><span class="p">(</span><span class="s">&quot;Failed to convert </span><span class="si">\(</span><span class="n">stripped</span><span class="si">)</span><span class="s"> to Int.&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">t</span> <span class="p">=</span> <span class="bp">insert</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">t</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">t</span><span class="p">,</span> <span class="n">space</span><span class="p">:</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+
+  </section>
+
+  <section>
+    <h2>Build and run</h2>
+    <p>These steps are linux only.</p>
+    <pre><code>$ swiftc main.swift
+
+$ ./main $myProgram</code></pre>
+  </section>
+
+  
+
+  <section>
+    <h2>All implementations</h2>
+    <ul>
+      
+      <li><a href="/AATree/d.html">d</a></li>
+      
+      <li><a href="/AATree/go.html">go (Reference)</a></li>
+      
+      <li><a href="/AATree/java.html">java</a></li>
+      
+      <li><a href="/AATree/rust.html">rust</a></li>
+      
+      <li><a href="/AATree/swift.html">swift</a></li>
+      
+    </ul>
+  </section>
+
+
+  <footer>
+    <p>Copyright 2022 Phil Eaton</p>
+    <p>
+      <a href="https://github.com/eatonphil/tinyprograms/blob/main/LICENSE.MD">MIT Licensed</a>
+    </p>
+  </footer>
+</article>
+</script>
