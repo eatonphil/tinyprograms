@@ -153,6 +153,7 @@ section {
 .authors {
     display: flex;
     align-items: center;
+    margin-top: 1rem;
 }
 
 .authors img {
