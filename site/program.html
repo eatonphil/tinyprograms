@@ -5,6 +5,7 @@
 {% block body %}
   <a href="/">Tiny Programs</a>
   <h1>{{ project_name }} in {{ language }}</h1>
+  <a href="{{url}}">Source</a>
   <div class="authors">
     <img src="https://github.com/{{authors[0]}}.png" / >
     <span>Contributed by <a href="https://github.com/{{ authors[0] }}">{{ authors[0] }}</a></span>
@@ -17,7 +18,6 @@
       {{project['description']}}
       {% endif %}
     </div>
-    <a href="{{url}}">Source Code</a>
     {{program}}
   </section>
 

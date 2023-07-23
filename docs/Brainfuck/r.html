@@ -8,6 +8,7 @@
   
   <a href="/">Tiny Programs</a>
   <h1>Brainfuck in r</h1>
+  <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/r/bf.R">Source</a>
   <div class="authors">
     <img src="https://github.com/spasticus74.png" / >
     <span>Contributed by <a href="https://github.com/spasticus74">spasticus74</a></span>
@@ -22,7 +23,6 @@
 
       
     </div>
-    <a href="https://github.com/eatonphil/tinyprograms/blob/main/Brainfuck/r/bf.R">Source Code</a>
     <div class="highlight"><pre><span></span><span class="n">args</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">commandArgs</span><span class="p">(</span><span class="n">trailingOnly</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
 
 <span class="n">program</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">strsplit</span><span class="p">(</span><span class="nf">readChar</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="nf">file.info</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="m">1</span><span class="p">])</span><span class="o">$</span><span class="n">size</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">)[[</span><span class="m">1</span><span class="p">]]</span>
