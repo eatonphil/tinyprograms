@@ -191,3 +191,10 @@ footer p {
 .highlight pre {
     margin: 0;
 }
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+    .highlight {
+	width: 100%;
+	margin-left: 0;
+    }
+}
