@@ -1,6 +1,6 @@
 import Foundation
 
-class AATree<T:Comparable> {
+class AATree<T: Comparable> {
     let key: T
     var left: AATree<T>?
     var right: AATree<T>?
@@ -13,15 +13,15 @@ class AATree<T:Comparable> {
 
 func skew<T>(tree: AATree<T>?) -> AATree<T>? {
     guard let t = tree else {
-    return nil
-}
+        return nil
+    }
 
     guard let left = t.left else {
-    return t
-}
+        return t
+    }
 
     // Red node to the left? Do a right rotation.
-    if (left.level == t.level) {
+    if left.level == t.level {
         let l = left
         t.left = l.right
         l.right = t
@@ -33,19 +33,19 @@ func skew<T>(tree: AATree<T>?) -> AATree<T>? {
 
 func split<T>(tree: AATree<T>?) -> AATree<T>? {
     guard let t = tree else {
-    return nil
-}
+        return nil
+    }
 
     guard let right = t.right else {
-    return t
-}
+        return t
+    }
 
     guard let rightRight = right.right else {
-    return t
-}
+        return t
+    }
 
     // Right-right red chain? Do a left rotation
-    if (rightRight.level == t.level) {
+    if rightRight.level == t.level {
         let l = right
         t.right = l.left
         l.left = t
@@ -58,10 +58,10 @@ func split<T>(tree: AATree<T>?) -> AATree<T>? {
 
 func insert<T>(tree: AATree<T>?, key: T) -> AATree<T>? {
     guard let t = tree else {
-    return AATree<T>(key: key)
-}
+        return AATree<T>(key: key)
+    }
 
-    if (key < t.key) {
+    if key < t.key {
         t.left = insert(tree: t.left, key: key)
     } else {
         t.right = insert(tree: t.right, key: key)
@@ -74,7 +74,7 @@ func insert<T>(tree: AATree<T>?, key: T) -> AATree<T>? {
 func display<T>(tree: AATree<T>?, space: String) {
     guard let t = tree else {
         return
-}
+    }
 
     display(tree: t.left, space: space + "  ")
 
@@ -86,16 +86,16 @@ func display<T>(tree: AATree<T>?, space: String) {
 let fileName = CommandLine.arguments[1]
 let numbers = try String(contentsOfFile: fileName)
 
-var t: AATree<Int>?;
+var t: AATree<Int>?
 
 for number in numbers.components(separatedBy: " ") {
     let stripped = number.trimmingCharacters(in: .whitespacesAndNewlines)
     guard let n = Int(stripped) else {
-    print("Failed to convert \(stripped) to Int.")
-    exit(1)
+        print("Failed to convert \(stripped) to Int.")
+        exit(1)
+    }
+
+    t = insert(tree: t, key: n)
 }
 
-    t = insert(tree: t, key: n);
-}
-
-display(tree: t, space: "");
+display(tree: t, space: "")
