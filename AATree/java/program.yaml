@@ -1,0 +1,8 @@
+source: Main.java
+
+prepare:
+  - javac Main.java
+run: java Main {PROGRAM}
+
+authors:
+  - eatonphil
