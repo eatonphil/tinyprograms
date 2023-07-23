@@ -39,6 +39,7 @@
     <span class="bp">print</span><span class="p">(</span><span class="s">&quot;Could not read 16 bytes&quot;</span><span class="p">)</span>
     <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="p">}</span>
+
 <span class="kd">var</span> <span class="nv">buf</span><span class="p">:</span> <span class="p">[</span><span class="nb">UInt8</span><span class="p">]</span> <span class="p">=</span> <span class="nb">Array</span><span class="p">(</span><span class="n">read</span><span class="p">)</span>
 
 <span class="c1">// Set bit 6 to 0</span>
@@ -53,26 +54,26 @@
 <span class="n">buf</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span><span class="p">)</span>
 
 <span class="bp">print</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="n">format</span><span class="p">:</span> <span class="s">&quot;%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x&quot;</span><span class="p">,</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
-	     <span class="c1">// -</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
-	     <span class="c1">// - </span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
-	     <span class="c1">// -</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
-	     <span class="c1">// -</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span>
-	     <span class="n">buf</span><span class="p">[</span><span class="mi">15</span><span class="p">]))</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+             <span class="c1">// -</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+             <span class="c1">// -</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+             <span class="c1">// -</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+             <span class="c1">// -</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span>
+             <span class="n">buf</span><span class="p">[</span><span class="mi">15</span><span class="p">]))</span>
 </pre></div>
 
   </section>

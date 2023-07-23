@@ -23,54 +23,54 @@
 
       
     </div>
-    <div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.FileInputStream</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Arrays</span><span class="p">;</span>
+    <div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.FileInputStream</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
 
 <span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Main</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span>
-<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FileInputStream</span><span class="p">(</span><span class="s">&quot;/dev/random&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FileInputStream</span><span class="p">(</span><span class="s">&quot;/dev/random&quot;</span><span class="p">);</span>
 
-<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="n">buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">byte</span><span class="o">[</span><span class="mi">16</span><span class="o">]</span><span class="p">;</span>
-<span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="na">read</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
-<span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">buf</span><span class="p">.</span><span class="na">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">	    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Could not read 16 bytes.&quot;</span><span class="p">);</span>
-<span class="w">	    </span><span class="k">return</span><span class="p">;</span>
-<span class="w">	</span><span class="p">}</span>
-
-<span class="w">	</span><span class="c1">// Set bit 6 to 0</span>
-<span class="w">	</span><span class="n">buf</span><span class="o">[</span><span class="mi">8</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span>
-<span class="w">	</span><span class="c1">// Set bit 7 to 1</span>
-<span class="w">	</span><span class="n">buf</span><span class="o">[</span><span class="mi">8</span><span class="o">]</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
-
-<span class="w">	</span><span class="c1">// Set version</span>
-<span class="w">	</span><span class="n">buf</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
-<span class="w">	</span><span class="n">buf</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
-<span class="w">	</span><span class="n">buf</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
-<span class="w">	</span><span class="n">buf</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">);</span>
-
-<span class="w">	</span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">format</span><span class="p">(</span><span class="s">&quot;%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x\n&quot;</span><span class="p">,</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="c1">// -</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">4</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">5</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="c1">// - </span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">7</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="c1">// -</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">8</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">9</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="c1">// -</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">10</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">11</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">12</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">13</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">14</span><span class="o">]</span><span class="p">,</span>
-<span class="w">	       </span><span class="n">buf</span><span class="o">[</span><span class="mi">15</span><span class="o">]</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="n">buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">byte</span><span class="o">[</span><span class="mi">16</span><span class="o">]</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="na">read</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">buf</span><span class="p">.</span><span class="na">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Could not read 16 bytes.&quot;</span><span class="p">);</span>
+<span class="w">      </span><span class="k">return</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Set bit 6 to 0</span>
+<span class="w">    </span><span class="n">buf</span><span class="o">[</span><span class="mi">8</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// Set bit 7 to 1</span>
+<span class="w">    </span><span class="n">buf</span><span class="o">[</span><span class="mi">8</span><span class="o">]</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Set version</span>
+<span class="w">    </span><span class="n">buf</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+<span class="w">    </span><span class="n">buf</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
+<span class="w">    </span><span class="n">buf</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">    </span><span class="n">buf</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">format</span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x\n&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="c1">// -</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">4</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">5</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="c1">// -</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">7</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="c1">// -</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">8</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">9</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="c1">// -</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">10</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">11</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">12</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">13</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">14</span><span class="o">]</span><span class="p">,</span>
+<span class="w">        </span><span class="n">buf</span><span class="o">[</span><span class="mi">15</span><span class="o">]</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 
