@@ -1,0 +1,8 @@
+source: main.v
+
+prepare:
+  - v main.v -o bf
+run: ./bf {PROGRAM}
+
+authors:
+  - betelgeuse-7
