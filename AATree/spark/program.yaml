@@ -13,7 +13,7 @@ notes:
   - If you want to use Alire
     - Follow the instructions for downloading and setting up Alire https://alire.ada.dev
     - Run the proofs with `alr gnatprove`.
-    - Run the example program with `alr run --args=../_tests/helloworld.bf`.
+    - Run the example program with `alr run --args=../_tests/general_case.txt` etc.
 
 authors:
   - ceberly
