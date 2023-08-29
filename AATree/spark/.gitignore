@@ -1,0 +1,11 @@
+*.swp
+alire.toml
+spark.gpr
+/obj/
+/bin/
+/alire/
+/config/
+/obj/
+/bin/
+/alire/
+/config/
